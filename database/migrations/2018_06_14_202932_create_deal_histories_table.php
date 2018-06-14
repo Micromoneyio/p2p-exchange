@@ -15,6 +15,11 @@ class CreateDealHistoriesTable extends Migration
     {
         Schema::create('deal_histories', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('deal_id');
+            $table->unsignedInteger('deal_stage_id');
+            $table->text('notes');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
+            $table->foreign('deal_stage_id')->references('id')->on('deal_stages')->onDelete('cascade');
             $table->timestamps();
         });
     }

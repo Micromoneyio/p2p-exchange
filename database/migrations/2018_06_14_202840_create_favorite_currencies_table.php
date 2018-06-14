@@ -15,6 +15,10 @@ class CreateFavoriteCurrenciesTable extends Migration
     {
         Schema::create('favorite_currencies', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('currency_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -15,6 +15,14 @@ class CreateMarketHistoriesTable extends Migration
     {
         Schema::create('market_histories', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('currency_id');
+            $table->unsignedInteger('unit_currency_id');
+            $table->unsignedInteger('rate_source_id');
+            $table->float('market_cap');
+            $table->float('price');
+            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
+            $table->foreign('unit_currency_id')->references('id')->on('currencies')->onDelete('cascade');
+            $table->foreign('rate_source_id')->references('id')->on('rate_sources')->onDelete('cascade');
             $table->timestamps();
         });
     }

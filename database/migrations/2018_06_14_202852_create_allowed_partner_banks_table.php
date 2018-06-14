@@ -15,6 +15,12 @@ class CreateAllowedPartnerBanksTable extends Migration
     {
         Schema::create('allowed_partner_banks', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('asset_id');
+            $table->unsignedInteger('bank_id');
+            $table->float('allow_income');
+            $table->float('allow_outgoing');
+            $table->foreign('asset_id')->references('id')->on('assets')->onDelete('cascade');
+            $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             $table->timestamps();
         });
     }

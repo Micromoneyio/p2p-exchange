@@ -8,7 +8,7 @@ class Asset extends Model
 {
     protected $fillable = ['name', 'asset_type_id', 'user_id', 'currency_id', 'address', 'bank_id'];
 
-    public function asset_type() {
+    public function assetType() {
         return $this->belongsTo('App\AssetType');
     }
 
@@ -24,11 +24,11 @@ class Asset extends Model
         return $this->belongsTo('App\Bank');
     }
 
-    public function crypto_asset() {
+    public function crypto() {
         return Currency::find($this->currency_id)->crypto;
     }
 
-    public function fiat_asset() {
+    public function fiat() {
         return !Currency::find($this->currency_id)->crypto;
     }
 }

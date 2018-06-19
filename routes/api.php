@@ -17,4 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('banks', 'BankController');
+Route::resource('rate_sources', 'RateSourceController');
+Route::resource('banks',        'BankController');
+Route::resource('currencies',   'CurrencyController');

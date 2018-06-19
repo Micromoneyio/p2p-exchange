@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
+use App\Http\Resources\CurrenciesResource;
+use App\Http\Resources\CurrencyResource;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -14,28 +16,23 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new CurrenciesResource(Currency::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return CurrencyResource
      */
     public function store(Request $request)
     {
-        //
+        $currency = Currency::create([
+            'name' => $request->name,
+            'symbol' => $request->symbol,
+            'crypto' => $request->crypto
+        ]);
+        return new CurrencyResource($currency);
     }
 
     /**
@@ -46,18 +43,7 @@ class CurrencyController extends Controller
      */
     public function show(Currency $currency)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Currency  $currency
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Currency $currency)
-    {
-        //
+        return new CurrencyResource($currency);
     }
 
     /**
@@ -69,7 +55,12 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
-        //
+        $currency->update([
+            'name'   => $request->name,
+            'symbol' => $request->symbol,
+            'crypto' => $request->crypto
+        ]);
+        return new CurrencyResource($currency);
     }
 
     /**
@@ -80,6 +71,6 @@ class CurrencyController extends Controller
      */
     public function destroy(Currency $currency)
     {
-        //
+        $currency->delete();
     }
 }

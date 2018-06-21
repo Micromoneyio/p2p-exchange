@@ -16,6 +16,7 @@ class RateSourceController extends Controller
      */
     public function index()
     {
+        RateSourceResource::withoutWrapping();
         return new RateSourcesResource(RateSource::all());
     }
 
@@ -42,6 +43,7 @@ class RateSourceController extends Controller
      */
     public function show(RateSource $rateSource)
     {
+        RateSourceResource::withoutWrapping();
         return new RateSourceResource($rateSource);
     }
 

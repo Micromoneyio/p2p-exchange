@@ -27,5 +27,15 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function notifications() {
+        return $this->hasMany('App\Notification');
+    }
 
+    public function assets() {
+        return $this->hasMany('App\Asset');
+    }
+
+    public function orders() {
+        return $this->hasMany('App\Order');
+    }
 }

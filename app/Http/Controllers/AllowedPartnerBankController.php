@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\AllowedPartnerBank;
+use App\Http\Resources\AllowedPartnerBankResource;
+use App\Http\Resources\AllowedPartnerBanksResource;
 use Illuminate\Http\Request;
 
 class AllowedPartnerBankController extends Controller
@@ -10,54 +12,39 @@ class AllowedPartnerBankController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AllowedPartnerBanksResource
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new AllowedPartnerBanksResource(AllowedPartnerBank::where('asset_id', $request->asset_id));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return AllowedPartnerBankResource
      */
     public function store(Request $request)
     {
-        //
+        $allowedPartnerBank = AllowedPartnerBank::create([
+            'asset_id' => $request->asset_id,
+            'bank_id' => $request->bank_id,
+            'allow_income' => $request->allow_income,
+            'allow_outgoing' => $request->allow_outgoing
+        ]);
+        return new AllowedPartnerBankResource($allowedPartnerBank);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\AllowedPartnerBank  $allowedPartnerBank
-     * @return \Illuminate\Http\Response
+     * @return AllowedPartnerBankResource
      */
     public function show(AllowedPartnerBank $allowedPartnerBank)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\AllowedPartnerBank  $allowedPartnerBank
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AllowedPartnerBank $allowedPartnerBank)
-    {
-        //
+        return new AllowedPartnerBankResource($allowedPartnerBank);
     }
 
     /**
@@ -65,11 +52,16 @@ class AllowedPartnerBankController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\AllowedPartnerBank  $allowedPartnerBank
-     * @return \Illuminate\Http\Response
+     * @return AllowedPartnerBankResource
      */
     public function update(Request $request, AllowedPartnerBank $allowedPartnerBank)
     {
-        //
+        $allowedPartnerBank->update([
+            'bank_id' => $request->bank_id,
+            'allow_income' => $request->allow_income,
+            'allow_outgoing' => $request->allow_outgoing
+        ]);
+        return new AllowedPartnerBankResource($allowedPartnerBank);
     }
 
     /**
@@ -80,6 +72,6 @@ class AllowedPartnerBankController extends Controller
      */
     public function destroy(AllowedPartnerBank $allowedPartnerBank)
     {
-        //
+        $allowedPartnerBank->delete();
     }
 }

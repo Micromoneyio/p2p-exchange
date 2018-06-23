@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deal extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
+    }
+    
     public function get_address(string $symbol) {
 //        def get_address(symbol)
 //            currency = Currency.find_by(symbol: symbol)

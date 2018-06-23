@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DealHistory;
+use App\Http\Resources\DealHistoriesResource;
+use App\Http\Resources\DealHistoryResource;
 use Illuminate\Http\Request;
 
 class DealHistoryController extends Controller
@@ -10,32 +12,27 @@ class DealHistoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return DealHistoriesResource
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new DealHistoriesResource(DealHistory::where('deal_id', $request->deal_id));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return DealHistoryResource
      */
     public function store(Request $request)
     {
-        //
+        $dealHistory = DealHistory::create([
+            'deal_id' => $request->deal_id,
+            'deal_stage_id' => $request->deal_stage_id,
+            'notes' => $request->notes
+        ]);
+        return new DealHistoryResource($dealHistory);
     }
 
     /**
@@ -46,18 +43,7 @@ class DealHistoryController extends Controller
      */
     public function show(DealHistory $dealHistory)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\DealHistory  $dealHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DealHistory $dealHistory)
-    {
-        //
+        return new DealHistoryResource($dealHistory);
     }
 
     /**
@@ -69,7 +55,11 @@ class DealHistoryController extends Controller
      */
     public function update(Request $request, DealHistory $dealHistory)
     {
-        //
+        $dealHistory->update([
+            'deal_stage_id' => $request->deal_stage_id,
+            'notes' => $request->notes
+        ]);
+        return new DealHistoryResource($dealHistory);
     }
 
     /**
@@ -80,6 +70,6 @@ class DealHistoryController extends Controller
      */
     public function destroy(DealHistory $dealHistory)
     {
-        //
+        $dealHistory->delete();
     }
 }

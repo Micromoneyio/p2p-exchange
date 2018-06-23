@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrdersResource;
 use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -14,17 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new OrdersResource(Order::all());
     }
 
     /**
@@ -35,7 +28,19 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $order = Order::create([
+            'user_id' => Auth::id(),
+            'source_currency_id' => $request->source_currency_id,
+            'destination_currency_id' => $request->destination_currency_id,
+            'rate_source_id' => $request->rate_source_id,
+            'source_asset_id' => $request->source_asset_id,
+            'destination_asset_id' => $request->destination_asset_id,
+            'fix_price' => $request->fix_price,
+            'source_price_index' => $request->source_price_index,
+            'limit_from' => $request->limit_from,
+            'limit_to' => $request->limit_to
+        ]);
+        return new OrderResource($order);
     }
 
     /**
@@ -46,18 +51,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
+        return new OrderResource($order);
     }
 
     /**
@@ -69,7 +63,18 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order->update([
+            'source_currency_id' => $request->source_currency_id,
+            'destination_currency_id' => $request->destination_currency_id,
+            'rate_source_id' => $request->rate_source_id,
+            'source_asset_id' => $request->source_asset_id,
+            'destination_asset_id' => $request->destination_asset_id,
+            'fix_price' => $request->fix_price,
+            'source_price_index' => $request->source_price_index,
+            'limit_from' => $request->limit_from,
+            'limit_to' => $request->limit_to
+        ]);
+        return new OrderResource($order);
     }
 
     /**
@@ -80,6 +85,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
     }
 }

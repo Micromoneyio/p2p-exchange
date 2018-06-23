@@ -15,7 +15,7 @@ class Currency extends Model
         $user->favorite_currencies->where('currency_id', $this->id)->exists();
     }
 
-    public function market_cap(User $user) {
+    public function marketCap(User $user) {
         if ($this->created_at == null) {
             return 0;
         }

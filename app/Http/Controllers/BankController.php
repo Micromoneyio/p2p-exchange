@@ -12,32 +12,23 @@ class BankController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return BanksResource
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new BanksResource(Bank::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return BankResource
      */
     public function store(Request $request)
     {
-        //
+        $bank = Bank::create(['name' => $request->name]);
+        return new BankResource($bank);
     }
 
     /**
@@ -53,26 +44,16 @@ class BankController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Bank  $bank
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Bank $bank)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Bank  $bank
-     * @return \Illuminate\Http\Response
+     * @return BankResource
      */
     public function update(Request $request, Bank $bank)
     {
-        //
+        $bank->update(['name' => $request->bank]);
+        return new BankResource($bank);
     }
 
     /**
@@ -83,6 +64,6 @@ class BankController extends Controller
      */
     public function destroy(Bank $bank)
     {
-        //
+        $bank->delete();
     }
 }

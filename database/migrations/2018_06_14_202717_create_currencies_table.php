@@ -20,6 +20,11 @@ class CreateCurrenciesTable extends Migration
             $table->boolean('crypto');
             $table->timestamps();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedInteger('default_currency_id')->default(1);
+            $table->foreign('default_currency_id')->references('id')->on('currencies')->onDelete('cascade');
+        });
     }
 
     /**

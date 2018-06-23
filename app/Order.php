@@ -6,53 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    //  belongs_to :source_currency,      class_name: 'Currency', foreign_key: 'source_currency_id'
-    //  belongs_to :destination_currency, class_name: 'Currency', foreign_key: 'destination_currency_id'
-    //  belongs_to :source_asset,         class_name: 'Asset',    foreign_key: 'source_asset_id'
-    //  belongs_to :destination_asset,    class_name: 'Asset',    foreign_key: 'destination_asset_id'
-    //
-    //  has_many :deals
-    //
-    //  validates :user_id,                 presence: true
-    //  validates :source_currency_id,      presence: true
-    //  validates :destination_currency_id, presence: true
-    //  validates :source_asset_id,         presence: true
-    //  validates :destination_asset_id,    presence: true
-    //
-    //  def type
-    //    if source_currency.crypto && !destination_currency.crypto
-    //      :crypto_to_fiat
-    //    else
-    //      :fiat_to_crypto
-    //    end
-    //  end
-    //
-    //  def price
-    //    if fix_price
-    //      fix_price
-    //    elsif source_price_index
-    //      history_params = { rate_source: rate_source }
-    //      case type
-    //      when :crypto_to_fiat
-    //        history_params[:currency]      = source_currency
-    //        history_params[:unit_currency] = destination_currency
-    //      when :fiat_to_crypto
-    //        history_params[:currency]      = destination_currency
-    //        history_params[:unit_currency] = source_currency
-    //      end
-    //      market_history = MarketHistory.order(created_at: :asc).find_by(history_params)
-    //      if market_history
-    //        market_history.price + (market_history.price * source_price_index / 100)
-    //      else
-    //        0
-    //      end
-    //    end
-    //  end
-    //
-    //  def favorite?(user)
-    //    return false if id.nil?
-    //    user.favorite_orders.exists?(order_id: id)
-    //  end
+
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -60,5 +14,67 @@ class Order extends Model
 
     public function rate_source() {
         return $this->belongsTo('App\RateSource');
+    }
+
+    public function source_currency() {
+        return $this->belongsTo('App\Currency', 'source_currency_id');
+    }
+
+    public function destination_currency() {
+        return $this->belongsTo('App\Currency', 'destination_currency_id');
+    }
+
+    public function source_asset() {
+        return $this->belongsTo('App\Asset', 'source_asset_id');
+    }
+
+    public function destination_asset() {
+        return $this->belongsTo('App\Asset', 'destination_asset_id');
+    }
+
+    public function deals() {
+        return $this->hasMany('App\Deal');
+    }
+
+    public function type() {
+        if ($this->source_currency()->crypto && !$this->destination_currency->crypto) {
+            return 'crypto_to_fiat';
+        }
+        else {
+            return 'fiat_to_crypto';
+        }
+    }
+
+    public function price() {
+        $result = 0;
+        if ($this->fix_price) {
+            $result = $this->fix_price;
+        }
+        elseif ($this->source_price_index) {
+            $history_params = [ 'rate_source_id' => $this->rate_source->id];
+            switch ($this->type()) {
+                case 'crypto_to_fiat':
+                    $history_params['currency_id'] = $this->source_currency->id;
+                    $history_params['unit_currency_id'] = $this->destination_currency->id;
+                    break;
+                case 'fiat_to_currency':
+                    $history_params['currency_id'] = $this->destination_currency->id;
+                    $history_params['unit_currency_id'] = $this->source_currency->id;
+                    break;
+            }
+            $market_history = MarketHistory::orderBy('created_at', 'asc')->where($history_params)->first;
+            if ($market_history != null) {
+                $result = $market_history->price + ($market_history->price * $this->source_price_index / 100);
+            }
+        }
+        return $result;
+    }
+
+    public function is_favorite()
+    {
+        if ($this->id == null) {
+            return false;
+        }
+        return $this->user->favorite_orders->where('order_id', $this->id)->isNotEmpty();
     }
 }

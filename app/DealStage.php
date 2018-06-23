@@ -12,7 +12,7 @@ class DealStage extends Model
         return $this->hasMany('App\Deal');
     }
 
-    public function deal_histories() {
+    public function dealHistories() {
         return $this->hasMany('App\DealHistory');
     }
 }

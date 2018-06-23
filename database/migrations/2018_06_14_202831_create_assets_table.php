@@ -18,12 +18,12 @@ class CreateAssetsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('asset_type_id');
             $table->unsignedInteger('currency_id');
-            $table->unsignedInteger('bank_id');
-            $table->string('name');
-            $table->string('address');
-            $table->string('key');
-            $table->text('notes');
-            $table->boolean('default');
+            $table->unsignedInteger('bank_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('key')->nullable();
+            $table->text('notes')->nullable();
+            $table->boolean('default')->default(false);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('asset_type_id')->references('id')->on('asset_types')->onDelete('cascade');
             $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');

@@ -28,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'password', 'remember_token',
     ];
 
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -46,5 +47,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function notifications() {
+        return $this->hasMany('App\Notification');
+    }
 
+    public function assets() {
+        return $this->hasMany('App\Asset');
+    }
+
+    public function orders() {
+        return $this->hasMany('App\Order');
+    }
 }

@@ -10,4 +10,9 @@ class DealHistory extends Model
     {
         return $this->belongsTo('App\Deal');
     }
+
+    public function deal_stage()
+    {
+        return $this->belongsTo('App\DealStage');
+    }
 }

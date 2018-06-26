@@ -21,14 +21,25 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('test', function(){
         return response()->json(['foo'=>'bar']);
     });
+
+    Route::resource('assets',              'AssetController');
+    Route::resource('asset_types',         'AssetTypeController');
+    Route::resource('banks',               'BankController');
+    Route::resource('currencies',          'CurrencyController');
+    Route::resource('deals',               'DealController');
+    Route::resource('deal_histories',      'DealHistoryController');
+    Route::resource('deal_stages',         'DealStageController');
+    Route::resource('favorite_currencies', 'FavoriteCurrencyController');
+    Route::resource('market_histories',    'MarketHistoryController');
+    Route::resource('notifications',       'NotificationController');
+    Route::resource('orders',              'OrderController');
+    Route::resource('rate_sources',        'RateSourceController');
 });
 
 
 
 
-Route::resource('rate_sources', 'RateSourceController');
-Route::resource('banks',        'BankController');
-Route::resource('currencies',   'CurrencyController');
+
 
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');

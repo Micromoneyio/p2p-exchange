@@ -57,7 +57,7 @@ task :deploy do
     invoke :'deploy:link_shared_paths'
     command %{composer install}
     invoke :'deploy:cleanup'
-    to :launch do
+    on :launch do
       command %{composer dumpautoload}
       command %{php artisan cache:clear}
     end

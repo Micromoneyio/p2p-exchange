@@ -54,7 +54,7 @@ task :deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
     invoke :'git:clone'
-    command %{php composer.phar install}
+    command %{composer install}
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
   end

@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Currency;
+use App\MarketHistory;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +28,25 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function(){
+            $currencies = Currency::all();
+            $crypto = $currencies->filter(function ($value){
+               return  $value->crypto;
+            });
+            foreach ($crypto as $cryptoItem){
+                foreach ($currencies as $item){
+                    $result = json_decode(file_get_contents(getenv('API_URL') . strtolower($cryptoItem->name). '?convert='.$item->symbol),true);
+                    MarketHistory::create([
+                        'currency_id' => $cryptoItem->id,
+                        'unit_currency_id' => $item->id,
+                        'rate_source_id' => 1,
+                        'market_cap' => $result[0]['market_cap_'.strtolower($item->symbol)],
+                        'price' => $result[0]['price_'.strtolower($item->symbol)],
+                    ]);
+                }
+
+            }
+        })->everyMinute();
     }
 
     /**

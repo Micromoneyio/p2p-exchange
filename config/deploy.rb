@@ -56,6 +56,7 @@ task :deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     command %{composer install}
+    command %{php artisan migrate}
     invoke :'deploy:cleanup'
     on :launch do
       command %{composer dumpautoload}

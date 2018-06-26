@@ -55,6 +55,7 @@ task :deploy do
     # instance of your project.
     invoke :'git:clone'
     command %{composer install}
+    command %{php artisan cache:clear}
     invoke :'deploy:link_shared_paths'
     invoke :'deploy:cleanup'
   end

@@ -12,7 +12,22 @@ class DealController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *   @SWG\Get(
+     *   path="/deals",
+     *   summary="Get deals",
+     *   operationId="index",
+     *   tags={"deals"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *      type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @return DealsResource
      */
     public function index()
@@ -29,7 +44,50 @@ class DealController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *   @SWG\Post(
+     *   path="/deals",
+     *   summary="create deal",
+     *   operationId="store",
+     *   tags={"deals"},
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *       type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="deal",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="order_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_value",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_value",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *     @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @return DealResource
      */
@@ -50,7 +108,29 @@ class DealController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     *@SWG\Get(
+     *   path="/deals/{id}",
+     *   summary="Get deal",
+     *   operationId="show",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Deal  $deal
      * @return DealResource
      */
@@ -61,7 +141,52 @@ class DealController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+
+     * *   @SWG\Put(
+     *   path="/deals/{id}",
+     *   summary="update deal",
+     *   operationId="update",
+     *   tags={"deals"},
+     * *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="deal",
+     *     required=true,
+     *     @SWG\Property(
+     *          property="source_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_value",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_value",
+     *          type="string"
+     *      )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Deal  $deal
      * @return DealResource
@@ -84,7 +209,29 @@ class DealController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     **@SWG\DELETE(
+     *   path="/deals/{id}",
+     *   summary="delete deal",
+     *   operationId="destroy",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Deal  $deal
      * @return \Illuminate\Http\Response
      */

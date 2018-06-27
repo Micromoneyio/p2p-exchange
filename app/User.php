@@ -6,6 +6,30 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+/**
+ * @SWG\Definition(
+ *     definition="User",
+ *      required={"email","password", "password_confirmation"},
+ *     @SWG\Property(
+ *     property="id",
+ *     description="id",
+ *      type="integer",
+ *      format="int32"
+ *      ),
+ *     @SWG\Property(
+ *     property="email",
+ *     description="email",
+ *      type="string",
+ *      ),
+ *      @SWG\Property(
+ *     property="password",
+ *     description="password",
+ *      type="string",
+ *      ),
+ * )
+ */
+
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -16,7 +40,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'is_verified'
+        'email', 'password', 'is_verified','name','default_currency_id'
     ];
 
     /**

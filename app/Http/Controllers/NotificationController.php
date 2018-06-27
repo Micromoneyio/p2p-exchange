@@ -12,7 +12,22 @@ class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *    @SWG\Get(
+     *   path="/notifications",
+     *   summary="Get notifications",
+     *   operationId="index",
+     *   tags={"notifications"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @return NotificationsResource
      */
     public function index()
@@ -22,7 +37,38 @@ class NotificationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *  @SWG\Post(
+     *   path="/notifications",
+     *   summary="create notifications",
+     *   operationId="store",
+     *   tags={"notifications"},
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *       type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="notifications",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="deal_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="text",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *     @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @return NotificationResource
      */
@@ -38,7 +84,29 @@ class NotificationController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     *@SWG\Get(
+     *   path="/notifications/{id}",
+     *   summary="Get notifications",
+     *   operationId="show",
+     *   tags={"notifications"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target notifications.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Notification  $notification
      * @return NotificationResource
      */
@@ -49,7 +117,45 @@ class NotificationController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     *   @SWG\Put(
+     *   path="/notifications/{id}",
+     *   summary="update notifications",
+     *   operationId="update",
+     *   tags={"notifications"},
+     * *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target notifications.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="notifications",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="text",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="viewed",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
@@ -65,7 +171,29 @@ class NotificationController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     **@SWG\DELETE(
+     *   path="/notifications/{id}",
+     *   summary="delete notifications",
+     *   operationId="destroy",
+     *   tags={"notifications"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target notifications.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Notification  $notification
      * @return \Illuminate\Http\Response
      */

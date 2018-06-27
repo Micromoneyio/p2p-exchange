@@ -14,7 +14,38 @@ use \Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+
+
     /**
+     *  @SWG\Post(
+     *   path="/register",
+     *   summary="Register user",
+     *   operationId="register",
+     *   tags={"auth"},
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="User that should be stored",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+    *          property="email",
+    *          type="string"
+    *      ),
+     *     @SWG\Property(
+     *          property="password",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="password_confirmation",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * API Register
      *
      * @param Request $request
@@ -37,7 +68,8 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
         $name = 'Customer';
-        $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password)]);
+
+        $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password),'default_currency_id'=>4]);
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
@@ -52,7 +84,32 @@ class AuthController extends Controller
 
 
     /** API Login, on success return JWT Auth token
-    *
+    @SWG\Post(
+     *   path="/login",
+     *   summary="Login user",
+     *   operationId="login",
+     *   tags={"auth"},
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Login",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="email",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="password",
+     *          type="string"
+     *      ),
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     *
     * @param Request $request
     * @return \Illuminate\Http\JsonResponse
     */
@@ -62,9 +119,7 @@ class AuthController extends Controller
 
         $rules = [
             'email' => 'required|email',
-            'password' => 'required|
-               min:6|
-               regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'
+            'password' => 'required|min:6'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -89,7 +144,22 @@ class AuthController extends Controller
      * Log out
      * Invalidate the token, so user cannot use it anymore
      * They have to relogin to get a new token
-     *
+     * @SWG\Get(
+     *   path="/logout",
+     *   summary="Logout",
+     *   operationId="logout",
+     *   tags={"auth"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -139,7 +209,27 @@ class AuthController extends Controller
 
     /**
      * API Recover Password
-     *
+     *    @SWG\Post(
+     *   path="/recover",
+     *   summary="Recover user",
+     *   operationId="recover",
+     *   tags={"auth"},
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Login",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="email",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

@@ -12,7 +12,22 @@ class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+    @SWG\Get(
+     *   path="/orders",
+     *   summary="Get orders",
+     *   operationId="index",
+     *   tags={"orders"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -22,7 +37,66 @@ class OrderController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *  @SWG\Post(
+     *   path="/orders",
+     *   summary="create orders",
+     *   operationId="store",
+     *   tags={"orders"},
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *       type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="orders",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="source_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="rate_source_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="fix_price",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_price_index",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="limit_from",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="limit_to",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *     @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -45,7 +119,29 @@ class OrderController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     *@SWG\Get(
+     *   path="/orders/{id}",
+     *   summary="Get orders",
+     *   operationId="show",
+     *   tags={"orders"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target orders.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
@@ -56,7 +152,73 @@ class OrderController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     *   @SWG\Put(
+     *   path="/orders/{id}",
+     *   summary="update orders",
+     *   operationId="update",
+     *   tags={"orders"},
+     * *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target orders.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="orders",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="source_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="rate_source_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="destination_asset_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="fix_price",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="source_price_index",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="limit_from",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="limit_to",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
@@ -79,7 +241,29 @@ class OrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     **@SWG\DELETE(
+     *   path="/orders/{id}",
+     *   summary="delete orders",
+     *   operationId="destroy",
+     *   tags={"orders"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target orders.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */

@@ -12,7 +12,22 @@ class AssetController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *@SWG\Get(
+     *   path="/assets",
+     *   summary="Get assets",
+     *   operationId="index",
+     *   tags={"Asset"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+            type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @return AssetsResource
      */
     public function index()
@@ -22,7 +37,62 @@ class AssetController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *  @SWG\Post(
+     *   path="/assets",
+     *   summary="Get assets",
+     *   operationId="index",
+     *   tags={"Asset"},
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+            type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Asset",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="asset_type_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="bank_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="address",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="key",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="default",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="notes",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @return AssetResource
      */
@@ -44,7 +114,29 @@ class AssetController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     **@SWG\Get(
+     *   path="/assets/{id}",
+     *   summary="Get asset",
+     *   operationId="show",
+     *   tags={"Asset"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target asset.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+            type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Asset  $asset
      * @return AssetResource
      */
@@ -55,7 +147,69 @@ class AssetController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+    @SWG\Put(
+     *   path="/assets/{id}",
+     *   summary="Get assets",
+     *   operationId="index",
+     *   tags={"Asset"},
+     * *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target asset.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Asset",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="asset_type_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="bank_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="address",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="key",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="default",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="notes",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Asset  $asset
      * @return \Illuminate\Http\Response
@@ -82,7 +236,29 @@ class AssetController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     **@SWG\DELETE(
+     *   path="/assets/{id}",
+     *   summary="Get asset",
+     *   operationId="destroy",
+     *   tags={"Asset"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target asset.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\Asset  $asset
      * @return \Illuminate\Http\Response
      */
@@ -92,7 +268,8 @@ class AssetController extends Controller
             return;
         }
         else {
-            return $asset->delete();
+            $asset->delete();
+            return response('ok',200);
         }
     }
 }

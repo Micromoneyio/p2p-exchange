@@ -12,7 +12,22 @@ class FavoriteCurrencyController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *  @SWG\Get(
+     *   path="/favorite_currencies",
+     *   summary="Get favorite_currencies",
+     *   operationId="index",
+     *   tags={"favorite_currencies"},
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @return FavoriteCurrenciesResource
      */
     public function index()
@@ -22,7 +37,34 @@ class FavoriteCurrencyController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *  @SWG\Post(
+     *   path="/favorite_currencies",
+     *   summary="create favorite_currencies",
+     *   operationId="store",
+     *   tags={"favorite_currencies"},
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *       type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="favorite_currencies",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="currency_id",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @return FavoriteCurrencyResource
      */
@@ -37,7 +79,29 @@ class FavoriteCurrencyController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     *@SWG\Get(
+     *   path="/favorite_currencies/{id}",
+     *   summary="Get favorite_currencies",
+     *   operationId="show",
+     *   tags={"favorite_currencies"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target favorite_currencies.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\FavoriteCurrency  $favoriteCurrency
      * @return FavoriteCurrencyResource
      */
@@ -48,7 +112,41 @@ class FavoriteCurrencyController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     *   @SWG\Put(
+     *   path="/favorite_currencies/{id}",
+     *   summary="update favorite_currencies",
+     *   operationId="update",
+     *   tags={"favorite_currencies"},
+     * *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target favorite_currencies.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *      ),
+     *   @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="favorite_currencies",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="currency_id",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\FavoriteCurrency  $favoriteCurrency
      * @return FavoriteCurrencyResource
@@ -63,7 +161,29 @@ class FavoriteCurrencyController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     **@SWG\DELETE(
+     *   path="/favorite_currencies/{id}",
+     *   summary="delete favorite_currencies",
+     *   operationId="destroy",
+     *   tags={"favorite_currencies"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target favorite_currencies.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
      * @param  \App\FavoriteCurrency  $favoriteCurrency
      * @return \Illuminate\Http\Response
      */

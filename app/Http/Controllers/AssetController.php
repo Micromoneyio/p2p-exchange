@@ -236,7 +236,7 @@ class AssetController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     **@SWG\DELETE(
+     **@SWG\Delete(
      *   path="/assets/{id}",
      *   summary="Get asset",
      *   operationId="destroy",

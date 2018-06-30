@@ -20,7 +20,6 @@ pipelines:
           - bundler
         script:
           - bundle install
-          - gem install mina
           - mina deploy
 
 definitions:

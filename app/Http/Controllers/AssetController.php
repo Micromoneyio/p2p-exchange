@@ -32,7 +32,15 @@ class AssetController extends Controller
      */
     public function index()
     {
-        return new AssetsResource(Auth::user()->assets);
+
+        $result = \auth()->user()->assets;
+        foreach($result as &$item){
+            $item->currency;
+            $item->bank;
+        }
+     return $result;
+        dd($result);
+        return \auth()->user()->assets;//new AssetsResource(Auth::user()->assets);
     }
 
     /**

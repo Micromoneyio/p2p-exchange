@@ -7,6 +7,8 @@ use App\User;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Namshi\JOSE\JWT;
+use Tymon\JWTAuth\Contracts\Providers\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Mail\Message;
@@ -138,7 +140,7 @@ class AuthController extends Controller
             return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
         }
         // all good so return the token
-        return response()->json(['success' => true, 'data'=> [ 'token' => $token ]]);
+        return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
     }
     /**
      * Log out

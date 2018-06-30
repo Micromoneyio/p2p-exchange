@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Asset;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\AssetsResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +33,15 @@ class AssetController extends Controller
      */
     public function index()
     {
-        return new AssetsResource(Auth::user()->assets);
+
+        $result = \auth()->user()->assets;
+        foreach($result as &$item){
+            $item->currency;
+            $item->bank;
+            $item->currency->makeHidden(['created_at','updated_at']);
+            $item->bank->makeHidden(['created_at','updated_at']);
+        }
+        return $result;//new AssetsResource(Auth::user()->assets);
     }
 
     /**

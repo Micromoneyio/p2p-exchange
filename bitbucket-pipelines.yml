@@ -10,13 +10,17 @@ pipelines:
     - step:
         caches:
           - bundler
-        script: # Modify the commands below to build your repository.
+        script:
           - bundle install
     - step:
         name: Deploy master
         trigger: manual
         deployment: production
+        caches:
+          - bundler
         script:
+          - bundle install
+          - gem install mina
           - mina deploy
 
 definitions:

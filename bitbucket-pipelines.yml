@@ -13,11 +13,11 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - bundle install
     - step:
-        name: Manual step
+        name: Deploy master
         trigger: manual
+        deployment: production
         script:
           - mina deploy
-
 
 definitions:
   caches:

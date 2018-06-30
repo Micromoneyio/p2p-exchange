@@ -39,6 +39,7 @@ class AssetController extends Controller
             $item->bank;
             isset($item->currency) ? $item->currency->makeHidden(['created_at','updated_at']) : null;
             isset($item->bank) ? $item->bank->makeHidden(['created_at','updated_at']) : null;
+            isset($item->assetType) ? $item->assetType->makeHidden(['created_at','updated_at']) : null;
         }
         return $result;//new AssetsResource(Auth::user()->assets);
     }

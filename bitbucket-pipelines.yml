@@ -11,7 +11,7 @@ pipelines:
         caches:
           - bundler
         script:
-          - bundle install
+          - php artisan l5-swagger:generate
     - step:
         name: Deploy master
         trigger: manual

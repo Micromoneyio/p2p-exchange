@@ -2,19 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Currency;
+use App\Http\Resources\MarketHistoriesResource;
 use App\MarketHistory;
+use App\RateSource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class MarketHistoryController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     *@SWG\Get(
+     *   path="/market_histories",
+     *   summary="Get market histories",
+     *   operationId="index",
+     *   tags={"Asset"},
+     *   @SWG\Parameter(
+     *     name="currency_id",
+     *     in="query",
+     *     description="Filter by currency",
+     *     required=falese,
+     *     type="string"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @return AssetsResource
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $entities = collect([]);
+        if (!empty($request->currency_id)) {
+            foreach (RateSource::all() as $rate_source) {
+                foreach (Currency::all() as $currency) {
+                    $history = MarketHistory::orderBy('created', 'desc')->where([
+                        'currency_id' => $request->currency_id,
+                        'unit_currency_id' => $currency->id,
+                        'rate_source_id' => $rate_source->id
+                    ])->first();
+                    if ($history != null) {
+                        $entities = $entities.push($history);
+                    }
+                }
+            }
+        }
+        else {
+            foreach (RateSource::all() as $rate_source) {
+                foreach (Currency::all() as $currency) {
+                    foreach (Currency::all() as $unit_currency) {
+                        $history = MarketHistory::orderBy('created', 'desc')->where([
+                            'currency_id' => $currency->id,
+                            'unit_currency_id' => $unit_currency->id,
+                            'rate_source_id' => $rate_source->id
+                        ])->first();
+                        if ($history != null) {
+                            $entities = $entities.push($history);
+                        }
+                    }
+                }
+            }
+        }
+        return new MarketHistoriesResource($entities);
     }
 
     /**

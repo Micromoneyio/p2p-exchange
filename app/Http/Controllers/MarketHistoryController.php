@@ -71,6 +71,12 @@ class MarketHistoryController extends Controller
                 }
             }
         }
+        foreach ($entities as $entity){
+            $entity->currency;
+            $entity->rate_source;
+            $entity->unit_currency;
+        }
+
         return new MarketHistoriesResource($entities);
     }
 

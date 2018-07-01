@@ -22,7 +22,7 @@ class MarketHistoryController extends Controller
      *     name="currency_id",
      *     in="query",
      *     description="Filter by currency",
-     *     required=falese,
+     *     required=false,
      *     type="string"
      *   ),
      *   @SWG\Parameter(

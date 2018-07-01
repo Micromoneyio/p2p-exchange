@@ -99,7 +99,7 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        $asset = new Asset([
+        $asset = Asset::create([
             'user_id' => Auth::id(),
             'asset_type_id' => $request->asset_type_id,
             'currency_id' => $request->currency_id,

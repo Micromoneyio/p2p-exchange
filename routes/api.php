@@ -22,6 +22,7 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     });
 
     Route::resource('assets',              'AssetController');
+    Route::post('assets/{id}',              'AssetController@edit');
     Route::resource('asset_types',         'AssetTypeController');
     Route::resource('banks',               'BankController');
     Route::resource('currencies',          'CurrencyController');

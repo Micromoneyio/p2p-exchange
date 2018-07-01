@@ -223,7 +223,7 @@ class AssetController extends Controller
      * @param  \App\Asset  $asset
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Asset $asset)
+    public function edit(Request $request, Asset $asset)
     {
         if ($asset->user_id != Auth::id()) {
             return;

@@ -44,7 +44,7 @@ class MarketHistoryController extends Controller
         if (!empty($request->currency_id)) {
             foreach (RateSource::all() as $rate_source) {
                 foreach (Currency::all() as $currency) {
-                    $history = MarketHistory::orderBy('created', 'desc')->where([
+                    $history = MarketHistory::orderBy('created_at', 'desc')->where([
                         'currency_id' => $request->currency_id,
                         'unit_currency_id' => $currency->id,
                         'rate_source_id' => $rate_source->id
@@ -59,7 +59,7 @@ class MarketHistoryController extends Controller
             foreach (RateSource::all() as $rate_source) {
                 foreach (Currency::all() as $currency) {
                     foreach (Currency::all() as $unit_currency) {
-                        $history = MarketHistory::orderBy('created', 'desc')->where([
+                        $history = MarketHistory::orderBy('created_at', 'desc')->where([
                             'currency_id' => $currency->id,
                             'unit_currency_id' => $unit_currency->id,
                             'rate_source_id' => $rate_source->id

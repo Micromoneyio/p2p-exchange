@@ -33,15 +33,7 @@ class AssetController extends Controller
      */
     public function index()
     {
-
-        $result = \auth()->user()->assets;
-        foreach($result as &$item){
-            $item->currency;
-            $item->bank;
-            $item->currency->makeHidden(['created_at','updated_at']);
-            $item->bank->makeHidden(['created_at','updated_at']);
-        }
-        return new AssetsResource($result);
+        return new AssetsResource(Auth::user()->assets);
     }
 
     /**

@@ -9,7 +9,7 @@ class Asset extends Model
     protected $fillable = ['name', 'asset_type_id', 'user_id', 'currency_id', 'address', 'bank_id'];
 
 
-    public function assetType() {
+    public function asset_type() {
         return $this->belongsTo('App\AssetType');
     }
 

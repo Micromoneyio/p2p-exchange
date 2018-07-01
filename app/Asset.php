@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asset extends Model
 {
-    protected $fillable = ['name', 'asset_type_id', 'user_id', 'currency_id', 'address', 'bank_id'];
+    protected $fillable = [
+        'asset_type_id',
+        'user_id',
+        'currency_id',
+        'bank_id',
+        'name',
+        'address',
+        'key',
+        'default',
+        'notes',
+    ];
 
 
     public function asset_type() {

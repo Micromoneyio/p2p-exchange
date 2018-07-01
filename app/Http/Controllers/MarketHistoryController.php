@@ -50,7 +50,7 @@ class MarketHistoryController extends Controller
                         'rate_source_id' => $rate_source->id
                     ])->first();
                     if ($history != null) {
-                        $entities = $entities.push($history);
+                        $entities = $entities->push($history);
                     }
                 }
             }
@@ -65,7 +65,7 @@ class MarketHistoryController extends Controller
                             'rate_source_id' => $rate_source->id
                         ])->first();
                         if ($history != null) {
-                            $entities = $entities.push($history);
+                            $entities = $entities->push($history);
                         }
                     }
                 }

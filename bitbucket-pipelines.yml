@@ -7,11 +7,11 @@ image: ruby:2.4.0
 
 pipelines:
   default:
-    - step:
-        caches:
-          - bundler
-        script:
-          - php artisan l5-swagger:generate
+#    - step:
+#        caches:
+#          - bundler
+#        script:
+#          - php artisan l5-swagger:generate
     - step:
         name: Deploy master
         trigger: manual

@@ -39,6 +39,8 @@ class DealController extends Controller
                 $deals->push($deal);
             }
         }
+        if(!$deals)
+            return response()->json(['code'=>200,'data'=>[]]);
         return new DealsResource($deals);
     }
 

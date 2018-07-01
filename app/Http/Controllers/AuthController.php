@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Currency;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -71,7 +72,7 @@ class AuthController extends Controller
         $password = $request->password;
         $name = 'Customer';
 
-        $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password),'default_currency_id'=>4]);
+        $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password),'default_currency_id'=>Currency::all()->first()->id]);
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";

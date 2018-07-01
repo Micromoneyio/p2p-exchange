@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'source_currency_id',
+        'destination_currency_id',
+        'rate_source_id',
+        'source_asset_id',
+        'destination_asset_id',
+        'fix_price',
+        'source_price_index',
+        'limit_from',
+        'limit_to'
+    ];
+
     public function user() {
         return $this->belongsTo('App\User');
     }

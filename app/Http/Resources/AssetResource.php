@@ -24,7 +24,7 @@ class AssetResource extends JsonResource
             'address' => $this->address,
             'key' => $this->key,
             'notes' => $this->notes,
-            'default' => $this->default,
+            'default' => (bool)$this->default,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

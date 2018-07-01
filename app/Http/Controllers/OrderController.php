@@ -275,7 +275,7 @@ class OrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     **@SWG\Get(
+     **@SWG\Post(
      *   path="/orders/filter",
      *   summary="filter orders",
      *   operationId="filter",

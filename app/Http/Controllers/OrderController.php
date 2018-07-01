@@ -7,6 +7,7 @@ use App\Http\Resources\OrdersResource;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class OrderController extends Controller
 {
@@ -241,7 +242,7 @@ class OrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     **@SWG\DELETE(
+     **@SWG\Delete(
      *   path="/orders/{id}",
      *   summary="delete orders",
      *   operationId="destroy",
@@ -270,5 +271,86 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         $order->delete();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     **@SWG\Get(
+     *   path="/orders/filter",
+     *   summary="filter orders",
+     *   operationId="filter",
+     *   tags={"orders"},
+     *  @SWG\Parameter(
+     *     name="source_currency_id",
+     *     in="path",
+     *     description="Source currency ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="destination_currency_id",
+     *     in="path",
+     *     description="Source currency ID",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="amount",
+     *     in="path",
+     *     description="Desired amount",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @return OrdersResource
+     */
+    public function filter(Request $request)
+    {
+        if (empty($request->destination_currency_id) && empty($request->source_currency_id)) {
+            return new OrdersResource(collect([]));
+        }
+
+        $orders = Order::where([
+            'destination_currency_id' => $request->destination_currency_id,
+            'source_currency_id' => $request->source_currency_id
+        ])->reject(function($value, $key) {
+           return $value->user_id == Auth::id();
+        });
+
+        $entities = collect([]);
+        foreach ($orders as $order) {
+            $valid = true;
+            if ($order->limit_from && $request->amount) {
+                $valid &= $order->limit_from >= floatval($request->amount);
+            }
+            if ($order->limit_to && $request->amount) {
+                $valid &= $order->limit_to <= floatval($request->amount);
+            }
+            if ($valid) {
+                $entities->push($order);
+            }
+        }
+
+        // Sorting params
+        $entities = $entities->sortBy(function ($order, $key) {
+            switch (Auth::user()->sort) {
+                case 'price':
+                    return $order->price;
+                case 'rank':
+                    return $order->user->rank;
+            }
+        });
+
+        return new OrdersResource($entities);
     }
 }

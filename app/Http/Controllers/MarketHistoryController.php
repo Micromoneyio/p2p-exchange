@@ -17,7 +17,7 @@ class MarketHistoryController extends Controller
      *   path="/market_histories",
      *   summary="Get market histories",
      *   operationId="index",
-     *   tags={"Asset"},
+     *   tags={"MarketHistory"},
      *   @SWG\Parameter(
      *     name="currency_id",
      *     in="query",
@@ -36,7 +36,7 @@ class MarketHistoryController extends Controller
      *   @SWG\Response(response=400, description="not acceptable"),
      *   @SWG\Response(response=500, description="internal server error")
      * )
-     * @return AssetsResource
+     * @return MarketHistoriesResource
      */
     public function index(Request $request)
     {

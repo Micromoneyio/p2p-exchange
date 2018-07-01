@@ -199,7 +199,7 @@ class AssetController extends Controller
      *      ),
      *     @SWG\Property(
      *          property="default",
-     *          type="string"
+     *          type="boolean"
      *      ),
      *     @SWG\Property(
      *          property="notes",
@@ -228,7 +228,7 @@ class AssetController extends Controller
                 'name' => $request->name,
                 'address' => $request->address,
                 'key' => $request->key,
-                'default' => $request->default,
+                'default' => (bool)$request->default,
                 'notes' => $request->notes
             ]);
             return new AssetResource($asset);

@@ -34,5 +34,12 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    'google' => [
+        'client_id' => '531964876786-ust9t6lkgdmejf0npaoq3qf10422vs5p.apps.googleusercontent.com',
+        'secret' => 'OmbPlfeg-_UN0AS6LfherLCy',
+        'api_key' => 'AIzaSyAaGRiitEZm1vdwsMtaaSdGFbCd981Znmo',
+        'app_name' => 'Exchange',
+    ],
+
 
 ];

@@ -40,6 +40,11 @@ return [
         'api_key' => 'AIzaSyAaGRiitEZm1vdwsMtaaSdGFbCd981Znmo',
         'app_name' => 'Exchange',
     ],
+    'facebook' => [
+        'client_id' => '832591046950309',
+        'client_secret' => 'fa5c4c0646c2410846e21214a081c14a',
+        'redirect' => '/redirect',
+    ],
 
 
 ];

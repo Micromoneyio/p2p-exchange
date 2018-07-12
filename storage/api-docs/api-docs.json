@@ -193,7 +193,7 @@
                                 },
                                 "default": {
                                     "description": "Update the specified resource in storage.",
-                                    "type": "string"
+                                    "type": "boolean"
                                 },
                                 "notes": {
                                     "description": "Update the specified resource in storage.",
@@ -579,6 +579,46 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "not acceptable"
+                    },
+                    "500": {
+                        "description": "internal server error"
+                    }
+                }
+            }
+        },
+        "/login/google": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Google login",
+                "operationId": "googleLogin",
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "not acceptable"
+                    },
+                    "500": {
+                        "description": "internal server error"
+                    }
+                }
+            }
+        },
+        "/login/facebook": {
+            "get": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Facebook login",
+                "operationId": "redirectToFacebook",
                 "responses": {
                     "200": {
                         "description": "successful operation"
@@ -1763,6 +1803,42 @@
                 }
             }
         },
+        "/market_histories": {
+            "get": {
+                "tags": [
+                    "MarketHistory"
+                ],
+                "summary": "Get market histories",
+                "operationId": "index",
+                "parameters": [
+                    {
+                        "name": "currency_id",
+                        "in": "query",
+                        "description": "Filter by currency",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "JWT-token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "not acceptable"
+                    },
+                    "500": {
+                        "description": "internal server error"
+                    }
+                }
+            }
+        },
         "/notifications": {
             "get": {
                 "tags": [
@@ -2187,6 +2263,56 @@
                         "name": "id",
                         "in": "path",
                         "description": "Target orders.",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "JWT-token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "not acceptable"
+                    },
+                    "500": {
+                        "description": "internal server error"
+                    }
+                }
+            }
+        },
+        "/orders/filter": {
+            "post": {
+                "tags": [
+                    "orders"
+                ],
+                "summary": "filter orders",
+                "operationId": "filter",
+                "parameters": [
+                    {
+                        "name": "source_currency_id",
+                        "in": "path",
+                        "description": "Source currency ID",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "destination_currency_id",
+                        "in": "path",
+                        "description": "Source currency ID",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "amount",
+                        "in": "path",
+                        "description": "Desired amount",
                         "required": true,
                         "type": "integer"
                     },

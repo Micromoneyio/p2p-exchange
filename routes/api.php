@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
 Route::post('recover', 'AuthController@recover');
+Route::get('login/google',array('as'=>'glogin','uses'=>'AuthController@googleLogin')) ;
+Route::get('login/facebook', 'AuthController@redirectToFacebook');
 Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('logout', 'AuthController@logout');
     Route::get('test', function(){

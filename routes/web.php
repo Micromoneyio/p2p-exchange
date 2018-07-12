@@ -15,5 +15,8 @@ Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
 Route::get('password/reset', 'AuthController@showResetForm')->name('password.request');
 
 
-Route::get('glogin',array('as'=>'glogin','uses'=>'AuthController@googleLogin')) ;
+
 Route::get('google-user',array('as'=>'user.glist','uses'=>'AuthController@listGoogleUser')) ;
+
+
+Route::get('facebook/callback', 'AuthController@handleFacebookCallback');

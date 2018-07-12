@@ -8,6 +8,7 @@ use App\User;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -308,6 +309,20 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Facebook
+     * @SWG\Get(
+     *   path="/login/google",
+     *   summary="Google login",
+     *   operationId="googleLogin",
+     *   tags={"auth"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function googleLogin(Request $request)  {
         $google_redirect_url = route('glogin');
         $gClient = new \Google_Client();
@@ -347,12 +362,64 @@ class AuthController extends Controller
         {
             //For Guest user, get google login url
             $authUrl = $gClient->createAuthUrl();
-            return redirect()->to($authUrl);
+            return response()->json(['success'=>true, 'data'=>['redirect'=>$authUrl]]);
         }
     }
     public function listGoogleUser(Request $request){
         $users = User::orderBy('id','DESC')->paginate(5);
         return view('users.list',compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);;
+    }
+
+
+    /**
+     * Facebook
+     * @SWG\Get(
+     *   path="/login/facebook",
+     *   summary="Facebook login",
+     *   operationId="redirectToFacebook",
+     *   tags={"auth"},
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function redirectToFacebook()
+    {
+        return response()->json(['success'=>true, 'data'=>['redirect'=>Socialite::driver('facebook')->redirect()->getTargetUrl()]]);
+    }
+
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function handleFacebookCallback()
+    {
+        try {
+            $user = Socialite::driver('facebook')->user();
+            $create['name'] = $user->getName();
+            $create['email'] = $user->getEmail();
+            $create['facebook_id'] = $user->getId();
+
+
+            $userModel = new User;
+            $createdUser = $userModel->addNew($create);
+            Auth::loginUsingId($createdUser->id);
+
+
+            return redirect()->route('home');
+
+
+        } catch (\Exception $e) {
+
+
+            return redirect('auth/facebook');
+
+
+        }
     }
 
 }

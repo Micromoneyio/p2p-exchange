@@ -15,7 +15,7 @@ require 'mina/puma'
 set :application_name, 'exchange'
 set :domain,           '109.120.152.45'
 set :deploy_to,        '/var/www/exchange_api'
-set :repository,       'git@bitbucket.org:blackseacoders/exchange_api.git'
+set :repository,       'git@bitbucket.org:VladimirPalych/exchange_api.git'
 set :branch,           'master'
 
 # Optional settings:

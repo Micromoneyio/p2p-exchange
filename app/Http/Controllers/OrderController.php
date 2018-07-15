@@ -31,9 +31,20 @@ class OrderController extends Controller
      * )
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new OrdersResource(Order::all());
+        $orders = Order::where('user_id',$request->user()->id)->get();
+        foreach ($orders as &$order) {
+            $order->rate_source;
+            $order->source_currency;
+            $order->destination_currency;
+            $order->source_asset;
+            $order->destination_asset;
+            $order->deals;
+            $order->type;
+        }
+
+        return $orders;
     }
 
     /**

@@ -40,10 +40,10 @@ class OrderController extends Controller
             $order->destination_currency;
             $order->source_asset;
             $order->destination_asset;
-            $order->deals;
             $order->type;
+            $order->user;
+            $order->deals;
         }
-
         return $orders;
     }
 

@@ -16,7 +16,8 @@ class Order extends Model
         'fix_price',
         'source_price_index',
         'limit_from',
-        'limit_to'
+        'limit_to',
+        'name'
     ];
 
     public function user() {

@@ -38,7 +38,7 @@ class OrderController extends Controller
             $order->rate_source;
             $order->source_currency;
             $order->destination_currency;
-            $order->source_asset;
+                $order->source_asset;
             $order->destination_asset;
             $order->type;
             $order->user;
@@ -102,6 +102,10 @@ class OrderController extends Controller
      *     @SWG\Property(
      *          property="limit_to",
      *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="name",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -124,7 +128,8 @@ class OrderController extends Controller
             'fix_price' => $request->fix_price,
             'source_price_index' => $request->source_price_index,
             'limit_from' => $request->limit_from,
-            'limit_to' => $request->limit_to
+            'limit_to' => $request->limit_to,
+            'name' => $request->name,
         ]);
         return new OrderResource($order);
     }
@@ -246,7 +251,9 @@ class OrderController extends Controller
             'fix_price' => $request->fix_price,
             'source_price_index' => $request->source_price_index,
             'limit_from' => $request->limit_from,
-            'limit_to' => $request->limit_to
+            'limit_to' => $request->limit_to,
+            'name' => $request->name,
+
         ]);
         return new OrderResource($order);
     }

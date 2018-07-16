@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DealHistory extends Model
 {
+    protected $fillable = ['deal_id','deal_stage_id','notes'];
     public function deal()
     {
         return $this->belongsTo('App\Deal');

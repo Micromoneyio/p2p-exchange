@@ -83,6 +83,26 @@ class DealController extends Controller
      *     @SWG\Property(
      *          property="destination_value",
      *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="deal_stage_id",
+     *          type="string"
+     *      ),
+     *    @SWG\Property(
+     *          property="transit_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="transit_address",
+     *          type="string"
+     *      ),
+     *      @SWG\Property(
+     *          property="transit_key",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="transit_hash",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -101,7 +121,12 @@ class DealController extends Controller
             'source_asset_id' => $request->source_asset_id,
             'destination_asset_id' => $request->destination_asset_id,
             'source_value' => $request->source_value,
-            'destination_value' => $request->destination_value
+            'destination_value' => $request->destination_value,
+            'deal_stage_id' => $request->deal_stage_id,
+            'transit_currency_id' => $request->transit_currency_id,
+            'transit_address' => $request->transit_address,
+            'transit_key' => $request->transit_key,
+            'transit_hash' => $request->transit_hash
         ]);
         $deal->get_address('ETH');
         $deal->save();
@@ -183,6 +208,26 @@ class DealController extends Controller
      *     @SWG\Property(
      *          property="destination_value",
      *          type="string"
+     *      ),
+     *    @SWG\Property(
+     *          property="deal_stage_id",
+     *          type="string"
+     *      ),
+     *    @SWG\Property(
+     *          property="transit_currency_id",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="transit_address",
+     *          type="string"
+     *      ),
+     *      @SWG\Property(
+     *          property="transit_key",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="transit_hash",
+     *          type="string"
      *      )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -203,7 +248,12 @@ class DealController extends Controller
                 'source_asset_id' => $request->source_asset_id,
                 'destination_asset_id' => $request->destination_asset_id,
                 'source_value' => $request->source_value,
-                'destination_value' => $request->destination_value
+                'destination_value' => $request->destination_value,
+                'deal_stage_id' => $request->deal_stage_id,
+                'transit_currency_id' => $request->transit_currency_id,
+                'transit_address' => $request->transit_address,
+                'transit_key' => $request->transit_key,
+                'transit_hash' => $request->transit_hash
             ]);
             return new DealResource($deal);
         }

@@ -77,7 +77,7 @@ class NotificationController extends Controller
         $notification = Notification::create([
             'user_id' => Auth::id(),
             'deal_id' => $request->deal_id,
-            'text' => $request->text
+            'notes' => $request->text
         ]);
         return new NotificationResource($notification);
     }

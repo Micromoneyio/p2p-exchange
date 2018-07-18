@@ -35,7 +35,10 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::resource('notifications',       'NotificationController');
     Route::resource('orders',              'OrderController');
     Route::resource('rate_sources',        'RateSourceController');
-    Route::post('order','OrderController@filter');
+
+    Route::prefix('orders')->group(function() {
+        Route::post('filter','OrderController@filter');
+    });
 });
 
 

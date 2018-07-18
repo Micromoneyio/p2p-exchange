@@ -349,11 +349,11 @@ class OrderController extends Controller
         $entities = collect([]);
         foreach ($orders as $order) {
             $valid = true;
-            if ($order->limit_from && $order->limit_from != 0 && $request->amount) {
-                $valid &= $order->limit_from >= floatval($request->amount);
+            if ($order->limit_from && $request->amount) {
+                $valid &= $order->limit_from <= floatval($request->amount);
             }
-            if ($order->limit_to && $order->limit_to != 0 && $request->amount) {
-                $valid &= $order->limit_to <= floatval($request->amount);
+            if ($order->limit_to && $request->amount) {
+                $valid &= $order->limit_to >= floatval($request->amount);
             }
             if ($valid) {
                 $entities->push($order);

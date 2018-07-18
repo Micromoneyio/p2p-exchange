@@ -341,7 +341,7 @@ class OrderController extends Controller
         $orders = Order::where([
             'destination_currency_id' => $request->destination_currency_id,
             'source_currency_id' => $request->source_currency_id
-        ]);
+        ])->get();
         $orders = $orders->reject(function($value, $key) {
            return $value->user_id == Auth::id();
         });

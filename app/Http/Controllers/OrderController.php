@@ -364,7 +364,7 @@ class OrderController extends Controller
         $entities = $entities->sortBy(function ($order, $key) {
             switch (Auth::user()->sort) {
                 case 'price':
-                    return $order->price;
+                    return $order->price();
                 case 'rank':
                     return $order->user->rank;
             }

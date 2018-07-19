@@ -38,7 +38,7 @@ class OrderController extends Controller
             $order->rate_source;
             $order->source_currency;
             $order->destination_currency;
-                $order->source_asset;
+            $order->source_asset;
             $order->destination_asset;
             $order->type;
             $order->user;
@@ -369,7 +369,16 @@ class OrderController extends Controller
                     return $order->user->rank;
             }
         });
-
-        return new OrdersResource($entities);
+        foreach ($entities as &$order) {
+            $order->rate_source;
+            $order->source_currency;
+            $order->destination_currency;
+            $order->source_asset;
+            $order->destination_asset;
+            $order->type;
+            $order->user;
+            $order->deals;
+        }
+        return $entities;
     }
 }

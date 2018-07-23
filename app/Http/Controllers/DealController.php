@@ -296,4 +296,16 @@ class DealController extends Controller
             return $deal->delete();
         }
     }
+
+    //def pay
+    //return false unless current_user == (@entity.order.type == :crypto_to_fiat ? @entity.user : @entity.order.user)
+    //deal_stage = DealStage.find_by(name: 'Marked as paid')
+    //@entity.update(deal_stage: deal_stage)
+    //end
+
+    //def release
+    //return false unless current_user == (@entity.order.type == :crypto_to_fiat ? @entity.order.user : @entity.user)
+    //deal_stage = DealStage.find_by(name: 'Escrow in releasing transaction')
+    //@entity.update(deal_stage: deal_stage)
+    //end
 }

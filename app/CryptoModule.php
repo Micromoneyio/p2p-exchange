@@ -123,6 +123,6 @@ class CryptoModule
         if ($response->getStatusCode()!='200'){
             return \response($response->getReasonPhrase(),$response->getStatusCode());
         }
-        return $response->getBody();
+        return json_decode($response->getBody());
     }
 }

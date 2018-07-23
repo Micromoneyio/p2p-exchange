@@ -19,16 +19,14 @@ class Deal extends Model
     }
     
     public function get_address(string $symbol) {
-//        def get_address(symbol)
-//            currency = Currency.find_by(symbol: symbol)
-//            self.transit_currency = currency
-//            self.deal_stage = DealStage.find_by(name: 'Waiting for escrow')
-//
-//            response = CryptoModule.new(symbol: symbol).get_address
-//
-//            self.transit_address = response['address']
-//            self.transit_key     = response['privateKey']
-//          end
+        $currency = Currency::where(['symbol' => $symbol])->first();
+        $this->transit_currency_id = $currency->id;
+        $this->deal_stage_id = DealStage::where(['name' => 'Waiting for escrow'])->first()->id;
 
+        $module = new CryptoModule($symbol);
+        $response = $module->getAddress();
+
+        $this->transit_address = $response->address;
+        $this->transit_key = $response->privateKey;
     }
 }

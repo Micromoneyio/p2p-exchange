@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
@@ -91,6 +93,6 @@ class Order extends Model
         if ($this->id == null) {
             return false;
         }
-        return $this->user->favorite_orders->where('order_id', $this->id)->isNotEmpty();
+        return (int) Auth::user()->favorite_orders->where('order_id', $this->id)->isNotEmpty();
     }
 }

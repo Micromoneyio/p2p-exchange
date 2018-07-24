@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Deal;
+use App\Observers\DealObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 

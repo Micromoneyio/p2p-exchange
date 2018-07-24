@@ -48,6 +48,10 @@ class Order extends Model
         return $this->hasMany('App\Deal');
     }
 
+    public function favourites() {
+        return $this->hasMany(FavoriteOrder::class);
+    }
+
     public function getTypeAttribute() {
         if ($this->source_currency->crypto && !$this->destination_currency->crypto) {
             return 'crypto_to_fiat';

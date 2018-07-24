@@ -43,6 +43,7 @@ class OrderController extends Controller
             $order->type;
             $order->user;
             $order->deals;
+            $order->is_favorite = $order->is_favorite();
         }
         return $orders;
     }

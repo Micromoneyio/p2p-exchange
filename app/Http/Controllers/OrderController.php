@@ -369,6 +369,7 @@ class OrderController extends Controller
                     return $order->user->rank;
             }
         });
+
         foreach ($entities as &$order) {
             $order->rate_source;
             $order->source_currency;
@@ -378,7 +379,7 @@ class OrderController extends Controller
             $order->type;
             $order->user;
             $order->deals;
-            $order->favourites;
+            $order->is_favorite = $order->is_favorite();
         }
         return $entities;
     }

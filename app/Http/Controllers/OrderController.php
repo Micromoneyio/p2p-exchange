@@ -378,6 +378,7 @@ class OrderController extends Controller
             $order->type;
             $order->user;
             $order->deals;
+            $order->favourites;
         }
         return $entities;
     }

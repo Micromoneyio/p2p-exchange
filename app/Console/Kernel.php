@@ -6,6 +6,7 @@ use App\Currency;
 use App\MarketHistory;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use React\Socket\ConnectionInterface;
 
 class Kernel extends ConsoleKernel
 {
@@ -46,6 +47,9 @@ class Kernel extends ConsoleKernel
                 }
 
             }
+        })->everyMinute();
+        $schedule->call(function (ConnectionInterface $connection){
+            dd(get_class_methods($connection));
         })->everyMinute();
     }
 

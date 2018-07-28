@@ -1,0 +1,23 @@
+
+  [41;1m Symfony\Component\Debug\Exception\FatalThrowableError [49;22m : [33mClass 'App\Console\Commands\WebSocketController' not found[39m
+
+  at [32mC:\OpenServerNew\OSPanel\domains\exchange_api\app\Console\Commands\WebSocketServer.php[39m:[32m46[39m
+    [90;3m42| [0m[33m    {[0m
+    [90;3m43| [0m[33m        [0m[39;1m$server [0m[33m= [0m[39;1mIoServer[0m[33m::[0m[39;1mfactory[0m[33m([0m
+    [90;3m44| [0m[33m            new [0m[39;1mHttpServer[0m[33m([0m
+    [90;3m45| [0m[33m                new [0m[39;1mWsServer[0m[33m([0m
+[41;1m  > [0m[90;3m46| [0m[33m                    new [0m[39;1mWebSocketController[0m[33m()[0m
+    [90;3m47| [0m[33m                )[0m
+    [90;3m48| [0m[33m            ),[0m
+    [90;3m49| [0m[33m            [0m[39;1m8090[0m
+    [90;3m50| [0m[39;1m        [0m[33m);[0m
+
+  [33mException trace:[39m
+
+  [36m1   [39m[33mApp\Console\Commands\WebSocketServer::handle()[39m
+      [32mC:\OpenServerNew\OSPanel\domains\exchange_api\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php[39m:[32m29[39m
+
+  [36m2   [39m[33mcall_user_func_array([])[39m
+      [32mC:\OpenServerNew\OSPanel\domains\exchange_api\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php[39m:[32m29[39m
+
+  [32mPlease use the argument [39m[31m-v[39m[32m to see more details.[39m

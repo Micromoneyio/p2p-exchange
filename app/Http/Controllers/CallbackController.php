@@ -8,7 +8,7 @@ use App\Http\Resources\CallbackResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CallbackControllerextends Controller
+class CallbackController extends Controller
 {
     /**
      * Display a listing of the resource.

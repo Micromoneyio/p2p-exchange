@@ -69,4 +69,21 @@ class Deal extends Model
             'transit_hash' => $response->hash
         ]);
     }
+
+    /**
+     * @return Currency
+     */
+    public function getCryptoCurrency(): Currency
+    {
+        $sourceCurrency = $this->source_asset->currency;
+        $destinationCurrency = $this->destination_asset->currency;
+        if($sourceCurrency->crypto) {
+            return $sourceCurrency;
+        }
+        if($destinationCurrency->crypto) {
+            return $destinationCurrency;
+        }
+
+        return null;
+    }
 }

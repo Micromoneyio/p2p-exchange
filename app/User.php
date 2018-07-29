@@ -85,4 +85,9 @@ class User extends Authenticatable implements JWTSubject
     public function favorite_orders(){
         return $this->hasMany(FavoriteOrder::class);
     }
+
+    public function callbacks()
+    {
+        return $this->hasMany('App\Callback');
+    }
 }

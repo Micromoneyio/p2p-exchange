@@ -36,6 +36,8 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::resource('orders',              'OrderController');
     Route::resource('rate_sources',        'RateSourceController');
     Route::resource('callbacks',           'CallbackController');
+    Route::resource('settings',            'SettingsController')
+        ->only(['show', 'update']);
 
     Route::post('orders/filter','OrderController@filter');
     Route::post('deals/{deal}/pay', 'DealController@pay');

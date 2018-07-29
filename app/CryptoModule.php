@@ -44,9 +44,9 @@ class CryptoModule
 
 
     /**
-     * @return string
+     * @return \stdClass
      */
-    public function getAddress(): string
+    public function getAddress(): \stdClass
     {
         $res = $this->client->request(
             'POST',
@@ -58,7 +58,7 @@ class CryptoModule
                 ]
             ]
         );
-        return $this->returnResponse($res);
+        return json_decode($res->getBody()->getContents());
     }
 
     /**

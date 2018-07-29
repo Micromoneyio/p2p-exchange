@@ -16,7 +16,9 @@ class DealObserver
      */
     public function created(Deal $deal)
     {
-        //
+        $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) {
+            SendCallbackJob::dispatch($callback, $deal->toJson());
+        });
     }
 
     /**
@@ -61,6 +63,14 @@ class DealObserver
             'deal_id' => $deal->id,
             'text' => $notification_text
         ]);
+
+
+        $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+            SendCallbackJob::dispatch($callback, $deal->toJson());
+        });
+        $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+            SendCallbackJob::dispatch($callback, $deal->toJson());
+        });
     }
 
     /**

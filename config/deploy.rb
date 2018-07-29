@@ -62,6 +62,7 @@ task :deploy do
       command %{composer dumpautoload}
       command %{php artisan l5-swagger:generate}
       command %{php artisan cache:clear}
+      command %{php artisan queue:restart}
     end
   end
 

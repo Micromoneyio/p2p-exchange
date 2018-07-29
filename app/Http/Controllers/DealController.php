@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\DealStage;
 use App\Http\Resources\DealResource;
 use App\Http\Resources\DealsResource;
 use Illuminate\Http\Request;
@@ -297,15 +298,79 @@ class DealController extends Controller
         }
     }
 
-    //def pay
-    //return false unless current_user == (@entity.order.type == :crypto_to_fiat ? @entity.user : @entity.order.user)
-    //deal_stage = DealStage.find_by(name: 'Marked as paid')
-    //@entity.update(deal_stage: deal_stage)
-    //end
+    /**
+     * Set deal as payed by non crypto owner
+     **@SWG\POST(
+     *   path="/deals/{id}/pay",
+     *   summary="set deal as payed",
+     *   operationId="pay",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param  \App\Deal  $deal
+     * @return DealResource
+     */
+    public function pay(Deal $deal)
+    {
+        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
+            return false;
+        }
+        $deal_stage = DealStage::where(['name' => 'Marked as paid'])->first();
+        $deal->update(['deal_stage_id' => $deal_stage->id]);
+        return new DealResource($deal);
+    }
 
-    //def release
-    //return false unless current_user == (@entity.order.type == :crypto_to_fiat ? @entity.order.user : @entity.user)
-    //deal_stage = DealStage.find_by(name: 'Escrow in releasing transaction')
-    //@entity.update(deal_stage: deal_stage)
-    //end
+    /**
+     * Release deal transaction
+     **@SWG\POST(
+     *   path="/deals/{id}/release",
+     *   summary="release deal transaction",
+     *   operationId="release",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+    type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param  \App\Deal  $deal
+     * @return DealResource
+     */
+    public function release(Deal $deal)
+    {
+        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return false;
+        }
+        $deal_stage = DealStage::where(['name' => 'Escrow in releasing transaction'])->first();
+        $deal->update(['deal_stage_id' => $deal_stage->id]);
+        return new DealResource($deal);
+    }
 }

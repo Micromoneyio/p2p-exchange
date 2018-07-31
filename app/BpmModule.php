@@ -10,50 +10,44 @@ use GuzzleHttp\Psr7\Response;
 
 class BpmModule
 {
-    private $api_url, $username, $password, $cookies, $headers;
+    private $api_url, $account, $cookies, $headers;
 
     public function __construct()
     {
         $this->api_url  = getenv('BPM_MODULE_URI');
-        $this->username = getenv('BPM_MODULE_USERNAME');
-        $this->password = getenv('BPM_MODULE_PASSWORD');
+        $this->account  = getenv('BPM_MODULE_USERNAME').':'.getenv('BPM_MODULE_PASSWORD');
         $this->cookies  = '';
         $this->headers  = [
             'MaxDataServiceVersion' => '3.0',
-            'Content-Type' => 'application/json;odata=verbose',
-            'DataServiceVersion' => '1.0'
+            'Content-Type'          => 'application/json;odata=verbose',
+            'DataServiceVersion'    => '1.0',
+            'Authorization'         => 'Basic '.base64_encode($this->account))
         ];
     }
 
     public function contact(User $user)
     {
-        $link = '/0/rest/UsrWebIntegrationService/Contact';
-        $this->checkCookies();
+        $link = 'ContactCollection';
         return request($link, [
-            'request' => [
-                'UserId' => $user->id,
-                'Email'  => $user->email
-            ]
+            'UsrUserId' => $user->id,
+            'Email'  => $user->email
         ]);
     }
 
     public function order(Order $order)
     {
-        $link = '/0/rest/UsrWebIntegrationService/Order';
-        $this->checkCookies();
+        $link = 'UsrOrderCollection';
         return request($link, [
-            'request' => [
-                'UserId'                => $order->user_id,
-                'SourceCurrencyId'      => $order->source_currency_id,
-                'DestinationCurrencyId' => $order->destination_currency_id,
-                'SourceAssetId'         => $order->source_asset_id,
-                'DestinationAssetId'    => $order->destination_asset_id,
-                'RateSourceId'          => $order->rate_source_id,
-                'FixPrice'              => $order->fix_price,
-                'SourcePriceIndex'      => $order->source_price_index,
-                'LimitFrom'             => $order->limit_from,
-                'LimitTo'               => $order->limit_to
-            ]
+            'UsrUserId'                => $order->user_id,
+            'UsrSourceCurrencyId'      => $order->source_currency_id,
+            'UsrDestinationCurrencyId' => $order->destination_currency_id,
+            'UsrSourceAssetId'         => $order->source_asset_id,
+            'UsrDestinationAssetId'    => $order->destination_asset_id,
+            'UsrRateSourceId'          => $order->rate_source_id,
+            'UsrFixPrice'              => $order->fix_price,
+            'UsrSourcePriceIndex'      => $order->source_price_index,
+            'UsrLimitFrom'             => $order->limit_from,
+            'UsrLimitTo'               => $order->limit_to
         ]);
     }
 
@@ -76,11 +70,12 @@ class BpmModule
 
     private function request($link, $body)
     {
-        $options = [
-            'headers' => $this->headers,
-            'cookies' => $this->cookies
-        ];
-        $response = $this->client->request('POST', $this->api_url.$link, $options, $body);
+        $response = $this->client->request(
+            'POST',
+            $this->api_url.$link,
+            ['headers' => $this->headers],
+            json_encode($body)
+        );
         return json_decode($response->getBody()->getContents());
     }
 }

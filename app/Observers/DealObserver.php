@@ -43,6 +43,7 @@ class DealObserver
                 ]);
                 $notification_user_id = $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id;
                 $notification_text = "Transfer crypto currency to " . $deal->transit_address;
+                CryptoCheckJob::dispatch($deal);
                 break;
             case 'Escrow received':
                 $notification_user_id = $deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id;

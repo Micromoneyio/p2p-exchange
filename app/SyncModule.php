@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 
-class BpmModule
+class SyncModule
 {
     private $api_url, $account, $headers;
 

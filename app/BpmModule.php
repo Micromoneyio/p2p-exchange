@@ -10,13 +10,12 @@ use GuzzleHttp\Psr7\Response;
 
 class BpmModule
 {
-    private $api_url, $account, $cookies, $headers;
+    private $api_url, $account, $headers;
 
     public function __construct()
     {
         $this->api_url  = getenv('BPM_MODULE_URI');
         $this->account  = getenv('BPM_MODULE_USERNAME').':'.getenv('BPM_MODULE_PASSWORD');
-        $this->cookies  = '';
         $this->headers  = [
             'MaxDataServiceVersion' => '3.0',
             'Content-Type'          => 'application/json;odata=verbose',
@@ -30,7 +29,7 @@ class BpmModule
         $link = 'ContactCollection';
         return request($link, [
             'UsrUserId' => $user->id,
-            'Email'  => $user->email
+            'Email'     => $user->email
         ]);
     }
 
@@ -49,23 +48,6 @@ class BpmModule
             'UsrLimitFrom'             => $order->limit_from,
             'UsrLimitTo'               => $order->limit_to
         ]);
-    }
-
-
-    private function checkCookies()
-    {
-        if (empty($this->cookies) || $this->cookies == ';') {
-            $this->getCookies();
-        }
-    }
-
-    private function getCookies()
-    {
-        $link = '/ServiceModel/AuthService.svc/Login';
-        $credentials = ['UserName' => $this->username, 'UserPassword' => $this->password];
-        $result = $this->request($link, $credentials);
-        preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $result, $matches);
-        $this->cookies = $matches[1][1].';'.$matches[1][2];
     }
 
     private function request($link, $body)

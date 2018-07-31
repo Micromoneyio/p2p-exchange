@@ -19,6 +19,17 @@ class DealObserver
         $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
+        Notification::create([
+            'user_id' => $deal->order->user_id,
+            'deal_id' => $deal->id,
+            'text' => 'New deal created by one of your orders!'
+        ]);
+        Notification::create([
+            'user_id' => $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id,
+            'deal_id' => $deal->id,
+            'text' => "Transfer crypto currency to " . $deal->transit_address
+        ]);
+        CryptoCheckJob::dispatch($deal);
     }
 
     /**
@@ -35,15 +46,6 @@ class DealObserver
         ]);
 
         switch ($deal->deal_stage->name) {
-            case 'Waiting for escrow':
-                Notification::create([
-                    'user_id' => $deal->order->user_id,
-                    'deal_id' => $deal->id,
-                    'text' => 'New deal created by one of your orders!'
-                ]);
-                $notification_user_id = $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id;
-                $notification_text = "Transfer crypto currency to " . $deal->transit_address;
-                break;
             case 'Escrow received':
                 $notification_user_id = $deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id;
                 $notification_text = 'Escrow was successfully received!';

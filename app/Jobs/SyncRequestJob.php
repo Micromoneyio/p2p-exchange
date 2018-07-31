@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\BpmModule;
+use App\SyncModule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,7 +31,7 @@ class SyncRequestJob implements ShouldQueue
      */
     public function handle(string $entity, $model)
     {
-        $module = new BpmModule();
+        $module = new SyncModule();
         switch ($entity) {
             case 'user':  $module->contact($model); break;
             case 'order': $module->order($model);   break;

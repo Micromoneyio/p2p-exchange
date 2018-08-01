@@ -34,7 +34,7 @@ class DealController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $deals = $user->deals;
+        $deals = $user->deals ?? collect();
         foreach ($user->orders as $order) {
             foreach ($order->deals as $deal) {
                 $deals->push($deal);

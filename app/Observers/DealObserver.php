@@ -22,7 +22,8 @@ class DealObserver
         Notification::create([
             'user_id' => $deal->order->user_id,
             'deal_id' => $deal->id,
-            'text' => 'New deal created by one of your orders!'
+            'text' => 'New deal created by one of your orders!',
+            'viewed' => 0
         ]);
         Notification::create([
             'user_id' => $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id,

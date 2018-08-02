@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Deal;
 use App\DealHistory;
+use App\Jobs\CryptoCheckJob;
+use App\Jobs\SendCallbackJob;
 use App\Notification;
 
 class DealObserver
@@ -28,7 +30,8 @@ class DealObserver
         Notification::create([
             'user_id' => $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id,
             'deal_id' => $deal->id,
-            'text' => "Transfer crypto currency to " . $deal->transit_address
+            'text' => "Transfer crypto currency to " . $deal->transit_address,
+            'viewed' => 0
         ]);
         CryptoCheckJob::dispatch($deal);
     }

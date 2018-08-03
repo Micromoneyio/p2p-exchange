@@ -70,7 +70,8 @@ class DealObserver
             Notification::create([
                 'user_id' => $notification_user_id,
                 'deal_id' => $deal->id,
-                'text' => $notification_text
+                'text'    => $notification_text,
+                'viewed'  => 0
             ]);
         }
 

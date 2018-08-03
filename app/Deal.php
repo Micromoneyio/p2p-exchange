@@ -73,7 +73,7 @@ class Deal extends Model
     /**
      * @return Currency
      */
-    public function getCryptoCurrency(): Currency
+    public function getCryptoCurrency()
     {
         $sourceAsset = $this->source_asset;
         if ($sourceAsset != null) {

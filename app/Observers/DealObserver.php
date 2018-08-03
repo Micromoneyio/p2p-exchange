@@ -71,10 +71,10 @@ class DealObserver
         ]);
 
 
-        $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+        $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
-        $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+        $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
     }

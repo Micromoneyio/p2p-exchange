@@ -48,6 +48,9 @@ class DealObserver
             'notes' => 'Deal update'
         ]);
 
+        $notification_user_id = null;
+        $notification_text    = null;
+
         switch ($deal->deal_stage->name) {
             case 'Escrow received':
                 $notification_user_id = $deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id;
@@ -63,12 +66,13 @@ class DealObserver
                 $deal->release_escrow();
                 break;
         }
-        Notification::create([
-            'user_id' => $notification_user_id,
-            'deal_id' => $deal->id,
-            'text' => $notification_text
-        ]);
-
+        if ($notification_user_id && $notification_text) {
+            Notification::create([
+                'user_id' => $notification_user_id,
+                'deal_id' => $deal->id,
+                'text' => $notification_text
+            ]);
+        }
 
         $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());

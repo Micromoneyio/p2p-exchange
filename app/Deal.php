@@ -75,15 +75,17 @@ class Deal extends Model
      */
     public function getCryptoCurrency(): Currency
     {
-        $sourceCurrency = $this->source_asset->currency;
-        $destinationCurrency = $this->destination_asset->currency;
-        if($sourceCurrency->crypto) {
-            return $sourceCurrency;
+        $sourceAsset = $this->source_asset;
+        if ($sourceAsset != null) {
+            $sourceCurrency = $this->source_asset->currency;
+            $destinationCurrency = $this->destination_asset->currency;
+            if ($sourceCurrency->crypto) {
+                return $sourceCurrency;
+            }
+            if ($destinationCurrency->crypto) {
+                return $destinationCurrency;
+            }
         }
-        if($destinationCurrency->crypto) {
-            return $destinationCurrency;
-        }
-
         return null;
     }
 }

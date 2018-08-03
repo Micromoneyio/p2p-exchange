@@ -108,7 +108,7 @@ class DealController extends Controller
         $transitCurrency = $deal->getCryptoCurrency();
         $deal->get_address($transitCurrency->symbol);
         $deal->save();
-        // CryptoCheckJob::dispatch($deal->id);
+        CryptoCheckJob::dispatch($deal->id);
         return new DealResource($deal);
     }
 

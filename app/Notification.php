@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
-    protected $fillable = ['deal_id','user_id','notes'];
+    protected $fillable = ['deal_id','user_id','notes', 'viewed'];
     public function user()
     {
         return $this->belongsTo('App\User');

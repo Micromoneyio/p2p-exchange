@@ -65,7 +65,7 @@ class CryptoModule
      * @param string $address
      * @return string
      */
-    public function checkBalance(string $address):string
+    public function checkBalance(string $address)
     {
         $res = $this->client->request(
             'GET',
@@ -88,7 +88,7 @@ class CryptoModule
      * @param string $amount
      * @return string
      */
-    public function releaseTransaction(string $accountFrom, string $privateKeyFrom, string $accountTo, string $amount):string
+    public function releaseTransaction(string $accountFrom, string $privateKeyFrom, string $accountTo, string $amount)
     {
         try{
         $res = $this->client->request(
@@ -118,11 +118,11 @@ class CryptoModule
      * @param Response $response
      * @return string
      */
-    private function returnResponse(Response $response):string
+    private function returnResponse(Response $response): \stdClass
     {
         if ($response->getStatusCode()!='200'){
             return \response($response->getReasonPhrase(),$response->getStatusCode());
         }
-        return json_decode($response->getBody());
+        return json_decode($response->getBody()->getContents());
     }
 }

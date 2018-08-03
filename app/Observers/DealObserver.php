@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Deal;
 use App\DealHistory;
-use App\Jobs\CryptoCheckJob;
 use App\Jobs\SendCallbackJob;
 use App\Notification;
 
@@ -33,7 +32,6 @@ class DealObserver
             'text' => "Transfer crypto currency to " . $deal->transit_address,
             'viewed' => 0
         ]);
-        CryptoCheckJob::dispatch($deal);
     }
 
     /**

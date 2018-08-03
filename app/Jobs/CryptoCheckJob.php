@@ -20,9 +20,10 @@ class CryptoCheckJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    private $deal;
+    public function __construct(Deal $deal)
     {
-        //
+        $this->deal = $deal;
     }
 
     /**
@@ -30,9 +31,9 @@ class CryptoCheckJob implements ShouldQueue
      * @param int $dealId
      * @return void
      */
-    public function handle($dealId)
+    public function handle()
     {
-        $deal = Deal::find($dealId);
+        $deal = $this->deal;
         $module = new CryptoModule($deal->getCryptoCurrency()->symbol);
         $response = $module->checkBalance($deal->transit_address);
         $expected = $deal->order->getTypeAttribute() == 'fiat_to_crypto' ? $deal->source_value : $deal->destination_value;
@@ -42,7 +43,7 @@ class CryptoCheckJob implements ShouldQueue
             $deal->update(['deal_stage_id' => $dealStage->id]);
         }
         else {
-            CryptoCheckJob::dispatch($dealId)->delay(now()->addSeconds(5));
+            CryptoCheckJob::dispatch($deal)->delay(now()->addSeconds(5));
         }
     }
 }

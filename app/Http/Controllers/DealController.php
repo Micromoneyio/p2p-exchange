@@ -6,6 +6,7 @@ use App\Deal;
 use App\DealStage;
 use App\Http\Resources\DealResource;
 use App\Http\Resources\DealsResource;
+use App\Jobs\CryptoCheckJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -107,6 +108,7 @@ class DealController extends Controller
         $transitCurrency = $deal->getCryptoCurrency();
         $deal->get_address($transitCurrency->symbol);
         $deal->save();
+        CryptoCheckJob::dispatch($deal);
         return new DealResource($deal);
     }
 

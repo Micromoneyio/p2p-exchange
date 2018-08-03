@@ -30,19 +30,22 @@ class CryptoCheckJob implements ShouldQueue
      * @param int $dealId
      * @return void
      */
-    public function handle(int $dealId)
+    public function handle($dealId)
     {
-        $deal = Deal::find($dealId);
-        $module = new CryptoModule($deal->getCryptoCurrency()->symbol);
-        $response = $module->checkBalance($deal->transit_address);
-        $expected = $deal->order->source_currency->crypto ? $deal->source_value : $deal->destination_value;
+        if ($dealId != null)
+        {
+            $deal = Deal::find($dealId);
+            $module = new CryptoModule($deal->getCryptoCurrency()->symbol);
+            $response = $module->checkBalance($deal->transit_address);
+            $expected = $deal->order->source_currency->crypto ? $deal->source_value : $deal->destination_value;
 
-        if ($response['balance'] == $expected) {
-            $dealStage = DealStage::where(['name' => 'Escrow received'])->first();
-            $deal->update(['deal_stage_id' => $dealStage->id]);
-        }
-        else {
-            CryptoCheckJob::dispatch($deal)->delay(now()->addSeconds(5));
+            if ($response['balance'] == $expected) {
+                $dealStage = DealStage::where(['name' => 'Escrow received'])->first();
+                $deal->update(['deal_stage_id' => $dealStage->id]);
+            }
+            else {
+                CryptoCheckJob::dispatch($deal)->delay(now()->addSeconds(5));
+            }
         }
     }
 }

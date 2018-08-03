@@ -27,11 +27,12 @@ class CryptoCheckJob implements ShouldQueue
 
     /**
      * Execute the job.
-     * @param Deal $deal
+     * @param int $dealId
      * @return void
      */
-    public function handle(Deal $deal)
+    public function handle(int $dealId)
     {
+        $deal = Deal::find($dealId);
         $module = new CryptoModule($deal->getCryptoCurrency()->symbol);
         $response = $module->checkBalance($deal->transit_address);
         $expected = $deal->order->source_currency->crypto ? $deal->source_value : $deal->destination_value;

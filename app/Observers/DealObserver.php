@@ -18,7 +18,7 @@ class DealObserver
      */
     public function created(Deal $deal)
     {
-        $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) {
+        $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
         Notification::create([

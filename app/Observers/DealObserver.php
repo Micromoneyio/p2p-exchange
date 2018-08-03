@@ -44,7 +44,8 @@ class DealObserver
     {
         DealHistory::create([
             'deal_id' => $deal->id,
-            'deal_stage_id' => $deal->deal_stage_id
+            'deal_stage_id' => $deal->deal_stage_id,
+            'notes' => 'Deal update'
         ]);
 
         switch ($deal->deal_stage->name) {

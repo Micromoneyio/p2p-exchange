@@ -14,6 +14,8 @@ class DealsResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => DealResource::collection($this->collection)
+        ];
     }
 }

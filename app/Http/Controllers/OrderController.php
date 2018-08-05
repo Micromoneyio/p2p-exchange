@@ -235,11 +235,11 @@ class OrderController extends Controller
      *     @SWG\Property(
      *          property="limit_to",
      *          type="string"
-     *      )
+     *      ),
      *    @SWG\Property(
      *          property="name",
      *          type="string"
-     *      )
+     *      ),
      *    @SWG\Property(
      *          property="telegram",
      *          type="string"

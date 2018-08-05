@@ -107,6 +107,10 @@ class OrderController extends Controller
      *     @SWG\Property(
      *          property="name",
      *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="telegram",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -131,6 +135,7 @@ class OrderController extends Controller
             'limit_from' => $request->limit_from,
             'limit_to' => $request->limit_to,
             'name' => $request->name,
+            'telegram' => $request->telegram,
         ]);
         return new OrderResource($order);
     }
@@ -231,6 +236,14 @@ class OrderController extends Controller
      *          property="limit_to",
      *          type="string"
      *      )
+     *    @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      )
+     *    @SWG\Property(
+     *          property="telegram",
+     *          type="string"
+     *      )
      *     )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -254,6 +267,7 @@ class OrderController extends Controller
             'limit_from' => $request->limit_from,
             'limit_to' => $request->limit_to,
             'name' => $request->name,
+            'telegram' => $request->telegram,
 
         ]);
         return new OrderResource($order);

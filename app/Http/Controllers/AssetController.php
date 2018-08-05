@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\AssetType;
+use App\CryptoModule;
+use App\Currency;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\AssetsResource;
 use Carbon\Carbon;
@@ -99,17 +102,43 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        $asset = Asset::create([
-            'user_id' => Auth::id(),
-            'asset_type_id' => $request->asset_type_id,
-            'currency_id' => $request->currency_id,
-            'bank_id' => $request->bank_id,
-            'name' => $request->name,
-            'address' => $request->address,
-            'key' => $request->key,
-            'default' => $request->default,
-            'notes' => $request->notes
-        ]);
+        $type = AssetType::findOrFail($request->asset_type_id);
+        $currency = Currency::findOrFail($request->currency_id);
+        if($type->isPersonalDeposit()) {
+            $user = Auth::user();
+            if(Asset::query()->where(['currency_id' => $request->currency_id, 'asset_type_id' => $request->asset_type_id])->exists()) {
+                return;
+            }
+
+            $cryptoModule = new CryptoModule($currency->symbol);
+            $address = $cryptoModule->getAddress();
+
+            $asset = Asset::create([
+                'user_id' => Auth::id(),
+                'asset_type_id' => $request->asset_type_id,
+                'currency_id' => $request->currency_id,
+                'bank_id' => $request->bank_id,
+                'name' => $request->name,
+                'address' => $address->address,
+                'key' => $address->privateKey,
+                'default' => $request->default,
+                'notes' => $request->notes
+            ]);
+
+        } else {
+            $asset = Asset::create([
+                'user_id' => Auth::id(),
+                'asset_type_id' => $request->asset_type_id,
+                'currency_id' => $request->currency_id,
+                'bank_id' => $request->bank_id,
+                'name' => $request->name,
+                'address' => $request->address,
+                'key' => $request->key,
+                'default' => $request->default,
+                'notes' => $request->notes
+            ]);
+        }
+
         return new AssetResource($asset);
     }
 

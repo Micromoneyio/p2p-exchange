@@ -14,7 +14,7 @@ class AssetResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $res = [
             'id' => $this->id,
             'user' => new UserResource($this->user),
             'asset_type' => new AssetTypeResource($this->asset_type),
@@ -28,5 +28,11 @@ class AssetResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
+
+        if($this->asset_type->isPersonalDeposit()) {
+            unset($res['key']);
+        }
+
+        return $res;
     }
 }

@@ -19,7 +19,8 @@ class Order extends Model
         'source_price_index',
         'limit_from',
         'limit_to',
-        'name'
+        'name',
+        'telegram'
     ];
 
     public function user() {

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'database'),
+    'default' => 'database',//env('QUEUE_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------

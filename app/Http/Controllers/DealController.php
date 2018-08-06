@@ -98,18 +98,12 @@ class DealController extends Controller
     public function store(Request $request)
     {
         $deal = new Deal([
-//            'user_id' => Auth::id(),
-//            'order_id' => $request->order_id,
-//            'source_asset_id' => $request->source_asset_id,
-//            'destination_asset_id' => $request->destination_asset_id,
-//            'source_value' => $request->source_value,
-//            'destination_value' => $request->destination_value,
-            'user_id' => 11,
-            'order_id' => 1,
-            'source_asset_id' => 19,
-            'destination_asset_id' => 20,
-            'source_value' => 123,
-            'destination_value' => 312,
+            'user_id' => Auth::id(),
+            'order_id' => $request->order_id,
+            'source_asset_id' => $request->source_asset_id,
+            'destination_asset_id' => $request->destination_asset_id,
+            'source_value' => $request->source_value,
+            'destination_value' => $request->destination_value,
         ]);
         $transitCurrency = $deal->getCryptoCurrency();
         $deal->get_address($transitCurrency->symbol);

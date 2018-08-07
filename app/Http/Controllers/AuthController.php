@@ -152,15 +152,15 @@ class AuthController extends Controller
 
         $rules = [
             'email' => 'required|email',
-            'password' => 'required|min:6',
-            'g-recaptcha-response'=>'required'
+            'password' => 'required|min:6'
+            //'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
-        }
+        }//elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+           // return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+        //}
 
         $credentials['is_verified'] = 1;
 

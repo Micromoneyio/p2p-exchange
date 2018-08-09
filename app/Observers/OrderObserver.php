@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\BpmRequestJob;
 use App\Order;
 
 class OrderObserver
@@ -14,7 +15,7 @@ class OrderObserver
      */
     public function created(Order $order)
     {
-        SyncRequestJob::dispatch('order', $order);
+        BpmRequestJob::dispatch($order);
     }
 
     /**
@@ -25,7 +26,7 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        SyncRequestJob::dispatch('order', $order);
+        BpmRequestJob::dispatch($order);
     }
 
     /**

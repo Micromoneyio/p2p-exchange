@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\BpmRequestJob;
 use App\User;
 
 class UserObserver
@@ -14,7 +15,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        SyncRequestJob::dispatch('user', $user);
+        BpmRequestJob::dispatch($user);
     }
 
     /**
@@ -25,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        SyncRequestJob::dispatch('user', $user);
+        BpmRequestJob::dispatch($user);
     }
 
     /**

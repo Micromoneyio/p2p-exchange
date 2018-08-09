@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -43,6 +44,10 @@ class AuthController extends Controller
      *     @SWG\Property(
      *          property="password_confirmation",
      *          type="string"
+     *      ),
+     *   @SWG\Property(
+     *          property="g-recaptcha-response",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -63,12 +68,16 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required',
                'min:6',
-               'confirmed']
+               'confirmed'],
+            'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
         }
+
         $email = $request->email;
         $password = $request->password;
         $name = 'Customer';
@@ -84,6 +93,22 @@ class AuthController extends Controller
                 $mail->subject($subject);
             });
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
+    }
+    private function validateRecaptcha($value){
+        $client = new Client();
+
+        $response = $client->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            ['form_params'=>
+                [
+                    'secret'=>env('GOOGLE_RECAPTCHA_SECRET'),
+                    'response'=>$value
+                ]
+            ]
+        );
+
+        $body = json_decode((string)$response->getBody());
+        return $body->success;
     }
 
 
@@ -107,6 +132,10 @@ class AuthController extends Controller
      *          property="password",
      *          type="string"
      *      ),
+     *   @SWG\Property(
+     *          property="g-recaptcha-response",
+     *          type="string"
+     *      ),
      *     )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -124,11 +153,14 @@ class AuthController extends Controller
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:6'
+            //'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }
+        }//elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+           // return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+        //}
 
         $credentials['is_verified'] = 1;
 

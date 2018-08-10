@@ -94,6 +94,6 @@ class Order extends Model
         if ($this->id == null) {
             return false;
         }
-        return (int) Auth::user()->favorite_orders->where('order_id', $this->id)->isNotEmpty();
+        return (int) Auth::user()->favoriteOrders->where('order_id', $this->id)->isNotEmpty();
     }
 }

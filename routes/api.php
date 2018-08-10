@@ -19,9 +19,6 @@ Route::get('login/google',array('as'=>'glogin','uses'=>'AuthController@googleLog
 Route::get('login/facebook', 'AuthController@redirectToFacebook');
 Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('logout', 'AuthController@logout');
-    Route::get('test', function(){
-        return response()->json(['foo'=>'bar']);
-    });
 
     Route::resource('assets',              'AssetController');
     Route::resource('asset_types',         'AssetTypeController');

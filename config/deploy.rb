@@ -59,8 +59,8 @@ task :deploy do
     command %{php artisan migrate}
     invoke :'deploy:cleanup'
     on :launch do
-      command %{php artisan clear:data}
       command %{composer dumpautoload}
+      command %{php artisan clear:data}
       command %{php artisan l5-swagger:generate}
       command %{php artisan queue:restart}
     end

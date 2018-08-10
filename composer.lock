@@ -1,11 +1,61 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f02d5816251879035edd4f2633b9f81a",
+    "content-hash": "2673f038e206137d699ff785ba6f762d",
     "packages": [
+        {
+            "name": "afrazahmad/clear-cached-data",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/afrazahmmad/clear-all-cached-data.git",
+                "reference": "03ba2ab0e295e004ea100e85d40702d63553fd90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/afrazahmmad/clear-all-cached-data/zipball/03ba2ab0e295e004ea100e85d40702d63553fd90",
+                "reference": "03ba2ab0e295e004ea100e85d40702d63553fd90",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "~5.5.0|~5.6.0",
+                "php": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AfrazAhmad\\ClearAllCachedData\\ClearAllCachedDataProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "App\\": "app/",
+                    "AfrazAhmad\\ClearAllCachedData\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Afraz Ahmad",
+                    "email": "afrazahmad101.ca@gmail.com"
+                }
+            ],
+            "description": "Clear all cached data i.e. views, config, routes etc",
+            "homepage": "https://github.com/afrazahmmad/clear-all-cached-data",
+            "keywords": [
+                "afrazahmad",
+                "laravel-clear-all-cached-data"
+            ],
+            "time": "2018-03-01T13:06:15+00:00"
+        },
         {
             "name": "cboden/ratchet",
             "version": "v0.4.1",

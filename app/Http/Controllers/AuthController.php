@@ -149,7 +149,6 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:6'

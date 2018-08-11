@@ -12,17 +12,21 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+# Auth routes
 Route::post('register', 'AuthController@register');
-Route::post('login', 'AuthController@login');
-Route::post('recover', 'AuthController@recover');
+Route::post('login',    'AuthController@login');
+Route::post('recover',  'AuthController@recover');
+
+# OAuth routes
 Route::get('login/google',array('as'=>'glogin','uses'=>'AuthController@googleLogin')) ;
 Route::get('login/facebook', 'AuthController@redirectToFacebook');
-Route::group(['middleware' => ['jwt.auth']], function() {
-    Route::get('logout', 'AuthController@logout');
-    Route::get('test', function(){
-        return response()->json(['foo'=>'bar']);
-    });
 
+Route::group(['middleware' => ['jwt.auth']], function ($router) {
+    # Auth routes
+    Route::get('logout', 'AuthController@logout');
+
+    # Resources routes
     Route::resource('assets',              'AssetController');
     Route::resource('asset_types',         'AssetTypeController');
     Route::resource('banks',               'BankController');
@@ -43,11 +47,6 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::post('deals/{deal}/pay', 'DealController@pay');
     Route::post('deals/{deal}/release', 'DealController@release');
 });
-
-
-
-
-
 
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');

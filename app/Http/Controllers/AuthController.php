@@ -16,11 +16,10 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Mail\Message;
 use \Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-
-
     /**
      *  @SWG\Post(
      *   path="/register",
@@ -34,9 +33,9 @@ class AuthController extends Controller
      *     required=true,
      *   @SWG\Schema(
      *      @SWG\Property(
-    *          property="email",
-    *          type="string"
-    *      ),
+     *         property="email",
+     *         type="string"
+     *     ),
      *     @SWG\Property(
      *          property="password",
      *          type="string"
@@ -94,6 +93,7 @@ class AuthController extends Controller
             });
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
+
     private function validateRecaptcha($value){
         $client = new Client();
 
@@ -110,7 +110,6 @@ class AuthController extends Controller
         $body = json_decode((string)$response->getBody());
         return $body->success;
     }
-
 
     /** API Login, on success return JWT Auth token
     @SWG\Post(
@@ -175,6 +174,7 @@ class AuthController extends Controller
         // all good so return the token
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
     }
+
     /**
      * Log out
      * Invalidate the token, so user cannot use it anymore
@@ -341,7 +341,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Facebook
+     * Google
      * @SWG\Get(
      *   path="/login/google",
      *   summary="Google login",
@@ -396,11 +396,11 @@ class AuthController extends Controller
             return response()->json(['success'=>true, 'data'=>['redirect'=>$authUrl]]);
         }
     }
+
     public function listGoogleUser(Request $request){
         $users = User::orderBy('id','DESC')->paginate(5);
         return view('users.list',compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);;
     }
-
 
     /**
      * Facebook
@@ -421,7 +421,6 @@ class AuthController extends Controller
         return response()->json(['success'=>true, 'data'=>['redirect'=>Socialite::driver('facebook')->redirect()->getTargetUrl()]]);
     }
 
-
     /**
      * Create a new controller instance.
      *
@@ -435,22 +434,14 @@ class AuthController extends Controller
             $create['email'] = $user->getEmail();
             $create['facebook_id'] = $user->getId();
 
-
             $userModel = new User;
             $createdUser = $userModel->addNew($create);
             Auth::loginUsingId($createdUser->id);
 
-
             return redirect()->route('home');
-
-
-        } catch (\Exception $e) {
-
-
+        }
+        catch (\Exception $e) {
             return redirect('auth/facebook');
-
-
         }
     }
-
 }

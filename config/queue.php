@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'database',//env('QUEUE_DRIVER', 'database'),
+    'default' => 'redis',//env('QUEUE_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------

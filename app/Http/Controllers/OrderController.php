@@ -33,7 +33,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::all()->get();
+        $orders = Order::all();
         foreach ($orders as &$order) {
             $order->rate_source;
             $order->source_currency;

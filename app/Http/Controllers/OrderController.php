@@ -390,6 +390,6 @@ class OrderController extends Controller
         $result->type;
     
         
-        return $entities;
+        return $result;
     }
 }

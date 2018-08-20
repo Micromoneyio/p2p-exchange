@@ -352,4 +352,42 @@ class DealController extends Controller
         $deal->update(['deal_stage_id' => $deal_stage->id]);
         return new DealResource($deal);
     }
+
+    /**
+     * Cancel deal
+     **@SWG\POST(
+     *   path="/deals/{id}/cancel",
+     *   summary="Cancel deal",
+     *   operationId="cancel",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param  \App\Deal  $deal
+     * @return DealResource
+     */
+    public function cancel(Deal $deal)
+    {
+        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return false;
+        }
+        $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
+        $deal->update(['deal_stage_id' => $deal_stage->id]);
+        return new DealResource($deal);
+    }
 }

@@ -46,6 +46,7 @@ Route::group(['middleware' => ['jwt.auth']], function ($router) {
     Route::post('orders/filter','OrderController@filter');
     Route::post('deals/{deal}/pay', 'DealController@pay');
     Route::post('deals/{deal}/release', 'DealController@release');
+    Route::post('deals/{deal}/cancel', 'DealController@cancel');
 });
 
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');

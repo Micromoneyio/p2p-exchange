@@ -33,6 +33,9 @@ class Deal extends Model
     {
         return $this->belongsTo('App\Order');
     }
+    public function transit_currency(){
+        return $this->belongsTo(Currency::class);
+    }
     
     public function get_address(string $symbol)
     {

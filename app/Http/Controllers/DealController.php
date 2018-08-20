@@ -43,6 +43,10 @@ class DealController extends Controller
         }
         if(!$deals)
             return response()->json(['code'=>200,'data'=>[]]);
+
+        foreach ($deals as &$item){
+            $item->transit_currency;
+        }
         return new DealsResource($deals);
     }
 

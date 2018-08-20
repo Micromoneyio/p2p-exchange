@@ -353,7 +353,7 @@ class OrderController extends Controller
             return new OrdersResource(collect([]));
         }
 
-        $orders = Order::with(['rate_source','source_currency','destination_currency','source_asset','destination_asset','type','user','deals'])->where([
+        $orders = Order::with(['rate_source','source_currency','destination_currency','source_asset','destination_asset','user','deals'])->where([
             'destination_currency_id' => $request->destination_currency_id,
             'source_currency_id' => $request->source_currency_id
         ])->get();
@@ -387,6 +387,7 @@ class OrderController extends Controller
 
         $result = $entities->first();
         $result->is_favorite = $result->is_favorite();
+        $result->type;
     
         
         return $entities;

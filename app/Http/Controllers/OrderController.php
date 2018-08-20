@@ -386,6 +386,9 @@ class OrderController extends Controller
         });
 
         $result = $entities->first();
+        if (!$result){
+            return new OrdersResource(collect([]));
+        }   
         $result->is_favorite = $result->is_favorite();
         $result->type;
     

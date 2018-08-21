@@ -307,7 +307,7 @@ class DealController extends Controller
      */
     public function pay(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
             return false;
         }
         $deal_stage = DealStage::where(['name' => 'Marked as paid'])->first();
@@ -345,7 +345,7 @@ class DealController extends Controller
      */
     public function release(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
             return false;
         }
         $deal_stage = DealStage::where(['name' => 'Escrow in releasing transaction'])->first();

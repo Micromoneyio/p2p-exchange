@@ -47,7 +47,7 @@ class DealController extends Controller
         foreach ($deals as &$item){
             $item->transit_currency;
             $item->destination_currency = $item->order->destination_currency;
-            
+            $item->destination_asset;
         }
         return new DealsResource($deals);
     }

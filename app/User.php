@@ -117,4 +117,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Callback::class);
     }
+    
+        /**
+     * Deakl relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
+    }
 }

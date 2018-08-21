@@ -27,7 +27,8 @@ class DealResource extends JsonResource
             'source_value' => $this->source_value,
             'destination_value' => $this->destination_value,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'destination_currency' => new CurrencyResource($this->destination_currency),
         ];
     }
 }

@@ -38,7 +38,7 @@ class CryptoCheckJob implements ShouldQueue
         $response = $module->checkBalance($deal->transit_address);
         $expected = $deal->order->getTypeAttribute() == 'fiat_to_crypto' ?  $deal->destination_value: $deal->source_value;
 
-        if ($response->balance == $expected) {
+        if ($response->balance >= $expected) {
             $dealStage = DealStage::where(['name' => 'Escrow received'])->first();
             $deal->update(['deal_stage_id' => $dealStage->id]);
         }

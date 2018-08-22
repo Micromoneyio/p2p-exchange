@@ -93,7 +93,7 @@ class CryptoModule
         try{
         $res = $this->client->request(
             'POST',
-            $this->api_url . '/transactions/' . $this->currency . '/fee-included',
+            $this->api_url . '/transactions/' . $this->currency . '/fee-not-included',
             [
                 'body'=>\GuzzleHttp\json_encode([
                     'to'=>$accountTo,

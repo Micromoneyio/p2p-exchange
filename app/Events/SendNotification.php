@@ -15,7 +15,9 @@ class SendNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $notifiaction;
+    /** @var  Notification */
+    private $notification;
+
     /**
      * Create a new event instance.
      *
@@ -23,7 +25,8 @@ class SendNotification implements ShouldBroadcast
      */
     public function __construct(Notification $notification)
     {
-        $this->notifiaction = $notification;
+        $this->notification = $notification;
+        info('notification event: '.json_encode($notification));
     }
 
     /**
@@ -33,11 +36,16 @@ class SendNotification implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('notifications'.$this->notifiaction->user_id);
+        return ['notifications'];
     }
 
     public function broadcastWith()
     {
-        return $this->notifiaction->toArray();
+        return $this->notification->toArray();
+    }
+
+    public function broadcastAs()
+    {
+        return 'notification';
     }
 }

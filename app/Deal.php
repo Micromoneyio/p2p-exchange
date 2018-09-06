@@ -52,16 +52,17 @@ class Deal extends Model
 
     public function release_escrow()
     {
-        if ($this->order->type != 'fiat_to_crypto')
+        if ($this->order->type == 'fiat_to_crypto')
         {
-            $crypto_address = $this->source_asset->address;
-            $symbol         = $this->source_asset->currency->symbol;
+            $crypto_address = $this->destination_asset->address;
+            $symbol         = $this->destination_asset->currency->symbol;
             $crypto_value   = $this->source_value;
         }
         else
         {
-            $crypto_address = $this->destination_asset->address;
-            $symbol         = $this->destination_asset->currency->symbol;
+
+            $crypto_address = $this->source_asset->address;
+            $symbol         = $this->source_asset->currency->symbol;
             $crypto_value   = $this->destination_value;
         }
 

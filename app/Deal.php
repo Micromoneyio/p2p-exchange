@@ -54,21 +54,22 @@ class Deal extends Model
     {
         if ($this->order->type == 'fiat_to_crypto')
         {
-            $crypto_address = $this->source_asset->address;
-            $symbol         = $this->source_asset->currency->symbol;
+            $crypto_address = $this->destination_asset->address;
+            $symbol         = $this->destination_asset->currency->symbol;
             $crypto_value   = $this->source_value;
         }
         else
         {
-            $crypto_address = $this->destination_asset->address;
-            $symbol         = $this->destination_asset->currency->symbol;
+
+            $crypto_address = $this->source_asset->address;
+            $symbol         = $this->source_asset->currency->symbol;
             $crypto_value   = $this->destination_value;
         }
 
         $module = new CryptoModule($symbol);
         $response = $module->releaseTransaction($this->transit_address, $this->transit_key, $crypto_address, $crypto_value);
         $this->update([
-            'deal_stage_id' => DealStage::where(['name' => 'Closed'])->frist()->id,
+            'deal_stage_id' => DealStage::where(['name' => 'Closed'])->first()->id,
             'transit_hash' => $response->hash
         ]);
     }

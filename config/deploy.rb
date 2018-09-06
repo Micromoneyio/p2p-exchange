@@ -64,6 +64,9 @@ task :deploy do
       command %{php artisan config:clear}
       command %{php artisan l5-swagger:generate}
       command %{php artisan queue:restart}
+      command %{sudo supervisorctl reread}
+      command %{sudo supervisorctl update}
+      command %{sudo supervisorctl start laravel-worker:*}
     end
   end
 

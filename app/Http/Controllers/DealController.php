@@ -48,6 +48,10 @@ class DealController extends Controller
             $item->transit_currency;
             $item->destination_currency = $item->order->destination_currency;
             $item->destination_asset->bank;
+            
+            $temp = $item->source_asset;
+            $item->source_asset = $item->destination_asset;
+            $item->destination_asset = $temp;
         }
         return new DealsResource($deals);
     }
@@ -313,8 +317,8 @@ class DealController extends Controller
      */
     public function pay(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
-            return false;
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Marked as paid'])->first();
         $deal->update(['deal_stage_id' => $deal_stage->id]);
@@ -351,8 +355,8 @@ class DealController extends Controller
      */
     public function release(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
-            return false;
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Escrow in releasing transaction'])->first();
         $deal->update(['deal_stage_id' => $deal_stage->id]);
@@ -389,8 +393,8 @@ class DealController extends Controller
      */
     public function cancel(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
-            return false;
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
         $deal->update(['deal_stage_id' => $deal_stage->id]);

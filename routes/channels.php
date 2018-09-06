@@ -18,3 +18,8 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('notifications.{userId}', function ($user, $userId) {
     return $user->id === $userId;
 });
+
+Broadcast::channel('notifications', function ($user, $userId) {
+    info('broadcats route');
+    return true;
+});

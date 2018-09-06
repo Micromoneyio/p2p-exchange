@@ -15,7 +15,7 @@ class NotificationObserver
      */
     public function created(Notification $notification)
     {
-        event(new SendNotification($notification));
+        broadcast(new SendNotification($notification));
     }
 
     /**

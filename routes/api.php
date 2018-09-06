@@ -53,6 +53,15 @@ Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
 Route::post('password/reset', 'AuthController@resetPassword')->name('password.reset');
 
+Route::get('tst', function () {
+    return App\Notification::create([
+        'user_id' => 3,
+        'deal_id' => 4,
+        'text'    => 'asd',
+        'viewed'  => 0
+    ]);
+});
+
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

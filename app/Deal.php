@@ -16,6 +16,7 @@ class Deal extends Model
 
     public function deal_stage()
     {
+
         return $this->belongsTo('App\DealStage');
     }
 

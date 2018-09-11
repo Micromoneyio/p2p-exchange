@@ -55,8 +55,8 @@ Route::post('password/reset', 'AuthController@resetPassword')->name('password.re
 
 Route::get('tst', function () {
     return App\Notification::create([
-        'user_id' => 3,
-        'deal_id' => 4,
+        'user_id' => 11,
+        'deal_id' => 162,
         'text'    => 'asd',
         'viewed'  => 0
     ]);

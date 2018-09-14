@@ -41,6 +41,7 @@ class SendNotification implements ShouldBroadcast
 
     public function broadcastWith()
     {
+        $this->notification->load('deal');
         return $this->notification->toArray();
     }
 

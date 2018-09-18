@@ -2,6 +2,11 @@
 
 namespace App\Events;
 
+use App\Http\Resources\AssetResource;
+use App\Http\Resources\CurrencyResource;
+use App\Http\Resources\DealStageResource;
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\UserResource;
 use App\Notification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -41,8 +46,26 @@ class SendNotification implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $this->notification->load('deal');
-        return $this->notification->toArray();
+//        $this->notification->load('deal');
+        return array_merge([
+            'deal' => [
+                'id' => $this->notification->deal->id,
+                'user' => $this->notification->deal->user,
+                'order' => $this->notification->deal->order,
+                'deal_stage' => $this->notification->deal->deal_stage,
+                'source_asset' => $this->notification->deal->source_asset,
+                'destination_asset' => $this->notification->deal->destination_asset,
+                'transit_currency' => $this->notification->deal->transit_currency,
+                'transit_address' => $this->notification->deal->transit_address,
+                'transit_hash' => $this->notification->deal->transit_hash,
+                'source_value' => $this->notification->deal->source_value,
+                'destination_value' => $this->notification->deal->destination_value,
+                'created_at' => $this->notification->deal->created_at,
+                'updated_at' => $this->notification->deal->updated_at,
+                'destination_currency' => $this->notification->deal->destination_currency,
+            ],
+            'notification' => $this->notification->toArray(),
+        ]);
     }
 
     public function broadcastAs()

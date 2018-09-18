@@ -51,7 +51,7 @@ class SendNotification implements ShouldBroadcast
             'deal' => [
                 'id' => $this->notification->deal->id,
                 'user' => $this->notification->deal->user,
-                'order' => $this->notification->deal->order,
+                'order' => $this->notification->deal->order()->with('user')->first(),
                 'deal_stage' => $this->notification->deal->deal_stage,
                 'source_asset' => $this->notification->deal->source_asset,
                 'destination_asset' => $this->notification->deal->destination_asset,

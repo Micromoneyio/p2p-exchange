@@ -64,6 +64,7 @@ class SendNotification implements ShouldBroadcast
                 'updated_at' => $this->notification->deal->updated_at,
                 'destination_currency' => $this->notification->deal->destination_currency,
             ],
+
             'notification' => $this->notification->toArray(),
         ]);
     }

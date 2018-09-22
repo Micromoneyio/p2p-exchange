@@ -48,17 +48,17 @@ class BpmModule
     public function order(Order $order)
     {
         $this->saveModel($order, 'UsrOrderCollection', [
-            'UsrName'                  => "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}",
-            'UsrContactId'             => $order->user->bpm_id,
-            'UsrSourceCurrency'        => $order->source_currency->name,
-            'UsrDestinationCurrency'   => $order->destination_currency->name,
-            'UsrSourceAsset'           => $order->source_asset->name,
-            'UsrDestinationAsset'      => $order->destination_asset->name,
-            'UsrRateSource'            => $order->rate_source->name,
-            'UsrFixPrice'              => strval($order->fix_price),
-            'UsrSourcePriceIndex'      => strval($order->source_price_index),
-            'UsrLimitFrom'             => strval($order->limit_from),
-            'UsrLimitTo'               => strval($order->limit_to)
+            'SLName'                  => "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}",
+            'SLContactId'             => $order->user->bpm_id,
+            'SLSourceCurrency'        => $order->source_currency->name,
+            'SLDestinationCurrency'   => $order->destination_currency->name,
+            'SLSourceAsset'           => $order->source_asset->name,
+            'SLDestinationAsset'      => $order->destination_asset->name,
+            'SLRateSource'            => $order->rate_source->name,
+            'SLFixPrice'              => strval($order->fix_price),
+            'SLSourcePriceIndex'      => strval($order->source_price_index),
+            'SLLimitFrom'             => strval($order->limit_from),
+            'SLLimitTo'               => strval($order->limit_to)
         ]);
         return $order;
     }

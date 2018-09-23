@@ -55,10 +55,10 @@ class BpmModule
             'SLSourceAsset'           => $order->source_asset->name,
             'SLDestinationAsset'      => $order->destination_asset->name,
             'SLRateSource'            => $order->rate_source->name,
-            'SLFixPrice'              => strval($order->fix_price),
-            'SLSourcePriceIndex'      => strval($order->source_price_index),
-            'SLLimitFrom'             => strval($order->limit_from),
-            'SLLimitTo'               => strval($order->limit_to)
+            'SLFixPrice'              => empty($order->fix_price) ? "0" : strval($order->fix_price),
+            'SLSourcePriceIndex'      => empty($order->source_price_index) ? "0" : strval($order->source_price_index),
+            'SLLimitFrom'             => empty($order->limit_from) ? "0" : strval($order->limit_from),
+            'SLLimitTo'               => empty($order->limit_to) ? "0" : strval($order->limit_to)
         ]);
         return $order;
     }

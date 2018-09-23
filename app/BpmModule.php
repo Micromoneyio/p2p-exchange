@@ -47,7 +47,7 @@ class BpmModule
 
     public function order(Order $order)
     {
-        $this->saveModel($order, 'UsrOrderCollection', [
+        $this->saveModel($order, 'SLOrderCollection', [
             'SLName'                  => "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}",
             'SLContactId'             => $order->user->bpm_id,
             'SLSourceCurrency'        => $order->source_currency->name,

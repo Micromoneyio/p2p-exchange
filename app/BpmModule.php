@@ -80,7 +80,7 @@ class BpmModule
         $this->saveModel($currency, 'SLCurrencyCollection', [
             'Name' => $currency->name,
             'SLSymbol' => $currency->symbol,
-            'SLCrypto' => $currency->crypto,
+            'SLCrypto' => $currency->crypto == 1,
         ]);
         return $currency;
     }

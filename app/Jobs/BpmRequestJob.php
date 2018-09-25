@@ -2,7 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Bank;
 use App\BpmModule;
+use App\Currency;
+use App\DealStage;
+use App\Order;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

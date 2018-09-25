@@ -31,6 +31,8 @@ class BpmModule
                 return $this->order($model); break;
             case 'App\Bank':
                 return $this->bank($model); break;
+            case 'App\Currency':
+                return $this->currency($model); break;
             default:
                 return null;
         }
@@ -71,6 +73,16 @@ class BpmModule
             'Name' => $bank->name,
         ]);
         return $bank;
+    }
+
+    public function currency(Currency $currency)
+    {
+        $this->saveModel($currency, 'SLCurrencyCollection', [
+            'Name' => $currency->name,
+            'SLSymbol' => $currency->symbol,
+            'SLCrypto' => $currency->crypto,
+        ]);
+        return $currency;
     }
 
     private function saveModel($model, $collection, $body)

@@ -18,9 +18,10 @@ class BpmRequestJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(int $modelId, string $modelClass)
     {
-        //
+        $this->modelId = $modelId;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -29,27 +30,24 @@ class BpmRequestJob implements ShouldQueue
      * @param  string $entity
      * @return void
      */
-    public function handle(int $modelId, string $modelClass)
+    public function handle()
     {
         $model = null;
         $module = new BpmModule();
-        switch ($modelClass) {
+        switch ($this->modelClass) {
             case 'Currency':
-                $model = Currency::find($modelId); break;
+                $model = Currency::find($this->modelId); break;
             case 'DealStage':
-                $model = DealStage::find($modelId); break;
+                $model = DealStage::find($this->modelId); break;
             case 'Order':
-                $model = Order::find($modelId); break;
+                $model = Order::find($this->modelId); break;
             case 'User':
-                $model = User::find($modelId); break;
+                $model = User::find($this->modelId); break;
             case 'Bank':
-                $model = Bank::find($modelId); break;
+                $model = Bank::find($this->modelId); break;
             default:
                 return null;
         }
-        if (!empty($model))
-        {
-            $module->save($model);
-        }
+        $module->save($model);
     }
 }

@@ -33,6 +33,8 @@ class BpmModule
                 return $this->bank($model); break;
             case 'App\Currency':
                 return $this->currency($model); break;
+            case 'App\DealStage':
+                return $this->dealStage($model); break;
             default:
                 return null;
         }
@@ -83,6 +85,14 @@ class BpmModule
             'SLCrypto' => $currency->crypto == 1,
         ]);
         return $currency;
+    }
+
+    public function dealStage(DealStage $dealStage)
+    {
+        $this->saveModel($dealStage, 'SLDealStageCollection', [
+            'Name' => $dealStage->name
+        ]);
+        return $dealStage;
     }
 
     private function saveModel($model, $collection, $body)

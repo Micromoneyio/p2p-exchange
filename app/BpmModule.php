@@ -67,7 +67,7 @@ class BpmModule
 
     public function bank(Bank $bank)
     {
-        $this->saveModel($order, 'SLBankCollection', [
+        $this->saveModel($bank, 'SLBankCollection', [
             'Name' => $bank->name,
         ]);
         return $bank;

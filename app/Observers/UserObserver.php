@@ -15,7 +15,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        BpmRequestJob::dispatch($user);
+        BpmRequestJob::dispatch($user->id, 'User');
     }
 
     /**
@@ -26,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        BpmRequestJob::dispatch($user);
+        BpmRequestJob::dispatch($user->id, 'User');
     }
 
     /**

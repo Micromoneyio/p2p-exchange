@@ -14,7 +14,7 @@ class CurrencyObserver
      */
     public function created(Currency $currency)
     {
-        BpmRequestJob::dispatch($currency);
+        BpmRequestJob::dispatch($currency->id, 'Currency');
     }
 
     /**
@@ -25,7 +25,7 @@ class CurrencyObserver
      */
     public function updated(Currency $currency)
     {
-        BpmRequestJob::dispatch($currency);
+        BpmRequestJob::dispatch($currency->id, 'Currency');
     }
 
     /**

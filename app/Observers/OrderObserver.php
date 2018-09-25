@@ -15,7 +15,7 @@ class OrderObserver
      */
     public function created(Order $order)
     {
-        BpmRequestJob::dispatch($order);
+        BpmRequestJob::dispatch($order->id, 'Order');
     }
 
     /**
@@ -26,7 +26,7 @@ class OrderObserver
      */
     public function updated(Order $order)
     {
-        BpmRequestJob::dispatch($order);
+        BpmRequestJob::dispatch($order->id, 'Order');
     }
 
     /**

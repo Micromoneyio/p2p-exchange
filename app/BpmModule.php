@@ -40,8 +40,6 @@ class BpmModule
         }
     }
 
-
-
     public function contact(User $user)
     {
         $this->saveModel($user, 'ContactCollection', [

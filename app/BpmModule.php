@@ -29,6 +29,8 @@ class BpmModule
                 return $this->contact($model); break;
             case 'App\Order':
                 return $this->order($model); break;
+            case 'App\Bank':
+                return $this->bank($model); break;
             default:
                 return null;
         }
@@ -61,6 +63,14 @@ class BpmModule
             'SLLimitTo'               => empty($order->limit_to) ? "0" : strval($order->limit_to)
         ]);
         return $order;
+    }
+
+    public function bank(Bank $bank)
+    {
+        $this->saveModel($order, 'SLBankCollection', [
+            'Name' => $bank->name,
+        ]);
+        return $bank;
     }
 
     private function saveModel($model, $collection, $body)

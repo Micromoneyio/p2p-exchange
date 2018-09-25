@@ -35,6 +35,8 @@ class BpmModule
                 return $this->currency($model); break;
             case 'App\DealStage':
                 return $this->dealStage($model); break;
+            case 'App\RateSource':
+                return $this->rateSource($model); break;
             default:
                 return null;
         }
@@ -91,6 +93,15 @@ class BpmModule
             'Name' => $dealStage->name
         ]);
         return $dealStage;
+    }
+
+    public function rateSource(RateSource $rateSource)
+    {
+        $this->saveModel($rateSource, 'SLRateSourceCollection', [
+            'Name' => $rateSource->name,
+            'SLDefault' => $rateSource->default == 1
+        ]);
+        return $rateSource;
     }
 
     private function saveModel($model, $collection, $body)

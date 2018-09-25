@@ -13,6 +13,8 @@ class BpmRequestJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $modelId, $modelClass;
+
     /**
      * Create a new job instance.
      *

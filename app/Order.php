@@ -19,7 +19,8 @@ class Order extends Model
         'source_price_index',
         'limit_from',
         'limit_to',
-        'name'
+        'name',
+        'telegram'
     ];
 
     public function user() {
@@ -70,7 +71,7 @@ class Order extends Model
         }
         elseif ($this->source_price_index) {
             $history_params = [ 'rate_source_id' => $this->rate_source->id];
-            switch ($this->type()) {
+            switch ($this->type) {
                 case 'crypto_to_fiat':
                     $history_params['currency_id'] = $this->source_currency->id;
                     $history_params['unit_currency_id'] = $this->destination_currency->id;
@@ -80,7 +81,7 @@ class Order extends Model
                     $history_params['unit_currency_id'] = $this->source_currency->id;
                     break;
             }
-            $market_history = MarketHistory::orderBy('created_at', 'asc')->where($history_params)->first;
+            $market_history = MarketHistory::orderBy('created_at', 'asc')->where($history_params)->first();
             if ($market_history != null) {
                 $result = $market_history->price + ($market_history->price * $this->source_price_index / 100);
             }
@@ -93,6 +94,6 @@ class Order extends Model
         if ($this->id == null) {
             return false;
         }
-        return (int) Auth::user()->favorite_orders->where('order_id', $this->id)->isNotEmpty();
+        return (int) Auth::user()->favoriteOrders->where('order_id', $this->id)->isNotEmpty();
     }
 }

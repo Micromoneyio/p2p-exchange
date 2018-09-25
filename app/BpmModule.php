@@ -47,18 +47,18 @@ class BpmModule
 
     public function order(Order $order)
     {
-        $this->saveModel($order, 'UsrOrderCollection', [
-            'UsrName'                  => "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}",
-            'UsrContactId'             => $order->user->bpm_id,
-            'UsrSourceCurrency'        => $order->source_currency->name,
-            'UsrDestinationCurrency'   => $order->destination_currency->name,
-            'UsrSourceAsset'           => $order->source_asset->name,
-            'UsrDestinationAsset'      => $order->destination_asset->name,
-            'UsrRateSource'            => $order->rate_source->name,
-            'UsrFixPrice'              => strval($order->fix_price),
-            'UsrSourcePriceIndex'      => strval($order->source_price_index),
-            'UsrLimitFrom'             => strval($order->limit_from),
-            'UsrLimitTo'               => strval($order->limit_to)
+        $this->saveModel($order, 'SLOrderCollection', [
+            'SLName'                  => "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}",
+            'SLContactIdId'           => $order->user->bpm_id,
+            'SLSourceCurrency'        => $order->source_currency->name,
+            'SLDestinationCurrency'   => $order->destination_currency->name,
+            'SLSourceAsset'           => $order->source_asset->name,
+            'SLDestinationAsset'      => $order->destination_asset->name,
+            'SLRateSource'            => $order->rate_source->name,
+            'SLFixPrice'              => empty($order->fix_price) ? "0" : strval($order->fix_price),
+            'SLSourcePriceIndex'      => empty($order->source_price_index) ? "0" : strval($order->source_price_index),
+            'SLLimitFrom'             => empty($order->limit_from) ? "0" : strval($order->limit_from),
+            'SLLimitTo'               => empty($order->limit_to) ? "0" : strval($order->limit_to)
         ]);
         return $order;
     }

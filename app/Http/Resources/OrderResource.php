@@ -27,7 +27,9 @@ class OrderResource extends JsonResource
             'limit_from' => $this->limit_from,
             'limit_to' => $this->limit_to,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'name' => $this->name,
+            'telegram' => $this->telegram,
         ];
     }
 }

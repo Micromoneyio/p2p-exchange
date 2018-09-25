@@ -23,12 +23,12 @@ class DealResource extends JsonResource
             'destination_asset' => new AssetResource($this->destination_asset),
             'transit_currency' => new CurrencyResource($this->transit_currency),
             'transit_address' => $this->transit_address,
-            'transit_key' => $this->transit_key,
             'transit_hash' => $this->transit_hash,
             'source_value' => $this->source_value,
             'destination_value' => $this->destination_value,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'destination_currency' => new CurrencyResource($this->destination_currency),
         ];
     }
 }

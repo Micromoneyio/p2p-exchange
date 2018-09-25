@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Deal;
 use App\DealHistory;
-use App\Jobs\CryptoCheckJob;
 use App\Jobs\SendCallbackJob;
 use App\Notification;
 
@@ -18,7 +17,7 @@ class DealObserver
      */
     public function created(Deal $deal)
     {
-        $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) {
+        $deal->order->user->callbacks->where('event', 'deal.create')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
         Notification::create([
@@ -33,7 +32,6 @@ class DealObserver
             'text' => "Transfer crypto currency to " . $deal->transit_address,
             'viewed' => 0
         ]);
-        CryptoCheckJob::dispatch($deal);
     }
 
     /**
@@ -46,8 +44,12 @@ class DealObserver
     {
         DealHistory::create([
             'deal_id' => $deal->id,
-            'deal_stage_id' => $deal->deal_stage_id
+            'deal_stage_id' => $deal->deal_stage_id,
+            'notes' => 'Deal update'
         ]);
+
+        $notification_user_id = null;
+        $notification_text    = null;
 
         switch ($deal->deal_stage->name) {
             case 'Escrow received':
@@ -64,17 +66,19 @@ class DealObserver
                 $deal->release_escrow();
                 break;
         }
-        Notification::create([
-            'user_id' => $notification_user_id,
-            'deal_id' => $deal->id,
-            'text' => $notification_text
-        ]);
+        if ($notification_user_id && $notification_text) {
+            Notification::create([
+                'user_id' => $notification_user_id,
+                'deal_id' => $deal->id,
+                'text'    => $notification_text,
+                'viewed'  => 0
+            ]);
+        }
 
-
-        $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+        $deal->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
-        $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) {
+        $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
     }

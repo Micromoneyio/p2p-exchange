@@ -6,6 +6,7 @@ use App\Deal;
 use App\DealStage;
 use App\Http\Resources\DealResource;
 use App\Http\Resources\DealsResource;
+use App\Jobs\CryptoCheckJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,6 +43,16 @@ class DealController extends Controller
         }
         if(!$deals)
             return response()->json(['code'=>200,'data'=>[]]);
+
+        foreach ($deals as &$item){
+            $item->transit_currency;
+            $item->destination_currency = $item->order->destination_currency;
+            $item->destination_asset->bank;
+            
+            $temp = $item->source_asset;
+            $item->source_asset = $item->destination_asset;
+            $item->destination_asset = $temp;
+        }
         return new DealsResource($deals);
     }
 
@@ -107,6 +118,8 @@ class DealController extends Controller
         $transitCurrency = $deal->getCryptoCurrency();
         $deal->get_address($transitCurrency->symbol);
         $deal->save();
+
+        CryptoCheckJob::dispatch($deal);
         return new DealResource($deal);
     }
 
@@ -304,8 +317,8 @@ class DealController extends Controller
      */
     public function pay(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
-            return false;
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Marked as paid'])->first();
         $deal->update(['deal_stage_id' => $deal_stage->id]);
@@ -342,10 +355,48 @@ class DealController extends Controller
      */
     public function release(Deal $deal)
     {
-        if (Auth::id() != ($deal->order->type() == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
-            return false;
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->user_id : $deal->order->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Escrow in releasing transaction'])->first();
+        $deal->update(['deal_stage_id' => $deal_stage->id]);
+        return new DealResource($deal);
+    }
+
+    /**
+     * Cancel deal
+     **@SWG\POST(
+     *   path="/deals/{id}/cancel",
+     *   summary="Cancel deal",
+     *   operationId="cancel",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *   ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param  \App\Deal  $deal
+     * @return DealResource
+     */
+    public function cancel(Deal $deal)
+    {
+        if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
+            return response()->json(['code'=>200,'data'=>[]]);
+        }
+        $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
         $deal->update(['deal_stage_id' => $deal_stage->id]);
         return new DealResource($deal);
     }

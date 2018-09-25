@@ -2,9 +2,9 @@
 
 namespace App;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
 /**
@@ -39,19 +39,14 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = [
-        'email', 'password', 'is_verified','name','default_currency_id'
-    ];
+    protected $fillable = ['email', 'password', 'is_verified','name','default_currency_id'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -62,6 +57,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
@@ -71,23 +67,64 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    public function notifications() {
-        return $this->hasMany('App\Notification');
+
+    /**
+     * Notifications relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 
-    public function assets() {
-        return $this->hasMany('App\Asset');
+    /**
+     * Assets relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
     }
 
-    public function orders() {
-        return $this->hasMany('App\Order');
+    /**
+     * Orders relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
-    public function favorite_orders(){
+
+    /**
+     * Favorite orders relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function favoriteOrders()
+    {
         return $this->hasMany(FavoriteOrder::class);
     }
 
+    /**
+     * Callbacks relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
     public function callbacks()
     {
-        return $this->hasMany('App\Callback');
+        return $this->hasMany(Callback::class);
+    }
+    
+        /**
+     * Deakl relationship
+     *
+     * @return Illuminate\Support\Collection
+     */
+    public function deals()
+    {
+        return $this->hasMany(Deal::class);
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -15,11 +16,10 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Mail\Message;
 use \Tymon\JWTAuth\Facades\JWTAuth;
+//use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-
-
     /**
      *  @SWG\Post(
      *   path="/register",
@@ -33,15 +33,19 @@ class AuthController extends Controller
      *     required=true,
      *   @SWG\Schema(
      *      @SWG\Property(
-    *          property="email",
-    *          type="string"
-    *      ),
+     *         property="email",
+     *         type="string"
+     *     ),
      *     @SWG\Property(
      *          property="password",
      *          type="string"
      *      ),
      *     @SWG\Property(
      *          property="password_confirmation",
+     *          type="string"
+     *      ),
+     *   @SWG\Property(
+     *          property="g-recaptcha-response",
      *          type="string"
      *      )
      *     )
@@ -63,12 +67,16 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required',
                'min:6',
-               'confirmed']
+               'confirmed'],
+            'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
         }
+
         $email = $request->email;
         $password = $request->password;
         $name = 'Customer';
@@ -86,6 +94,22 @@ class AuthController extends Controller
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
 
+    private function validateRecaptcha($value){
+        $client = new Client();
+
+        $response = $client->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            ['form_params'=>
+                [
+                    'secret'=>env('GOOGLE_RECAPTCHA_SECRET'),
+                    'response'=>$value
+                ]
+            ]
+        );
+
+        $body = json_decode((string)$response->getBody());
+        return $body->success;
+    }
 
     /** API Login, on success return JWT Auth token
     @SWG\Post(
@@ -107,6 +131,10 @@ class AuthController extends Controller
      *          property="password",
      *          type="string"
      *      ),
+     *   @SWG\Property(
+     *          property="g-recaptcha-response",
+     *          type="string"
+     *      ),
      *     )
      *   ),
      *   @SWG\Response(response=200, description="successful operation"),
@@ -120,15 +148,17 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:6'
+            //'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }
+        }//elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+           // return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+        //}
 
         $credentials['is_verified'] = 1;
 
@@ -144,6 +174,7 @@ class AuthController extends Controller
         // all good so return the token
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
     }
+
     /**
      * Log out
      * Invalidate the token, so user cannot use it anymore
@@ -310,7 +341,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Facebook
+     * Google
      * @SWG\Get(
      *   path="/login/google",
      *   summary="Google login",
@@ -365,11 +396,11 @@ class AuthController extends Controller
             return response()->json(['success'=>true, 'data'=>['redirect'=>$authUrl]]);
         }
     }
+
     public function listGoogleUser(Request $request){
         $users = User::orderBy('id','DESC')->paginate(5);
         return view('users.list',compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);;
     }
-
 
     /**
      * Facebook
@@ -390,7 +421,6 @@ class AuthController extends Controller
         return response()->json(['success'=>true, 'data'=>['redirect'=>Socialite::driver('facebook')->redirect()->getTargetUrl()]]);
     }
 
-
     /**
      * Create a new controller instance.
      *
@@ -404,22 +434,14 @@ class AuthController extends Controller
             $create['email'] = $user->getEmail();
             $create['facebook_id'] = $user->getId();
 
-
             $userModel = new User;
             $createdUser = $userModel->addNew($create);
             Auth::loginUsingId($createdUser->id);
 
-
             return redirect()->route('home');
-
-
-        } catch (\Exception $e) {
-
-
+        }
+        catch (\Exception $e) {
             return redirect('auth/facebook');
-
-
         }
     }
-
 }

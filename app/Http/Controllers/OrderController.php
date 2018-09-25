@@ -33,7 +33,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::where('user_id',$request->user()->id)->get();
+        $orders = Order::all();
         foreach ($orders as &$order) {
             $order->rate_source;
             $order->source_currency;
@@ -107,6 +107,10 @@ class OrderController extends Controller
      *     @SWG\Property(
      *          property="name",
      *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="telegram",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -131,6 +135,7 @@ class OrderController extends Controller
             'limit_from' => $request->limit_from,
             'limit_to' => $request->limit_to,
             'name' => $request->name,
+            'telegram' => $request->telegram,
         ]);
         return new OrderResource($order);
     }
@@ -230,6 +235,14 @@ class OrderController extends Controller
      *     @SWG\Property(
      *          property="limit_to",
      *          type="string"
+     *      ),
+     *    @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      ),
+     *    @SWG\Property(
+     *          property="telegram",
+     *          type="string"
      *      )
      *     )
      *   ),
@@ -254,6 +267,7 @@ class OrderController extends Controller
             'limit_from' => $request->limit_from,
             'limit_to' => $request->limit_to,
             'name' => $request->name,
+            'telegram' => $request->telegram,
 
         ]);
         return new OrderResource($order);
@@ -339,7 +353,7 @@ class OrderController extends Controller
             return new OrdersResource(collect([]));
         }
 
-        $orders = Order::where([
+        $orders = Order::with(['rate_source','source_currency','destination_currency','source_asset','destination_asset','user','deals'])->where([
             'destination_currency_id' => $request->destination_currency_id,
             'source_currency_id' => $request->source_currency_id
         ])->get();
@@ -371,17 +385,14 @@ class OrderController extends Controller
             }
         });
 
-        foreach ($entities as &$order) {
-            $order->rate_source;
-            $order->source_currency;
-            $order->destination_currency;
-            $order->source_asset;
-            $order->destination_asset;
-            $order->type;
-            $order->user;
-            $order->deals;
-            $order->is_favorite = $order->is_favorite();
-        }
-        return $entities;
+        $result = $entities->first();
+        if (!$result){
+            return new OrdersResource(collect([]));
+        }   
+        $result->is_favorite = $result->is_favorite();
+        $result->type;
+    
+        
+        return $result;
     }
 }

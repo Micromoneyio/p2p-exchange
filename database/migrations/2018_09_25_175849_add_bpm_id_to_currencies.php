@@ -13,7 +13,9 @@ class AddBpmIdToCurrencies extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('currencies', function (Blueprint $table) {
+            $table->string('bpm_id')->nullable();
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ class AddBpmIdToCurrencies extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('banks', function (Blueprint $table) {
+            //
+        });
     }
 }

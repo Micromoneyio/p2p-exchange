@@ -13,7 +13,9 @@ class AddBpmIdToRateSources extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('rate_sources', function (Blueprint $table) {
+            $table->string('bpm_id')->nullable();
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ class AddBpmIdToRateSources extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('rate_sources', function (Blueprint $table) {
+            //
+        });
     }
 }

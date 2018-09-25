@@ -7,6 +7,7 @@ use App\BpmModule;
 use App\Currency;
 use App\DealStage;
 use App\Order;
+use App\RateSource;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -52,6 +53,8 @@ class BpmRequestJob implements ShouldQueue
                 $model = User::find($this->modelId); break;
             case 'Bank':
                 $model = Bank::find($this->modelId); break;
+            case 'RateSource':
+                $model = RateSource::find($this->modelId); break;
             default:
                 return null;
         }

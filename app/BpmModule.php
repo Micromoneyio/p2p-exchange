@@ -54,7 +54,7 @@ class BpmModule
     public function order(Order $order)
     {
         $this->saveModel($order, 'SLOrderCollection', [
-            'SLName'                  => $order->name,
+            'SLName'                  => empty($order->name) ? "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}" : $order->name,
             'SLContactIdId'           => $order->user->bpm_id,
             'SLSourceCurrency'        => $order->source_currency->name,
             'SLDestinationCurrency'   => $order->destination_currency->name,

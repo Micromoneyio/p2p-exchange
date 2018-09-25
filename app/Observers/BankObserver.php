@@ -14,7 +14,7 @@ class BankObserver
      */
     public function created(Bank $bank)
     {
-        BpmRequestJob::dispatch($bank);
+        BpmRequestJob::dispatch($bank->id, 'Bank');
     }
 
     /**
@@ -25,7 +25,7 @@ class BankObserver
      */
     public function updated(Bank $bank)
     {
-        BpmRequestJob::dispatch($bank);
+        BpmRequestJob::dispatch($bank->id, 'Bank');
     }
 
     /**

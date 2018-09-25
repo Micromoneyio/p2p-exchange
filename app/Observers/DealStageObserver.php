@@ -14,7 +14,7 @@ class DealStageObserver
      */
     public function created(DealStage $dealStage)
     {
-        BpmRequestJob::dispatch($dealStage);
+        BpmRequestJob::dispatch($dealStage->id, 'DealStage');
     }
 
     /**
@@ -25,7 +25,7 @@ class DealStageObserver
      */
     public function updated(DealStage $dealStage)
     {
-        BpmRequestJob::dispatch($dealStage);
+        BpmRequestJob::dispatch($dealStage->id, 'DealStage');
     }
 
     /**

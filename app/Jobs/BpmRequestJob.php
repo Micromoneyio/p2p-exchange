@@ -29,9 +29,27 @@ class BpmRequestJob implements ShouldQueue
      * @param  string $entity
      * @return void
      */
-    public function handle($model)
+    public function handle(int $modelId, string $modelClass)
     {
+        $model = null;
         $module = new BpmModule();
-        $module->save($model);
+        switch ($modelClass) {
+            case 'Currency':
+                $model = Currency::find($modelId); break;
+            case 'DealStage':
+                $model = DealStage::find($modelId); break;
+            case 'Order':
+                $model = Order::find($modelId); break;
+            case 'User':
+                $model = User::find($modelId); break;
+            case 'Bank':
+                $model = Bank::find($modelId); break;
+            default:
+                return null;
+        }
+        if (!empty($model))
+        {
+            $module->save($model);
+        }
     }
 }

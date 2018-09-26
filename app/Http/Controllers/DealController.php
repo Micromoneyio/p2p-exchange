@@ -397,6 +397,7 @@ class DealController extends Controller
             return response()->json(['code'=>200,'data'=>[]]);
         }
         $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
+
         $deal->update(['deal_stage_id' => $deal_stage->id]);
         return new DealResource($deal);
     }

@@ -150,7 +150,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password', 'g-recaptcha-response');
         $rules = [
             'email' => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
             'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);

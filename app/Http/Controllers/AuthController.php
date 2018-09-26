@@ -61,7 +61,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only( 'email', 'password','password_confirmation');
+        $credentials = $request->only( 'email', 'password','password_confirmation','g-recaptcha-response');
 
         $rules = [
             'email' => 'required|email|max:255|unique:users',
@@ -147,18 +147,18 @@ class AuthController extends Controller
     */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password', 'g-recaptcha-response');
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:6'
-            //'g-recaptcha-response'=>'required'
+            'g-recaptcha-response'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }//elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-           // return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
-        //}
+        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
+            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+        }
 
         $credentials['is_verified'] = 1;
 

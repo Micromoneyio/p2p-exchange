@@ -37,6 +37,8 @@ class BpmModule
                 return $this->dealStage($model); break;
             case 'App\RateSource':
                 return $this->rateSource($model); break;
+            case 'App\AssetType':
+                return $this->assetType($model); break;
             default:
                 return null;
         }
@@ -67,6 +69,15 @@ class BpmModule
             'SLLimitTo'               => empty($order->limit_to) ? "0" : strval($order->limit_to)
         ]);
         return $order;
+    }
+
+    public function assetType(AssetType $assetType)
+    {
+        $this->saveModel($assetType, 'SLAssetTypeCollection', [
+            'Name'  => $assetType->name,
+            'SLCrypto' => $assetType->crypto
+        ]);
+        return $assetType;
     }
 
     public function bank(Bank $bank)

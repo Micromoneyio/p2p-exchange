@@ -90,9 +90,9 @@ class BpmModule
 
     public function currency(Currency $currency)
     {
-        $this->saveModel($currency, 'SLCurrencyCollection', [
+        $this->saveModel($currency, 'CurrencyCollection', [
             'Name' => $currency->name,
-            'SLSymbol' => $currency->symbol,
+            'Symbol' => $currency->symbol,
             'SLCrypto' => $currency->crypto == 1,
         ]);
         return $currency;

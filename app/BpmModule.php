@@ -75,7 +75,7 @@ class BpmModule
     {
         $this->saveModel($assetType, 'SLAssetTypeCollection', [
             'Name'  => $assetType->name,
-            'SLCrypto' => $assetType->crypto
+            'SLCrypto' => $assetType->crypto == 1
         ]);
         return $assetType;
     }

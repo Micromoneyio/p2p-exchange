@@ -74,7 +74,7 @@ class AuthController extends Controller
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>'Recaptcha Failed']]);
         }
 
         $email = $request->email;
@@ -85,12 +85,12 @@ class AuthController extends Controller
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
-        \Mail::send('emails.verify', ['email' => $email, 'verification_code' => $verification_code],
-            function($mail) use ($email,  $subject){
-                $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
-                $mail->to($email, 'Customer');
-                $mail->subject($subject);
-            });
+        #\Mail::send('emails.verify', ['email' => $email, 'verification_code' => $verification_code],
+        #    function($mail) use ($email,  $subject){
+        #        $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
+        #        $mail->to($email, 'Customer');
+        #        $mail->subject($subject);
+        #    });
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
 

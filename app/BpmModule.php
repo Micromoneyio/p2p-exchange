@@ -41,9 +41,31 @@ class BpmModule
                 return $this->assetType($model); break;
             case 'App\Asset':
                 return $this->asset($model); break;
+            case 'App\Deal':
+                return $this->deal($model); break;
             default:
                 return null;
         }
+    }
+
+    public function deal(Deal $deal)
+    {
+        $name = "#{$deal->user->email}/#{$deal->source_asset->name}->#{$deal->destination_asset->name}/#{$deal->source_value}->#{$deal->destination_value}";
+        $this->saveModel($deal, 'SLDealCollection', [
+            'Name' => $name,
+            'SLContactId' => $deal->user->bpm_id,
+            'SLOrderId' => $deal->order->bpm_id,
+            'SLDealStageId' => $deal->deal_stage->bpm_id,
+            'SLSourceAssetId' => $deal->source_asset->bpm_id,
+            'SLDestinationAssetId' => $deal->destination_asset->bpm_id,
+            'SLSourceValue' => $deal->source_value,
+            'SLDestinationValue' => $deal->destination_value,
+            'SLTransitCurrencyId' => $deal->transit_currency->bpm_id,
+            'SLTransitAddress' => $deal->transit_address,
+            'SLTransitKey' => $deal->transit_key,
+            'SLTransitHash' => $deal->transit_hash,
+        ]);
+        return $deal;
     }
 
     public function contact(User $user)

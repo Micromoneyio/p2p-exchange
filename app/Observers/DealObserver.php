@@ -32,6 +32,7 @@ class DealObserver
             'text' => "Transfer crypto currency to " . $deal->transit_address,
             'viewed' => 0
         ]);
+        BpmRequestJob::dispatch($deal->id, 'Deal');
     }
 
     /**
@@ -81,6 +82,7 @@ class DealObserver
         $deal->order->user->callbacks->where('event', 'deal.update')->each(function ($callback, $key) use ($deal) {
             SendCallbackJob::dispatch($callback, $deal->toJson());
         });
+        BpmRequestJob::dispatch($deal->id, 'Deal');
     }
 
     /**

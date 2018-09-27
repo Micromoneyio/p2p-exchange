@@ -10,6 +10,7 @@ use App\DealStage;
 use App\Order;
 use App\RateSource;
 use App\User;
+use App\Deal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -58,6 +59,8 @@ class BpmRequestJob implements ShouldQueue
                 $model = RateSource::find($this->modelId); break;
             case 'AssetType':
                 $model = AssetType::find($this->modelId); break;
+            case 'Deal':
+                $model = Deal::find($this->modelId); break;
             default:
                 return null;
         }

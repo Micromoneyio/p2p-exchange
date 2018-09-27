@@ -29,7 +29,7 @@ class Asset extends Model
     /**
      * @var array
      */
-    protected $hidden = ['password'];
+    protected $hidden = ['key'];
 
     /**
      * @return BelongsTo

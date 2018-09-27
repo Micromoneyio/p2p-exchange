@@ -22,7 +22,6 @@ class AssetResource extends JsonResource
             'bank' => $this->bank ? new BankResource($this->bank) : null,
             'name' => $this->name,
             'address' => $this->address,
-            'key' => $this->key,
             'notes' => $this->notes,
             'default' => (bool)$this->default,
             'created_at' => $this->created_at,

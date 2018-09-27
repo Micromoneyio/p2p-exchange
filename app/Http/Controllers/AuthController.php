@@ -166,11 +166,11 @@ class AuthController extends Controller
             // attempt to verify the credentials and create a token for the user
             unset($credentials['g-recaptcha-response']);
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['success' => false, 'error' => ['email'=>'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']], 404);
+                return response()->json(['success' => false, 'error' => ['email'=>'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']]);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['success' => false, 'error' => ['email'=>'Failed to login, please try again.']], 500);
+            return response()->json(['success' => false, 'error' => ['email'=>'Failed to login, please try again.']]);
         }
         // all good so return the token
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
@@ -207,7 +207,7 @@ class AuthController extends Controller
             return response()->json(['success' => true, 'message'=> "You have successfully logged out."]);
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.'], 500);
+            return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.']);
         }
     }
 
@@ -274,7 +274,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]], 401);
+            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
         }
         try {
             $verification_code = str_random(60); //Generate verification code
@@ -290,7 +290,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             //Return with error
             $error_message = $e->getMessage();
-            return response()->json(['success' => false, 'error' => $error_message], 401);
+            return response()->json(['success' => false, 'error' => $error_message]);
         }
         return response()->json([
             'success' => true, 'data'=> ['message'=> 'A reset email has been sent! Please check your email.']
@@ -305,7 +305,7 @@ class AuthController extends Controller
         $email = \DB::table('password_resets')->where('token', $request->token)->get()->last();
         if (!$email){
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]], 401);
+            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
         }
         return 'resetform';
     }
@@ -317,7 +317,7 @@ class AuthController extends Controller
         $email = \DB::table('password_resets')->where('token', $request->token)->get()->last();
         if (!$email){
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]], 401);
+            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
         }
         $user = User::where('email', $email->email)->first();
         $rules = [

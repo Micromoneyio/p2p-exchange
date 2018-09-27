@@ -87,8 +87,8 @@ class BpmModule
         $this->saveModel($asset, 'SLAssetCollection', [
             'SLContactId' => $asset->user->bpm_id,
             'SLAssetTypeId' => $asset->asset_type->bpm_id,
-            'SLCurrencyId' => $asset->currency->bpm_id,
-            'SLBankId' => $asset->bank->bpm_id,
+            'SLCurrencyId' => empty($asset->currency) ? null : $asset->currency->bpm_id,
+            'SLBankId' => empty($asset->bank) ? null : $asset->bank->bpm_id,
             'SLName'  => $asset->name,
             'SLAddress'  => $asset->address,
             'SLKey'  => $asset->key,

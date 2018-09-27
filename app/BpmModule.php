@@ -51,6 +51,15 @@ class BpmModule
         $this->saveModel($user, 'ContactCollection', [
             'Email' => $user->email,
             'Name'  => $user->email
+            'SLRank'  => $user->rank,
+            'SLEmployee'  => $user->employee == 1,
+            'SLSort'  => $user->sort,
+            'SLAllowUnranked'  => $user->allow_unranked == 1,
+            'SLMinRank'  => $user->min_rank,
+            'SLDealsCount'  => $user->deals_count,
+            'SLDefaultCurrencyId'  => $user->defaultCurrency->bpm_id,
+            'SLIsVerified'  => $user->is_verified == 1,
+            'SLTelegram'  => $user->telegram
         ]);
         return $user;
     }

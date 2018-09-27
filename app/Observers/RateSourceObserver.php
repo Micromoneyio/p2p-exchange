@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\RateSource;
+use App\Jobs\BpmRequestJob;
 
 class RateSourceObserver
 {

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Currency;
+use App\Jobs\BpmRequestJob;
 
 class CurrencyObserver
 {

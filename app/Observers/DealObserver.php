@@ -6,6 +6,7 @@ use App\Deal;
 use App\DealHistory;
 use App\Jobs\SendCallbackJob;
 use App\Notification;
+use App\Jobs\BpmRequestJob;
 
 class DealObserver
 {

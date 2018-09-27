@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Bank;
+use App\Jobs\BpmRequestJob;
 
 class BankObserver
 {

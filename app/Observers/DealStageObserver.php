@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\DealStage;
+use App\Jobs\BpmRequestJob;
 
 class DealStageObserver
 {

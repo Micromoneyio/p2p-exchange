@@ -74,7 +74,7 @@ class AuthController extends Controller
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>'Recaptcha Failed']]);
+            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>'[Recaptcha Failed']]]);
         }
 
         $email = $request->email;
@@ -85,12 +85,12 @@ class AuthController extends Controller
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
-        #\Mail::send('emails.verify', ['email' => $email, 'verification_code' => $verification_code],
-        #    function($mail) use ($email,  $subject){
-        #        $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
-        #        $mail->to($email, 'Customer');
-        #        $mail->subject($subject);
-        #    });
+        \Mail::send('emails.verify', ['email' => $email, 'verification_code' => $verification_code],
+            function($mail) use ($email,  $subject){
+                $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
+                $mail->to($email, 'Customer');
+                $mail->subject($subject);
+            });
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
 
@@ -157,7 +157,7 @@ class AuthController extends Controller
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> 'Recaptcha failed']);
+            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>['Recaptcha failed']]]);
         }
 
         $credentials['is_verified'] = 1;
@@ -166,11 +166,11 @@ class AuthController extends Controller
             // attempt to verify the credentials and create a token for the user
             unset($credentials['g-recaptcha-response']);
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['success' => false, 'error' => ['email'=>'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']]);
+                return response()->json(['success' => false, 'error' => ['email'=>['We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']]]);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['success' => false, 'error' => ['email'=>'Failed to login, please try again.']]);
+            return response()->json(['success' => false, 'error' => ['email'=>['Failed to login, please try again.']]]);
         }
         // all good so return the token
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);

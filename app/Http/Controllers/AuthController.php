@@ -45,7 +45,7 @@ class AuthController extends Controller
      *          type="string"
      *      ),
      *   @SWG\Property(
-     *          property="g-recaptcha-response",
+     *          property="recaptcha",
      *          type="string"
      *      )
      *     )
@@ -61,20 +61,20 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only( 'email', 'password','password_confirmation','g-recaptcha-response');
+        $credentials = $request->only( 'email', 'password','password_confirmation','recaptcha');
 
         $rules = [
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required',
                'min:6',
                'confirmed'],
-            'g-recaptcha-response'=>'required'
+            'recaptcha'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>'[Recaptcha Failed']]]);
+        }elseif (!$this->validateRecaptcha($request->{'recaptcha'})){
+            return response()->json(['success'=> false, 'error'=> ['recaptcha'=>['Recaptcha Failed']]]);
         }
 
         $email = $request->email;
@@ -132,7 +132,7 @@ class AuthController extends Controller
      *          type="string"
      *      ),
      *   @SWG\Property(
-     *          property="g-recaptcha-response",
+     *          property="recaptcha",
      *          type="string"
      *      ),
      *     )
@@ -147,24 +147,24 @@ class AuthController extends Controller
     */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password', 'g-recaptcha-response');
+        $credentials = $request->only('email', 'password', 'recaptcha');
         $rules = [
             'email' => 'required|email',
             'password' => 'required|min:6',
-            'g-recaptcha-response'=>'required'
+            'recaptcha'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-        }elseif (!$this->validateRecaptcha($request->{'g-recaptcha-response'})){
-            return response()->json(['success'=> false, 'error'=> ['g-recaptcha-response'=>['Recaptcha failed']]]);
+        }elseif (!$this->validateRecaptcha($request->{'recaptcha'})){
+            return response()->json(['success'=> false, 'error'=> ['recaptcha'=>['Recaptcha failed']]]);
         }
 
         $credentials['is_verified'] = 1;
 
         try {
             // attempt to verify the credentials and create a token for the user
-            unset($credentials['g-recaptcha-response']);
+            unset($credentials['recaptcha']);
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['success' => false, 'error' => ['email'=>['We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']]]);
             }

@@ -127,4 +127,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Deal::class);
     }
+
+    public function defaultCurrency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 }

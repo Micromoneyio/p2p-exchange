@@ -166,7 +166,7 @@ class AuthController extends Controller
             // attempt to verify the credentials and create a token for the user
             unset($credentials['g-recaptcha-response']);
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['success' => false, 'error' => ['email'=>'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']], 401);
+                return response()->json(['success' => false, 'error' => ['email'=>'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.']], 404);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token

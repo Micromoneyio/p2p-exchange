@@ -39,6 +39,8 @@ class BpmModule
                 return $this->rateSource($model); break;
             case 'App\AssetType':
                 return $this->assetType($model); break;
+            case 'App\Asset':
+                return $this->asset($model); break;
             default:
                 return null;
         }
@@ -76,6 +78,22 @@ class BpmModule
         $this->saveModel($assetType, 'SLAssetTypeCollection', [
             'Name'  => $assetType->name,
             'SLCrypto' => $assetType->crypto == 1
+        ]);
+        return $assetType;
+    }
+
+    public function asset(Asset $asset)
+    {
+        $this->saveModel($asset, 'SLAssetCollection', [
+            'SLContactId' => $asset->user->bpm_id,
+            'SLAssetTypeId' => $asset->asset_type->bpm_id,
+            'SLCurrencyId' => $asset->currency->bpm_id,
+            'SLBankId' => $asset->bank->bpm_id,
+            'SLName'  => $asset->name,
+            'SLAddress'  => $asset->address,
+            'SLKey'  => $asset->key,
+            'SLNotes'  => $asset->notes,
+            'SLDefault' => $asset->default == 1,
         ]);
         return $assetType;
     }

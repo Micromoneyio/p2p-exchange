@@ -95,7 +95,7 @@ class BpmModule
             'SLNotes'  => $asset->notes,
             'SLDefault' => $asset->default == 1,
         ]);
-        return $assetType;
+        return $asset;
     }
 
     public function bank(Bank $bank)

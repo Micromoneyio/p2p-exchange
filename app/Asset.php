@@ -3,9 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Asset
+ * @package App
+ */
 class Asset extends Model
 {
+    /**
+     * @var array
+     */
     protected $fillable = [
         'asset_type_id',
         'user_id',
@@ -18,28 +26,52 @@ class Asset extends Model
         'notes',
     ];
 
+    /**
+     * @var array
+     */
+    protected $hidden = ['password'];
 
-    public function asset_type() {
+    /**
+     * @return BelongsTo
+     */
+    public function asset_type():BelongsTo {
         return $this->belongsTo('App\AssetType');
     }
 
-    public function user() {
+    /**
+     * @return BelongsTo
+     */
+    public function user():BelongsTo {
         return $this->belongsTo('App\User');
     }
 
-    public function currency() {
+    /**
+     * @return BelongsTo
+     */
+    public function currency():BelongsTo {
         return $this->belongsTo('App\Currency');
     }
 
-    public function bank() {
+    /**
+     * @return BelongsTo
+     */
+    public function bank():BelongsTo {
         return $this->belongsTo('App\Bank');
     }
 
-    public function crypto() {
+    /**
+     * @return Currency
+     */
+    public function crypto():Currency {
         return Currency::find($this->currency_id)->crypto;
     }
 
-    public function fiat() {
+    /**
+     * @return Currency
+     */
+    public function fiat():Currency {
         return !Currency::find($this->currency_id)->crypto;
     }
+
+
 }

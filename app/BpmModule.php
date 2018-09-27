@@ -52,7 +52,7 @@ class BpmModule
     {
         $name = "#{$deal->user->email}/#{$deal->source_asset->name}->#{$deal->destination_asset->name}/#{$deal->source_value}->#{$deal->destination_value}";
         $this->saveModel($deal, 'SLDealCollection', [
-            'Name' => $name,
+            'SLName' => $name,
             'SLContactId' => $deal->user->bpm_id,
             'SLOrderId' => $deal->order->bpm_id,
             'SLDealStageId' => $deal->deal_stage->bpm_id,

@@ -71,7 +71,7 @@ class BpmModule
     {
         $this->saveModel($user, 'ContactCollection', [
             'Email' => $user->email,
-            'Name'  => $user->email,
+            'Name'  => $user->name,
             'SLRank'  => $user->rank,
             'SLEmployee'  => $user->employee == 1,
             'SLSort'  => $user->sort,

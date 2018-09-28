@@ -120,7 +120,6 @@ class BpmModule
             'SLBankId' => empty($asset->bank) ? null : $asset->bank->bpm_id,
             'SLName'  => $asset->name,
             'SLAddress'  => $asset->address,
-            'SLKey'  => $asset->key,
             'SLNotes'  => $asset->notes,
             'SLDefault' => $asset->default == 1,
         ]);

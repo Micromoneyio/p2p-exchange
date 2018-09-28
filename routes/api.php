@@ -19,7 +19,7 @@ Route::post('login',    'AuthController@login');
 Route::post('recover',  'AuthController@recover');
 
 # OAuth routes
-Route::get('login/google',array('as'=>'glogin','uses'=>'AuthController@googleLogin')) ;
+Route::post('login/google',array('as'=>'glogin','uses'=>'AuthController@googleLogin')) ;
 Route::get('login/facebook', 'AuthController@redirectToFacebook');
 
 Route::group(['middleware' => ['jwt.auth']], function ($router) {

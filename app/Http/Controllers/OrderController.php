@@ -384,15 +384,23 @@ class OrderController extends Controller
                     return $order->user->rank;
             }
         });
-
-        $result = $entities->first();
-        if (!$result){
+        foreach ($entities as &$order) {
+            $order->rate_source;
+            $order->source_currency;
+            $order->destination_currency;
+            $order->source_asset;
+            $order->destination_asset;
+            $order->type;
+            $order->user;
+            $order->deals;
+            $order->is_favorite = $order->is_favorite();
+        }
+        if (!$entities){
             return new OrdersResource(collect([]));
         }   
-        $result->is_favorite = $result->is_favorite();
-        $result->type;
+        
     
         
-        return $result;
+        return $entities;
     }
 }

@@ -48,9 +48,6 @@ class Kernel extends ConsoleKernel
 
             }
         })->everyMinute();
-        $schedule->call(function (ConnectionInterface $connection){
-            dd(get_class_methods($connection));
-        })->everyMinute();
     }
 
     /**

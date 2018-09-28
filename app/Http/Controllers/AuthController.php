@@ -37,6 +37,10 @@ class AuthController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Property(
+     *         property="name",
+     *         type="string"
+     *     ),
+     *     @SWG\Property(
      *          property="password",
      *          type="string"
      *      ),
@@ -61,14 +65,16 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only( 'email', 'password','password_confirmation','recaptcha');
+        $credentials = $request->only( 'email', 'password','password_confirmation','recaptcha', 'name');
 
         $rules = [
             'email' => 'required|email|max:255|unique:users',
-            'password' => ['required',
+            'password' => [
+                'required',
                'min:6',
                'confirmed'],
-            'recaptcha'=>'required'
+            'recaptcha'=>'required',
+            'name' =>'required|string|max:255'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -79,7 +85,7 @@ class AuthController extends Controller
 
         $email = $request->email;
         $password = $request->password;
-        $name = 'Customer';
+        $name = $request->name;
 
         $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password),'default_currency_id'=>Currency::all()->first()->id]);
         $verification_code = str_random(30); //Generate verification code

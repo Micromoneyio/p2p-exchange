@@ -349,11 +349,31 @@ class AuthController extends Controller
 
     /**
      * Google
-     * @SWG\Get(
+     * @SWG\Post(
      *   path="/login/google",
      *   summary="Google login",
      *   operationId="googleLogin",
      *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Login",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="email",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      ),
+     *   @SWG\Property(
+     *          property="google_id",
+     *          type="string"
+     *      ),
+     *     )
+     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      *   @SWG\Response(response=400, description="not acceptable"),
      *   @SWG\Response(response=500, description="internal server error")
@@ -362,46 +382,44 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function googleLogin(Request $request)  {
-        $google_redirect_url = route('glogin');
-        $gClient = new \Google_Client();
-        $gClient->setApplicationName(config('services.google.app_name'));
-        $gClient->setClientId(config('services.google.client_id'));
-        $gClient->setClientSecret(config('services.google.client_secret'));
-        $gClient->setRedirectUri($google_redirect_url);
-        $gClient->setDeveloperKey(config('services.google.api_key'));
-        $gClient->setScopes(array(
-            'https://www.googleapis.com/auth/plus.me',
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/userinfo.profile',
-        ));
-        $google_oauthV2 = new \Google_Service_Oauth2($gClient);
-        if ($request->get('code')){
-            $gClient->authenticate($request->get('code'));
-            $request->session()->put('token', $gClient->getAccessToken());
+        $credentials = $request->only('name', 'email', 'google_id');
+        $rules = [
+            'email' => 'required|email',
+            'google_id'=>'required',
+            'name' =>'required|string|max:255'
+        ];
+        $validator = \Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }
-        if ($request->session()->get('token'))
-        {
-            $gClient->setAccessToken($request->session()->get('token'));
-        }
-        if ($gClient->getAccessToken())
-        {
-            //For logged in user, get details from google using access token
-            $guser = $google_oauthV2->userinfo->get();
 
-            $request->session()->put('name', $guser['name']);
-            if ($user =User::where('email',$guser['email'])->first())
-            {
-                //logged your user via auth login
+        $credentials['is_verified'] = 1;
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            $user = User::where([
+                ['email','=',$request->email],
+                ['social_id','=',$request->google_id]
+            ])->get()->first();
+            if ($user){
+                $token = JWTAuth::tokenById($user->id);
             }else{
-                //register your user with response data
+                $user = User::create([
+                    'name' => $request->$credentials['name'],
+                    'email' => $credentials['email'],
+                    'password' => \Hash::make(str_random()),
+                    'default_currency_id'=>Currency::all()->first()->id,
+                    'is_verified'=>1,
+                    'social_id' => $request->google_id
+                ]);
+                $token = JWTAuth::tokenById($user->id);
             }
-            return redirect()->route('user.glist');
-        } else
-        {
-            //For Guest user, get google login url
-            $authUrl = $gClient->createAuthUrl();
-            return response()->json(['success'=>true, 'data'=>['redirect'=>$authUrl]]);
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['success' => false, 'error' => ['email'=>['Failed to login, please try again.']]]);
         }
+        // all good so return the token
+        return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
     }
 
     public function listGoogleUser(Request $request){

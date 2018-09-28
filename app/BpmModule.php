@@ -61,7 +61,6 @@ class BpmModule
             'SLDestinationValue' => $deal->destination_value,
             'SLTransitCurrencyId' => $deal->transit_currency->bpm_id,
             'SLTransitAddress' => $deal->transit_address,
-            'SLTransitKey' => $deal->transit_key,
             'SLTransitHash' => $deal->transit_hash,
         ]);
         return $deal;
@@ -89,12 +88,12 @@ class BpmModule
     {
         $this->saveModel($order, 'SLOrderCollection', [
             'SLName'                  => empty($order->name) ? "{$order->source_currency->symbol}->{$order->destination_currency->symbol}/{$order->user->email}" : $order->name,
-            'SLContactIdId'           => $order->user->bpm_id,
-            'SLSourceCurrency'        => $order->source_currency->name,
-            'SLDestinationCurrency'   => $order->destination_currency->name,
-            'SLSourceAsset'           => $order->source_asset->name,
-            'SLDestinationAsset'      => $order->destination_asset->name,
-            'SLRateSource'            => $order->rate_source->name,
+            'SLContactId'             => $order->user->bpm_id,
+            'SLSourceCurrencyId'      => $order->source_currency->bpm_id,
+            'SLDestinationCurrencyId' => $order->destination_currency->bpm_id,
+            'SLSourceAssetId'         => $order->source_asset->bpm_id,
+            'SLDestinationAssetId'    => $order->destination_asset->bpm_id,
+            'SLRateSourceId'          => $order->rate_source->bpm_id,
             'SLFixPrice'              => empty($order->fix_price) ? "0" : strval($order->fix_price),
             'SLSourcePriceIndex'      => empty($order->source_price_index) ? "0" : strval($order->source_price_index),
             'SLLimitFrom'             => empty($order->limit_from) ? "0" : strval($order->limit_from),

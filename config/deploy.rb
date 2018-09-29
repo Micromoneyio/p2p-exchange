@@ -67,6 +67,7 @@ task :deploy do
       command %{sudo supervisorctl reread}
       command %{sudo supervisorctl update}
       command %{sudo supervisorctl start laravel-worker:*}
+      command %{sudo service php7.1-fpm restart}
     end
   end
 

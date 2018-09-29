@@ -4,60 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\SettingsResource;
 use App\Settings;
+use App\User;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
 
     /**
-     * Display the specified resource.
-     *@SWG\Get(
-     *   path="/settings/{user_id}",
-     *   summary="Get user settings",
-     *   operationId="show",
-     *   tags={"settings"},
-     *  @SWG\Parameter(
-     *     name="user_id",
-     *     in="path",
-     *     description="Id of a user to get settings.",
-     *     required=true,
-     *     type="integer"
-     *   ),
-     *   @SWG\Parameter(
-     *     name="token",
-     *     in="query",
-     *     description="JWT-token",
-     *     required=true,
-     *     type="string"
-     *   ),
-     *   @SWG\Response(response=200, description="successful operation"),
-     *   @SWG\Response(response=400, description="not acceptable"),
-     *   @SWG\Response(response=500, description="internal server error")
-     * )
-     *
-     * @param  int $userId
-     * @return SettingsResource
-     */
-    public function show($userId)
-    {
-        return new SettingsResource(Settings::forUser($userId));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @SWG\Put(
-     *   path="/settings/{user_id}",
+     *   path="/settings",
      *   summary="update user settings",
      *   operationId="update",
      *   tags={"settings"},
-     * *  @SWG\Parameter(
-     *     name="id",
-     *     in="path",
-     *     description="Target user id.",
-     *     required=true,
-     *     type="integer"
-     *   ),
      *    @SWG\Parameter(
      *     name="token",
      *     in="query",
@@ -68,28 +28,40 @@ class SettingsController extends Controller
      *   @SWG\Parameter(
      *     name="body",
      *     in="body",
-     *     description="local currency id",
+     *     description="key for param update",
      *     required=true,
      *   @SWG\Schema(
      *      @SWG\Property(
-     *          property="local_currency_id",
-     *          type="integer"
+     *          property="key",
+     *          type="string"
+     *      )
+     *     ),
+     *     @SWG\Schema(
+     *      @SWG\Property(
+     *          property="value",
+     *          type="string"
      *      )
      *     )
      *   ),
+     *
      *   @SWG\Response(response=200, description="successful operation"),
      *   @SWG\Response(response=400, description="not acceptable"),
      *   @SWG\Response(response=500, description="internal server error")
      * )
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int $userId
      * @return SettingsResource
      */
-    public function update(Request $request, $userId)
+    public function update(Request $request)
     {
-        $model = Settings::forUser($userId);
-        $model->update($request->only(['local_currency_id']));
-        return new SettingsResource($model);
+        if (in_array($request->key, User::SETTINGS_FILLABLE)){
+              $user = $request->user();
+              $user->$request->key = $request->value;
+              $user->save();
+            return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
+        }
+        //$model = User::where($userId);
+        //$model->update($request->only(['local_currency_id']));
+        return response()->json(['success'=> false, 'error'=> 'You don\'t have access for this Action' ]);
     }
 }

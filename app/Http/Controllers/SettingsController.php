@@ -56,12 +56,10 @@ class SettingsController extends Controller
     {
         if (in_array($request->key, User::SETTINGS_FILLABLE)){
               $user = $request->user();
-              $user->$request->key = $request->value;
+              $user->{$request->key} = $request->value;
               $user->save();
             return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
         }
-        //$model = User::where($userId);
-        //$model->update($request->only(['local_currency_id']));
         return response()->json(['success'=> false, 'error'=> 'You don\'t have access for this Action' ]);
     }
 }

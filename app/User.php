@@ -40,6 +40,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = ['email', 'password', 'is_verified','name','default_currency_id'];
+    const SETTINGS_FILLABLE = ['name', 'telegram', 'deals_count','default_currency_id'];
 
     /**
      * The attributes that should be hidden for arrays.

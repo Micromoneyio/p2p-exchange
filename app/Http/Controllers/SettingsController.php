@@ -61,6 +61,6 @@ class SettingsController extends Controller
             }
         }
         $user->save();
-        return return response()->json(['success' => true, 'data'=> ['user'=>$user]]);;
+        return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
     }
 }

@@ -12,7 +12,7 @@ class Settings extends Model
      * @param $userId
      * @return Settings
      */
-    public static function forUser($userId)
+    /**public static function forUser($userId)
     {
         $model = self::where('user_id', $userId)->first();
         if(!$model) {
@@ -30,4 +30,5 @@ class Settings extends Model
     {
         return $this->belongsTo(Currency::class, 'local_currency_id');
     }
+     * */
 }

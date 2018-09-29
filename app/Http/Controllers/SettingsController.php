@@ -54,12 +54,13 @@ class SettingsController extends Controller
      */
     public function update(Request $request)
     {
-        if (in_array($request->key, User::SETTINGS_FILLABLE)){
-              $user = $request->user();
-              $user->{$request->key} = $request->value;
-              $user->save();
-            return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
+        $user = $request->user();
+        foreach ($request->all() as $key=>$item){
+            if (in_array($key, User::SETTINGS_FILLABLE)){
+                $user->{$key} = $item;
+            }
         }
-        return response()->json(['success'=> false, 'error'=> 'You don\'t have access for this Action' ]);
+        $user->save();
+        return return response()->json(['success' => true, 'data'=> ['user'=>$user]]);;
     }
 }

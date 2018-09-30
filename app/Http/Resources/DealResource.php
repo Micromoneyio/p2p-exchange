@@ -29,6 +29,7 @@ class DealResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'destination_currency' => new CurrencyResource($this->destination_currency),
+            'outgoing_transaction_hash' => $this->outgoing_transaction_hash,
         ];
     }
 }

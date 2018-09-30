@@ -54,7 +54,7 @@ class SendNotification implements ShouldBroadcast
                 'order' => $this->notification->deal->order()->with('user')->first(),
                 'deal_stage' => $this->notification->deal->deal_stage,
                 'source_asset' => $this->notification->deal->source_asset()->with('currency')->first(),
-                'destination_asset' => $this->notification->deal->destination_asset()->with('currency')->first(),
+                'destination_asset' => $this->notification->deal->destination_asset()->with(['currency', 'user'])->first(),
                 'transit_currency' => $this->notification->deal->transit_currency,
                 'transit_address' => $this->notification->deal->transit_address,
                 'transit_hash' => $this->notification->deal->transit_hash,

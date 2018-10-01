@@ -93,7 +93,7 @@ class AuthController extends Controller
         $subject = "Please verify your email address.";
         \Mail::send('emails.verify', ['email' => $email, 'verification_code' => $verification_code],
             function($mail) use ($email,  $subject){
-                $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
+                $mail->from(getenv('FROM_EMAIL_ADDRESS'), getenv('APP_NAME'));
                 $mail->to($email, 'Customer');
                 $mail->subject($subject);
             });
@@ -282,7 +282,7 @@ class AuthController extends Controller
             $email = $request->email;
             \Mail::send('emails.reset', ['email' => $email, 'verification_code' => $verification_code],
                 function($mail) use ($email,  $subject){
-                    $mail->from(getenv('FROM_EMAIL_ADDRESS'), "From User/Company Name Goes Here");
+                    $mail->from(getenv('FROM_EMAIL_ADDRESS'), getenv('APP_NAME'));
                     $mail->to($email, 'Customer');
                     $mail->subject($subject);
                 });

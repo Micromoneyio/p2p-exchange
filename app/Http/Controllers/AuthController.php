@@ -231,13 +231,13 @@ class AuthController extends Controller
             $user = User::find($check->user_id);
 
             if($user->is_verified == 1){
-                return redirect()->away(getenv('APP_URL'). '?action_type=EMAIL_CONFIRMED');
+                return redirect()->away(getenv('APP_URL'). 'login?action_type=EMAIL_CONFIRMED');
             }
 
             $user->update(['is_verified' => 1]);
             \DB::table('user_verifications')->where('token',$request->verification_code)->delete();
 
-            return redirect()->away(getenv('APP_URL'). '?action_type=EMAIL_CONFIRMED');
+            return redirect()->away(getenv('APP_URL'). 'login?action_type=EMAIL_CONFIRMED');
         }
         return redirect()->away(getenv('APP_URL'));
     }

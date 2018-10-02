@@ -411,7 +411,7 @@ class AuthController extends Controller
                     'is_verified'=>1,
                     'google_id' => $request->google_id
                 ]);
-                 \Illuminate\Support\Facades\Auth::loginUsingId($user->id,true);
+
                   $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {
@@ -421,7 +421,6 @@ class AuthController extends Controller
         // all good so return the token
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>$user]]);
     }
-
     /**
      * Facebook
      * @SWG\Post(
@@ -490,7 +489,6 @@ class AuthController extends Controller
                     'is_verified'=>1,
                     'facebook_id' => $request->facebook_id
                 ]);
-                \Illuminate\Support\Facades\Auth::loginUsingId($user->id,true);
                 $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {

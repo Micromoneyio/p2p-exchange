@@ -12,7 +12,6 @@
 */
 
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
-Route::get('password/reset', 'AuthController@showResetForm')->name('password.request');
 
 
 

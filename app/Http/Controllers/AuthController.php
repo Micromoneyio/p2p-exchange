@@ -65,7 +65,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only( 'email', 'password','password_confirmation','recaptcha', 'name');
+        $credentials = $request->only( 'email', 'password','password_confirmation','recaptcha', 'name', 'facebook_id');
 
         $rules = [
             'email' => 'required|email|max:255|unique:users',
@@ -92,7 +92,7 @@ class AuthController extends Controller
             'email' => $email,
             'password' => \Hash::make($password),
             'default_currency_id'=>Currency::all()->first()->id,
-            'facebook_id'=>$request->facebook_id
+            'facebook_id'=>$credentials['facebook_id'] ?? ""
         ]);
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);

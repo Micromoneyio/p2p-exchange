@@ -477,7 +477,7 @@ class AuthController extends Controller
                 $token = JWTAuth::fromUser($user);
             }else{
                 $user = User::create([
-                    'name' => $credentials['name'],
+                    'name' => $credentials['name'] ?? "Customer",
                     'email' => $credentials['email'],
                     'password' => \Hash::make(str_random()),
                     'default_currency_id'=>Currency::all()->first()->id,

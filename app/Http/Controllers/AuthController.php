@@ -87,7 +87,13 @@ class AuthController extends Controller
         $password = $request->password;
         $name = $request->name;
 
-        $user = User::create(['name' => $name,'email' => $email, 'password' => \Hash::make($password),'default_currency_id'=>Currency::all()->first()->id]);
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => \Hash::make($password),
+            'default_currency_id'=>Currency::all()->first()->id,
+            'facebook_id'=>$request->facebook_id
+        ]);
         $verification_code = str_random(30); //Generate verification code
         \DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
@@ -391,7 +397,7 @@ class AuthController extends Controller
         try {
             // attempt to verify the credentials and create a token for the user
             $user = User::where([
-                ['email','=',$request->email]
+                ['google_id','=',$request->google_id]
             ])->get()->first();
             if ($user){
                 $token = JWTAuth::fromUser($user);
@@ -402,8 +408,9 @@ class AuthController extends Controller
                     'password' => \Hash::make(str_random()),
                     'default_currency_id'=>Currency::all()->first()->id,
                     'is_verified'=>1,
-                    'social_id' => $request->google_id
+                    'google_id' => $request->google_id
                 ]);
+                 \Illuminate\Support\Facades\Auth::loginUsingId($user->id,true);
                   $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {
@@ -469,7 +476,7 @@ class AuthController extends Controller
                 $email = $credentials['email'];
             }
             $user = User::where([
-                ['email','=',$email]
+                ['facebook_id','=',$request->facebook_id]
             ])->get()->first();
             if ($user){
                 $token = JWTAuth::fromUser($user);
@@ -480,8 +487,9 @@ class AuthController extends Controller
                     'password' => \Hash::make(str_random()),
                     'default_currency_id'=>Currency::all()->first()->id,
                     'is_verified'=>1,
-                    'social_id' => $request->facebook_id
+                    'facebook_id' => $request->facebook_id
                 ]);
+                \Illuminate\Support\Facades\Auth::loginUsingId($user->id,true);
                 $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {
@@ -538,5 +546,35 @@ class AuthController extends Controller
         catch (\Exception $e) {
             return redirect('auth/facebook');
         }
+    }
+
+    public function connectFacebook(Request $request){
+        $credentials = $request->only('facebook_id');
+        $rules = [
+            'facebook_id'=>'required',
+        ];
+        $validator = \Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }
+        $user = $request->user();
+        $user->facebook_id = $credentials['facebook_id'];
+        $user->save();
+        return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
+    }
+
+    public function connectGoogle(Request $request){
+        $credentials = $request->only('google_id');
+        $rules = [
+            'google'=>'required',
+        ];
+        $validator = \Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }
+        $user = $request->user();
+        $user->google_id = $credentials['google_id'];
+        $user->save();
+        return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
     }
 }

@@ -456,10 +456,9 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function facebookLogin(Request $request)  {
-        $credentials = $request->only('name', 'email', 'facebook_id');
+        $credentials = $request->only('name', 'email', 'id');
         $rules = [
-            'facebook_id'=>'required',
-            'name' =>'required|string|max:255'
+            'id'=>'required'
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -470,24 +469,20 @@ class AuthController extends Controller
 
         try {
             // attempt to verify the credentials and create a token for the user
-            if (!$credentials['email']){
-                $email = $credentials['facebook_id']. '@facebook.com';
-            }else{
-                $email = $credentials['email'];
-            }
+
             $user = User::where([
-                ['facebook_id','=',$request->facebook_id]
+                ['facebook_id','=',$request->id]
             ])->get()->first();
             if ($user){
                 $token = JWTAuth::fromUser($user);
             }else{
                 $user = User::create([
                     'name' => $credentials['name'],
-                    'email' => $email,
+                    'email' => $credentials['email'],
                     'password' => \Hash::make(str_random()),
                     'default_currency_id'=>Currency::all()->first()->id,
                     'is_verified'=>1,
-                    'facebook_id' => $request->facebook_id
+                    'facebook_id' => $request->id
                 ]);
                 $token = JWTAuth::fromUser($user);
             }

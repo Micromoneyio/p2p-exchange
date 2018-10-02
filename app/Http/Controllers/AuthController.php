@@ -395,7 +395,7 @@ class AuthController extends Controller
                 ['social_id','=',$request->google_id]
             ])->get()->first();
             if ($user){
-                $token = JWTAuth::tokenById($user->id);
+                $token = JWTAuth::fromUser($user);
             }else{
                 $user = User::create([
                     'name' => $credentials['name'],
@@ -405,14 +405,14 @@ class AuthController extends Controller
                     'is_verified'=>1,
                     'social_id' => $request->google_id
                 ]);
-                $token = JWTAuth::tokenById($user->id);
+                  $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
             return response()->json(['success' => false, 'error' => ['email'=>['Failed to login, please try again.']]]);
         }
         // all good so return the token
-        return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>\auth()->user()]]);
+        return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>$user]]);
     }
 
     public function listGoogleUser(Request $request){

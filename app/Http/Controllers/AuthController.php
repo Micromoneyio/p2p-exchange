@@ -312,7 +312,8 @@ class AuthController extends Controller
             $error_message = "Your email address was not found.";
             return response()->json(['success' => false, 'error' => ['email'=> [$error_message]]]);
         }
-        return 'resetform';
+        return redirect()->away(getenv('APP_URL'). 'password-new?token='. $request->token);
+
     }
 
     /**

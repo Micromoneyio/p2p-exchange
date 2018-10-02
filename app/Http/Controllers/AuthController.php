@@ -273,7 +273,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
+            return response()->json(['success' => false, 'error' => ['email'=> [$error_message]]]);
         }
         try {
             $verification_code = str_random(60); //Generate verification code
@@ -304,7 +304,7 @@ class AuthController extends Controller
         $email = \DB::table('password_resets')->where('token', $request->token)->get()->last();
         if (!$email){
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
+            return response()->json(['success' => false, 'error' => ['email'=> [$error_message]]]);
         }
         return 'resetform';
     }
@@ -316,7 +316,7 @@ class AuthController extends Controller
         $email = \DB::table('password_resets')->where('token', $request->token)->get()->last();
         if (!$email){
             $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> $error_message]]);
+            return response()->json(['success' => false, 'error' => ['email'=> [$error_message]]]);
         }
         $user = User::where('email', $email->email)->first();
         $rules = [
@@ -391,8 +391,7 @@ class AuthController extends Controller
         try {
             // attempt to verify the credentials and create a token for the user
             $user = User::where([
-                ['email','=',$request->email],
-                ['social_id','=',$request->google_id]
+                ['email','=',$request->email]
             ])->get()->first();
             if ($user){
                 $token = JWTAuth::fromUser($user);
@@ -406,6 +405,84 @@ class AuthController extends Controller
                     'social_id' => $request->google_id
                 ]);
                   $token = JWTAuth::fromUser($user);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['success' => false, 'error' => ['email'=>['Failed to login, please try again.']]]);
+        }
+        // all good so return the token
+        return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>$user]]);
+    }
+
+    /**
+     * Facebook
+     * @SWG\Post(
+     *   path="/login/facebook",
+     *   summary="facebook login",
+     *   operationId="facebook Login",
+     *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Login",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="email",
+     *          type="string"
+     *      ),
+     *     @SWG\Property(
+     *          property="name",
+     *          type="string"
+     *      ),
+     *   @SWG\Property(
+     *          property="facebook_id",
+     *          type="string"
+     *      ),
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function facebookLogin(Request $request)  {
+        $credentials = $request->only('name', 'email', 'facebook_id');
+        $rules = [
+            'facebook_id'=>'required',
+            'name' =>'required|string|max:255'
+        ];
+        $validator = \Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }
+
+        $credentials['is_verified'] = 1;
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (!$credentials['email']){
+                $email = $credentials['facebook_id']. '@facebook.com';
+            }else{
+                $email = $credentials['email'];
+            }
+            $user = User::where([
+                ['email','=',$email]
+            ])->get()->first();
+            if ($user){
+                $token = JWTAuth::fromUser($user);
+            }else{
+                $user = User::create([
+                    'name' => $credentials['name'],
+                    'email' => $email,
+                    'password' => \Hash::make(str_random()),
+                    'default_currency_id'=>Currency::all()->first()->id,
+                    'is_verified'=>1,
+                    'social_id' => $request->facebook_id
+                ]);
+                $token = JWTAuth::fromUser($user);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token

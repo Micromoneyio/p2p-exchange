@@ -639,12 +639,6 @@ class AuthController extends Controller
      *   summary="google disconnect",
      *   operationId="google disconnect",
      *   tags={"auth"},
-     *     @SWG\Parameter(
-     *     name="body",
-     *     in="body",
-     *     description="Body",
-     *     required=true,
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      *   @SWG\Response(response=400, description="not acceptable"),
      *   @SWG\Response(response=500, description="internal server error")
@@ -666,12 +660,6 @@ class AuthController extends Controller
      *   summary="facebook disconnect",
      *   operationId="facebook disconnect",
      *   tags={"auth"},
-     *     @SWG\Parameter(
-     *     name="body",
-     *     in="body",
-     *     description="Body",
-     *     required=true,
-     *   ),
      *   @SWG\Response(response=200, description="successful operation"),
      *   @SWG\Response(response=400, description="not acceptable"),
      *   @SWG\Response(response=500, description="internal server error")

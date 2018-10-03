@@ -560,7 +560,7 @@ class AuthController extends Controller
     public function connectGoogle(Request $request){
         $credentials = $request->only('google_id');
         $rules = [
-            'google'=>'required',
+            'google_id'=>'required',
         ];
         $validator = \Validator::make($credentials, $rules);
         if($validator->fails()) {

@@ -106,6 +106,10 @@ class AuthController extends Controller
         return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     private function validateRecaptcha($value){
         $client = new Client();
 
@@ -494,6 +498,10 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'data'=> [ 'token' => $token , 'user'=>$user]]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listGoogleUser(Request $request){
         $users = User::orderBy('id','DESC')->paginate(5);
         return view('users.list',compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);;
@@ -542,6 +550,32 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Facebook
+     * @SWG\Post(
+     *   path="/connect/facebook",
+     *   summary="facebook connect",
+     *   operationId="facebook connect",
+     *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Body",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="facebook_id",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function connectFacebook(Request $request){
         $credentials = $request->only('facebook_id');
         $rules = [
@@ -557,6 +591,32 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
     }
 
+    /**
+     * Google
+     * @SWG\Post(
+     *   path="/connect/google",
+     *   summary="google connect",
+     *   operationId="google connect",
+     *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Body",
+     *     required=true,
+     *   @SWG\Schema(
+     *      @SWG\Property(
+     *          property="google_id",
+     *          type="string"
+     *      )
+     *     )
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function connectGoogle(Request $request){
         $credentials = $request->only('google_id');
         $rules = [
@@ -568,6 +628,60 @@ class AuthController extends Controller
         }
         $user = $request->user();
         $user->google_id = $credentials['google_id'];
+        $user->save();
+        return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
+    }
+
+    /**
+     * Google
+     * @SWG\Post(
+     *   path="/disconnect/google",
+     *   summary="google disconnect",
+     *   operationId="google disconnect",
+     *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Body",
+     *     required=true,
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function disconnectGoogle(Request $request){
+        $user = $request->user();
+        $user->google_id = null;
+        $user->save();
+        return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
+    }
+
+    /**
+     * Facebook
+     * @SWG\Post(
+     *   path="/disconnect/facebook",
+     *   summary="facebook disconnect",
+     *   operationId="facebook disconnect",
+     *   tags={"auth"},
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="Body",
+     *     required=true,
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function disconnectFacebook(Request $request){
+        $user = $request->user();
+        $user->facebook_id = null;
         $user->save();
         return response()->json(['success' => true, 'data'=> ['user'=>$user]]);
     }

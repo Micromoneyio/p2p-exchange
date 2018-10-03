@@ -50,6 +50,9 @@ Route::group(['middleware' => ['jwt.auth']], function ($router) {
 
     Route::post('connect/facebook', 'AuthController@connectFacebook');
     Route::post('connect/google', 'AuthController@connectGoogle');
+
+    Route::post('disconnect/facebook', 'AuthController@disconnectFacebook');
+    Route::post('disconnect/google', 'AuthController@disconnectGoogle');
 });
 
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');

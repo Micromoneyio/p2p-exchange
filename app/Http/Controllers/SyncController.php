@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AssetType;
 use App\Bank;
 use App\DealStage;
+use App\RateSource;
 use Illuminate\Http\Request;
 
 class SyncController extends Controller
@@ -50,5 +51,20 @@ class SyncController extends Controller
         $deal_stage->name = $request->name;
         $deal_stage->save();
         return $deal_stage;
+    }
+
+    public function rate_source(Request $request)
+    {
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $rate_source = RateSource::where(['bpm_id' => $request->id])->first();
+        if (empty($rate_source)) {
+            $rate_source = new RateSource(['bpm_id' => $request->id]);
+        }
+        $rate_source->name = $request->name;
+        $rate_source->crypto = $request->default == '1';
+        $rate_source->save();
+        return $rate_source;
     }
 }

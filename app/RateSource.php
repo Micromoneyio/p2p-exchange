@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RateSource extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'bpm_id'];
 
     public function orders() {
         return $this->hasMany('App\Order');

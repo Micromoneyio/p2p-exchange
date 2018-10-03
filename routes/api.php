@@ -65,6 +65,10 @@ Route::get('tst', function () {
     ]);
 });
 
+Route::prefix('sync')->group(function () {
+    Route::post('bank', 'SyncController@bank');
+});
+
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

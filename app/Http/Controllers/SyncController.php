@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Asset;
 use App\AssetType;
 use App\Bank;
+use App\Currency;
 use App\DealStage;
 use App\RateSource;
+use App\User;
 use Illuminate\Http\Request;
 
 class SyncController extends Controller
@@ -63,8 +66,40 @@ class SyncController extends Controller
             $rate_source = new RateSource(['bpm_id' => $request->id]);
         }
         $rate_source->name = $request->name;
-        $rate_source->crypto = $request->default == '1';
+        $rate_source->default = $request->default == '1';
         $rate_source->save();
         return $rate_source;
+    }
+
+    public function asset(Request $request)
+    {
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $asset = Asset::where(['bpm_id' => $request->id])->first();
+        if (empty($asset)) {
+            $asset = new Asset(['bpm_id' => $request->id]);
+        }
+        $asset->name = $request->name;
+        $asset->default = $request->default == '1';
+        $asset->notes = $request->notes;
+        $asset->address = $request->address;
+
+        $asset_type = AssetType::where(['bpm_id' => $request->asset_type])->first();
+        $asset->asset_type_id = $asset_type->id;
+
+        $user = User::where(['bpm_id' => $request->user])->first();
+        $asset->user_id = $user->id;
+
+        $currency = Currency::where(['bpm_id' => $request->currency])->first();
+        $asset->currency_id = $currency->id;
+
+        if (!empty($request->bank)) {
+            $bank = Bank::where(['bpm_id' => $request->bank])->first();
+            $asset->bank_id = $bank->id;
+        }
+
+        $asset->save();
+        return $asset;
     }
 }

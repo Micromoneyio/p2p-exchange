@@ -8,7 +8,7 @@ class AssetType extends Model
 {
     const TYPE_PERSONAL_DEPOSIT = 'Personal deposit';
 
-    protected $fillable = ['name','crypto'];
+    protected $fillable = ['name', 'crypto', 'bpm_id'];
 
     public function assets() {
         return $this->hasMany('App\Asset');

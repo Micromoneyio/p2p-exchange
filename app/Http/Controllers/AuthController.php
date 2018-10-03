@@ -322,8 +322,8 @@ class AuthController extends Controller
     public function resetPassword(Request $request){
         $email = \DB::table('password_resets')->where('token', $request->token)->get()->last();
         if (!$email){
-            $error_message = "Your email address was not found.";
-            return response()->json(['success' => false, 'error' => ['email'=> [$error_message]]]);
+            $error_message = "Your link has expired. Try again from the beginning.";
+            return response()->json(['success' => false, 'error' => ['password'=> [$error_message]]]);
         }
         $user = User::where('email', $email->email)->first();
         $rules = [

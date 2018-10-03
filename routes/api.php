@@ -70,6 +70,7 @@ Route::prefix('sync')->group(function () {
     Route::post('asset_type', 'SyncController@asset_type');
     Route::post('deal_stage', 'SyncController@deal_stage');
     Route::post('rate_source', 'SyncController@rate_source');
+    Route::post('asset', 'SyncController@asset');
 });
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {

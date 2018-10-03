@@ -24,6 +24,7 @@ class Asset extends Model
         'key',
         'default',
         'notes',
+        'bpm_id'
     ];
 
     /**

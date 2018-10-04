@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Asset;
 use App\AssetType;
 use App\Bank;
 use App\BpmModule;
@@ -61,6 +62,8 @@ class BpmRequestJob implements ShouldQueue
                 $model = AssetType::find($this->modelId); break;
             case 'Deal':
                 $model = Deal::find($this->modelId); break;
+            case 'Asset':
+                $model = Asset::find($this->modelId); break;
             default:
                 return null;
         }

@@ -395,6 +395,6 @@ class OrderController extends Controller
         
     
         
-        return $entities;
+        return $entities->values();
     }
 }

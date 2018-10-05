@@ -6,6 +6,7 @@ use App\Asset;
 use App\AssetType;
 use App\Bank;
 use App\Currency;
+use App\Deal;
 use App\DealStage;
 use App\Order;
 use App\RateSource;
@@ -192,5 +193,43 @@ class SyncController extends Controller
 
         $order->save();
         return $order;
+    }
+
+    public function deal(Request $request)
+    {
+        Log::info('Deal sync request', ['request' => $request]);
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $deal = Deal::where(['bpm_id' => $request->id])->first();
+        if (empty($deal)) {
+            $deal = new Deal(['bpm_id' => $request->id]);
+        }
+
+        $deal->source_value = $request->source_value;
+        $deal->destination_value = $request->destination_value;
+        $deal->transit_address = $request->transit_address;
+        $deal->transit_hash = $request->transit_hash;
+
+        $user = User::where(['bpm_id' => $request->contact])->first();
+        $deal->user_id = $user->id;
+
+        $order = Order::where(['bpm_id' => $request->order])->first();
+        $deal->order_id = $order->id;
+
+        $deal_stage = DealStage::where(['bpm_id' => $request->deal_stage])->first();
+        $deal->deal_stage_id = $deal_stage->id;
+
+        $source_asset = Asset::where(['bpm_id' => $request->source_asset])->first();
+        $deal->source_asset_id = $source_asset->id;
+
+        $destination_asset = Asset::where(['bpm_id' => $request->destination_asset])->first();
+        $deal->destination_asset_id = $destination_asset->id;
+
+        $transit_currency = Currency::where(['bpm_id' => $request->transit_currency])->first();
+        $deal->transit_currency_id = $transit_currency->id;
+
+        $deal->save();
+        return $deal;
     }
 }

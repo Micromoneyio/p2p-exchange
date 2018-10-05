@@ -10,6 +10,7 @@ use App\DealStage;
 use App\RateSource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SyncController extends Controller
 {
@@ -73,6 +74,7 @@ class SyncController extends Controller
 
     public function currency(Request $request)
     {
+        Log::info('Currency sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }

@@ -122,7 +122,7 @@ class SyncController extends Controller
             $asset->bank_id = $bank->id;
         }
 
-        $asset->save();
+        Log::info('Asset errors', ['errors' => $asset->save()]);
         return $asset;
     }
 }

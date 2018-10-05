@@ -71,6 +71,22 @@ class SyncController extends Controller
         return $rate_source;
     }
 
+    public function currency(Request $request)
+    {
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $currency = Currency::where(['bpm_id' => $request->id])->first();
+        if (empty($currency)) {
+            $currency = new Currency(['bpm_id' => $request->id]);
+        }
+        $currency->name = $request->name;
+        $currency->symbol = $request->symbol;
+        $currency->crypto = $request->crypto == '1';
+        $currency->save();
+        return $currency;
+    }
+
     public function asset(Request $request)
     {
         if (getenv('BPM_TOKEN') != $request->token) {

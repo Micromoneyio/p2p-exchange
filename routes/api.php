@@ -78,4 +78,5 @@ Route::prefix('sync')->group(function () {
     Route::post('currency',    'SyncController@currency');
     Route::post('contact',     'SyncController@contact');
     Route::post('order',       'SyncController@order');
+    Route::post('deal',        'SyncController@deal');
 });

@@ -7,6 +7,7 @@ use App\AssetType;
 use App\Bank;
 use App\Currency;
 use App\DealStage;
+use App\Order;
 use App\RateSource;
 use App\User;
 use Illuminate\Http\Request;
@@ -154,5 +155,42 @@ class SyncController extends Controller
 
         $user->save();
         return $user;
+    }
+
+    public function order(Request $request)
+    {
+        Log::info('Order sync request', ['request' => $request]);
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $order = Order::where(['bpm_id' => $request->id])->first();
+        if (empty($order)) {
+            $order = new Order(['bpm_id' => $request->id]);
+        }
+
+        $order->name = $request->name;
+        $order->fix_price = $request->fix_price;
+        $order->source_price_index = $request->source_price_index;
+        $order->limit_from = $request->limit_from;
+        $order->limit_to = $request->limit_to;
+
+        $user = User::where(['bpm_id' => $request->contact])->first();
+        $order->user_id = $user->id;
+
+        $source_currency = Currency::where(['bpm_id' => $request->source_currency])->first();
+        $order->source_currency_id = $source_currency->id;
+        $destination_currency = Currency::where(['bpm_id' => $request->destination_currency])->first();
+        $order->destination_currency_id = $destination_currency->id;
+
+        $source_asset = Asset::where(['bpm_id' => $request->source_asset])->first();
+        $order->source_asset_id = $source_asset->id;
+        $destination_asset = Asset::where(['bpm_id' => $request->destination_asset])->first();
+        $order->destination_asset_id = $destination_asset->id;
+
+        $rate_source = RateSource::where(['bpm_id' => $request->rate_source])->first();
+        $order->rate_source_id = $rate_source->id;
+
+        $order->save();
+        return $order;
     }
 }

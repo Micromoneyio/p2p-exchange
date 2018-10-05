@@ -68,6 +68,7 @@ Route::get('tst', function () {
     ]);
 });
 
+# Sync routes for BPM
 Route::prefix('sync')->group(function () {
     Route::post('bank',        'SyncController@bank');
     Route::post('asset_type',  'SyncController@asset_type');
@@ -76,4 +77,5 @@ Route::prefix('sync')->group(function () {
     Route::post('asset',       'SyncController@asset');
     Route::post('currency',    'SyncController@currency');
     Route::post('contact',     'SyncController@contact');
+    Route::post('order',       'SyncController@order');
 });

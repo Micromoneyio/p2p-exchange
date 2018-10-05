@@ -11,6 +11,7 @@ use App\DealStage;
 use App\Order;
 use App\RateSource;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -26,6 +27,10 @@ class SyncController extends Controller
         if (empty($bank)) {
             $bank = new Bank(['bpm_id' => $request->id]);
         }
+        if (!empty($bank->updated_at) && $bank->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
+        
         $bank->name = $request->name;
         $bank->save();
         return $bank;
@@ -40,6 +45,9 @@ class SyncController extends Controller
         $asset_type = AssetType::where(['bpm_id' => $request->id])->first();
         if (empty($asset_type)) {
             $asset_type = new AssetType(['bpm_id' => $request->id]);
+        }
+        if (!empty($asset_type->updated_at) && $asset_type->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
         }
         $asset_type->name = $request->name;
         $asset_type->crypto = $request->crypto == '1';
@@ -57,6 +65,9 @@ class SyncController extends Controller
         if (empty($deal_stage)) {
             $deal_stage = new DealStage(['bpm_id' => $request->id]);
         }
+        if (!empty($deal_stage->updated_at) && $deal_stage->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
         $deal_stage->name = $request->name;
         $deal_stage->save();
         return $deal_stage;
@@ -71,6 +82,9 @@ class SyncController extends Controller
         $rate_source = RateSource::where(['bpm_id' => $request->id])->first();
         if (empty($rate_source)) {
             $rate_source = new RateSource(['bpm_id' => $request->id]);
+        }
+        if (!empty($rate_source->updated_at) && $rate_source->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
         }
         $rate_source->name = $request->name;
         $rate_source->default = $request->default == '1';
@@ -87,6 +101,9 @@ class SyncController extends Controller
         $currency = Currency::where(['bpm_id' => $request->id])->first();
         if (empty($currency)) {
             $currency = new Currency(['bpm_id' => $request->id]);
+        }
+        if (!empty($currency->updated_at) && $currency->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
         }
         $currency->name = $request->name;
         $currency->symbol = $request->symbol;
@@ -105,6 +122,10 @@ class SyncController extends Controller
         if (empty($asset)) {
             $asset = new Asset(['bpm_id' => $request->id]);
         }
+        if (!empty($asset->updated_at) && $asset->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
+
         $asset->name = $request->name;
         $asset->default = $request->default == '1';
         $asset->notes = $request->notes;
@@ -138,6 +159,9 @@ class SyncController extends Controller
         if (empty($user)) {
             $user = new User(['bpm_id' => $request->id]);
         }
+        if (!empty($user->updated_at) && $user->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
 
         $user->email = $request->email;
         $user->name = $request->name;
@@ -167,6 +191,9 @@ class SyncController extends Controller
         $order = Order::where(['bpm_id' => $request->id])->first();
         if (empty($order)) {
             $order = new Order(['bpm_id' => $request->id]);
+        }
+        if (!empty($order->updated_at) && $order->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
         }
 
         $order->name = $request->name;
@@ -204,6 +231,9 @@ class SyncController extends Controller
         $deal = Deal::where(['bpm_id' => $request->id])->first();
         if (empty($deal)) {
             $deal = new Deal(['bpm_id' => $request->id]);
+        }
+        if (!empty($deal->updated_at) && $deal->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
         }
 
         $deal->source_value = $request->source_value;

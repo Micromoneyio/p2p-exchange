@@ -16,7 +16,7 @@ class SyncController extends Controller
 {
     public function bank(Request $request)
     {
-        Log::info('Bank sync request', ['request' => var_dump($request)]);
+        Log::info('Bank sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -31,7 +31,7 @@ class SyncController extends Controller
 
     public function asset_type(Request $request)
     {
-        Log::info('Asset type sync request', ['request' => var_dump($request)]);
+        Log::info('Asset type sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -47,7 +47,7 @@ class SyncController extends Controller
 
     public function deal_stage(Request $request)
     {
-        Log::info('Deal stage sync request', ['request' => var_dump($request)]);
+        Log::info('Deal stage sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -62,7 +62,7 @@ class SyncController extends Controller
 
     public function rate_source(Request $request)
     {
-        Log::info('Rate source sync request', ['request' => var_dump($request)]);
+        Log::info('Rate source sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -78,7 +78,7 @@ class SyncController extends Controller
 
     public function currency(Request $request)
     {
-        Log::info('Currency sync request', ['request' => var_dump($request)]);
+        Log::info('Currency sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -95,7 +95,7 @@ class SyncController extends Controller
 
     public function asset(Request $request)
     {
-        Log::info('Asset sync request', ['request' => var_dump($request)]);
+        Log::info('Asset sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }

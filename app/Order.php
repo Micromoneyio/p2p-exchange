@@ -20,7 +20,8 @@ class Order extends Model
         'limit_from',
         'limit_to',
         'name',
-        'telegram'
+        'telegram',
+        'bpm_id'
     ];
 
     public function user() {

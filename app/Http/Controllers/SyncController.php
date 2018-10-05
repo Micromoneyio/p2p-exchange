@@ -148,7 +148,7 @@ class SyncController extends Controller
         $user->deals_count = $request->deal_count;
 
         $currency = Currency::where(['bpm_id' => $request->default_currency])->first();
-        $user->defaultCurrency = $currency;
+        $user->default_currency_id = $currency->id;
 
         $user->telegram = $request->telegram;
 

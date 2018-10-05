@@ -122,7 +122,37 @@ class SyncController extends Controller
             $asset->bank_id = $bank->id;
         }
 
-        Log::info('Asset errors', ['errors' => $asset->save()]);
+        $asset->save();
         return $asset;
+    }
+
+    public function contact(Request $request)
+    {
+        Log::info('User sync request', ['request' => $request]);
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $user = User::where(['bpm_id' => $request->id])->first();
+        if (empty($user)) {
+            $user = new User(['bpm_id' => $request->id]);
+        }
+
+        $user->email = $request->email;
+        $user->name = $request->name;
+        $user->rank = $request->rank;
+        $user->employee = $request->employee == '1';
+        $user->is_verified = $request->is_verified == '1';
+        $user->allow_unranked = $request->allow_unranked == '1';
+        $user->sort = $request->sort;
+        $user->min_rank = $request->min_rank;
+        $user->deals_count = $request->deal_count;
+
+        $currency = Currency::where(['bpm_id' => $request->default_currency])->first();
+        $user->defaultCurrency = $currency;
+
+        $user->telegram = $request->telegram;
+
+        $user->save();
+        return $user;
     }
 }

@@ -75,11 +75,5 @@ Route::prefix('sync')->group(function () {
     Route::post('rate_source', 'SyncController@rate_source');
     Route::post('asset',       'SyncController@asset');
     Route::post('currency',    'SyncController@currency');
+    Route::post('contact',     'SyncController@contact');
 });
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-//
-//Route::resource('banks', 'BankController');
-

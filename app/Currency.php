@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Currency extends Model
 {
-    protected $fillable = ['name', 'symbol'];
+    protected $fillable = ['name', 'symbol', 'bpm_id'];
 
     public function favorite(User $user) {
         if ($this->created_at == null) {

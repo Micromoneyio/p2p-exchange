@@ -68,17 +68,15 @@ Route::get('tst', function () {
     ]);
 });
 
+# Sync routes for BPM
 Route::prefix('sync')->group(function () {
-    Route::post('bank', 'SyncController@bank');
-    Route::post('asset_type', 'SyncController@asset_type');
-    Route::post('deal_stage', 'SyncController@deal_stage');
+    Route::post('bank',        'SyncController@bank');
+    Route::post('asset_type',  'SyncController@asset_type');
+    Route::post('deal_stage',  'SyncController@deal_stage');
     Route::post('rate_source', 'SyncController@rate_source');
-    Route::post('asset', 'SyncController@asset');
+    Route::post('asset',       'SyncController@asset');
+    Route::post('currency',    'SyncController@currency');
+    Route::post('contact',     'SyncController@contact');
+    Route::post('order',       'SyncController@order');
+    Route::post('deal',        'SyncController@deal');
 });
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-//
-//Route::resource('banks', 'BankController');
-

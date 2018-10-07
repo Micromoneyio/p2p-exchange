@@ -9,7 +9,7 @@ class Deal extends Model
     protected $fillable = [
         'user_id','order_id','source_asset_id','destination_asset_id','source_value',
         'destination_value','deal_stage_id','transit_currency_id','transit_address','transit_key','transit_hash',
-        'outgoing_transaction_hash',
+        'outgoing_transaction_hash', 'bpm_id'
     ];
 
     public function user()

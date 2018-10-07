@@ -17,10 +17,10 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "http",
+	"protocol": "https",
 	"socketio": {},
-	"sslCertPath": "",
-	"sslKeyPath": "",
+	"sslCertPath": "/etc/ngninx/ssl/cert.crt",
+	"sslKeyPath": "/etc/ngninx/ssl/private.crt",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"apiOriginAllow": {

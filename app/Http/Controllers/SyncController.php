@@ -30,7 +30,7 @@ class SyncController extends Controller
         if (!empty($bank->updated_at) && $bank->updated_at->diffInSeconds(Carbon::now()) <= 2) {
             return;
         }
-        
+
         $bank->name = $request->name;
         $bank->save();
         return $bank;
@@ -240,6 +240,7 @@ class SyncController extends Controller
         $deal->destination_value = $request->destination_value;
         $deal->transit_address = $request->transit_address;
         $deal->transit_hash = $request->transit_hash;
+        $deal->transit_key = "";
 
         $user = User::where(['bpm_id' => $request->contact])->first();
         $deal->user_id = $user->id;

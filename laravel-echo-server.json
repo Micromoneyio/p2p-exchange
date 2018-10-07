@@ -19,8 +19,8 @@
 	"port": "6001",
 	"protocol": "https",
 	"socketio": {},
-	"sslCertPath": "/etc/ngninx/ssl/cert.crt",
-	"sslKeyPath": "/etc/ngninx/ssl/private.crt",
+	"sslCertPath": "/etc/nginx/ssl/cert.crt",
+	"sslKeyPath": "/etc/nginx/ssl/private.crt",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"apiOriginAllow": {

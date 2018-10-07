@@ -20,7 +20,7 @@
 	"protocol": "https",
 	"socketio": {},
 	"sslCertPath": "/etc/nginx/ssl/cert.crt",
-	"sslKeyPath": "/etc/nginx/ssl/private.crt",
+	"sslKeyPath": "/etc/nginx/ssl/private.key",
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"apiOriginAllow": {

@@ -17,7 +17,7 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "https",
+	"protocol": "http",
 	"socketio": {},
 	"sslCertPath": "/etc/nginx/ssl/cert.crt",
 	"sslKeyPath": "/etc/nginx/ssl/private.key",

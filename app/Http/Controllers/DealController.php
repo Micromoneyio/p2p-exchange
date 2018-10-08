@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\CryptoModule;
 use App\Deal;
 use App\DealStage;
 use App\Http\Resources\DealResource;
 use App\Http\Resources\DealsResource;
+use App\Jobs\CheckCanceledDeal;
 use App\Jobs\CryptoCheckJob;
+use App\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -376,7 +379,7 @@ class DealController extends Controller
      *     description="Target deal.",
      *     required=true,
      *     type="integer"
-     *   ),
+     *  ),
      *   @SWG\Parameter(
      *     name="token",
      *     in="query",
@@ -396,9 +399,111 @@ class DealController extends Controller
         if (Auth::id() != ($deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id)) {
             return response()->json(['code'=>200,'data'=>[]]);
         }
+
+        $sellerId = $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id;
         $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
 
-        $deal->update(['deal_stage_id' => $deal_stage->id]);
+
+        if ($deal->deal_stage_id == Deal::STAGES['Waiting for escrow'] || $deal->deal_stage_id == Deal::STAGES['Escrow in transaction']){
+                $deal->deal_stage_id = $deal_stage;
+        }elseif ($deal->deal_stage_id == Deal::STAGES['Escrow received']){
+
+            if (Auth::id() == $sellerId){
+                $deal->request_cancel_by_seller = 1;
+            }else{
+                $deal->deal_stage_id = $deal_stage;
+            }
+
+        }elseif ($deal->deal_stage_id == Deal::STAGES['Marked as paid']){
+            if (Auth::id() == $sellerId){
+                $deal->request_cancel_by_seller = 1;
+            }else{
+                $deal->deal_stage_id = $deal_stage;
+            }
+
+        }else{
+            return response()->json(['code'=>200,'error'=>['deal'=>["Can't cancel the deal"]]]);
+        }
+        $deal->save();
         return new DealResource($deal);
+    }
+
+
+    /**
+     * Cancel deal
+     **@SWG\POST(
+     *   path="/deals/{id}/arbitrage_release",
+     *   summary="Release escrow deal",
+     *   operationId="Release escrow arbitrage",
+     *   tags={"deals"},
+     *  @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     description="Target deal.",
+     *     required=true,
+     *     type="integer"
+     *  ),
+     *   @SWG\Parameter(
+     *     name="token",
+     *     in="query",
+     *     description="JWT-token",
+     *     required=true,
+     *     type="string"
+     *   ),
+     *     @SWG\Parameter(
+     *     name="body",
+     *     in="body",
+     *     description="deal",
+     *     required=true,
+     *     @SWG\Property(
+     *          property="user_id",
+     *          type="string",
+     *          description="Not required"
+     *      ),
+     *     @SWG\Property(
+     *          property="wallet",
+     *          type="string"
+     *      ),
+     *   ),
+     *   @SWG\Response(response=200, description="successful operation"),
+     *   @SWG\Response(response=400, description="not acceptable"),
+     *   @SWG\Response(response=500, description="internal server error")
+     * )
+     * @param  \App\Deal  $deal
+     * @return DealResource
+     */
+    public function arbitrageReleaseEscrow(Deal $deal, Request $request){
+        $credentials = $request->only('user_id', 'wallet');
+        $rules = [
+            'user_id' => 'required'
+        ];
+        $validator = \Validator::make($credentials, $rules);
+
+        if($validator->fails()) {
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+        }
+        if ($request->user()->employee) {
+            if ($deal->source_asset->user_id == $request->user_id){
+                $symbol = $deal->source_asset->currency->symbol;
+                $address = $request->wallet ? $request->wallet : $deal->source_asset->address;
+                $crypto_value = $deal->destination_value;
+            }elseif($deal->destination_asset->user_id == $request->user_id){
+                $symbol = $deal->destination_asset->currency->symbol;
+                $address = $request->wallet ? $request->wallet : $deal->destination_asset->address;
+                $crypto_value = $deal->source_value;
+            }else{
+                return response()->json(['success'=> false, 'error'=> 'Provided user id is not participant of deal']);
+            }
+            $module = new CryptoModule($symbol);
+            $response = $module->releaseTransaction($deal->transit_address, $deal->transit_key, $address, $crypto_value);
+            \Log::info(json_encode($response));
+            $deal->deal_stage_id = Deal::STAGES['Closed'];
+            $deal->side_wallet = $address;
+            $deal->arbitrage_user_id = $request->user()->id;
+            $deal->escrow_received_user_id = $request->user_id;
+            $deal->save();
+        }else{
+            return response()->json(['success'=> false, 'error'=> 'You don\'t have permissions for this']);
+        }
     }
 }

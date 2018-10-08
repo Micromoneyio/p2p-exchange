@@ -46,6 +46,7 @@ Route::group(['middleware' => ['jwt.auth']], function ($router) {
     Route::post('deals/{deal}/pay', 'DealController@pay');
     Route::post('deals/{deal}/release', 'DealController@release');
     Route::post('deals/{deal}/cancel', 'DealController@cancel');
+    Route::post('deals/{deal}/arbitrage_release', 'DealController@arbitrageReleaseEscrow');
 
 
     Route::post('connect/facebook', 'AuthController@connectFacebook');

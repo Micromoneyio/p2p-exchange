@@ -401,7 +401,7 @@ class DealController extends Controller
         }
 
         $sellerId = $deal->order->type == 'crypto_to_fiat' ? $deal->order->user_id : $deal->user_id;
-        $deal_stage = DealStage::where(['name' => 'Cancelled'])->first();
+        $deal_stage = DealStage::where(['name' => 'Cancelled'])->first()->id;
 
 
         if ($deal->deal_stage_id == Deal::STAGES['Waiting for escrow'] || $deal->deal_stage_id == Deal::STAGES['Escrow in transaction']){

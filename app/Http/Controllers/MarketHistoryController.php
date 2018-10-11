@@ -75,6 +75,12 @@ class MarketHistoryController extends Controller
             $entity->currency;
             $entity->rate_source;
             $entity->unit_currency;
+            if ($entity->currency->crypto){
+                $entity->price_usd = MarketHistory::orderBy('created_at', 'desc')->where([
+                    'currency_id' => $entity->currency->id,
+                    'unit_currency_id' => $entity->unit_currency->id
+                ])->first()->price;
+            }
         }
 
         return new MarketHistoriesResource($entities);

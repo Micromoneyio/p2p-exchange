@@ -71,7 +71,7 @@ class MarketHistoryController extends Controller
                 }
             }
         }
-        $usd_id = Currency::where('symbol','USD')->get()->first()->id
+        $usd_id = Currency::where('symbol','USD')->get()->first()->id;
         foreach ($entities as $entity){
             $entity->currency;
             $entity->rate_source;

@@ -71,6 +71,7 @@ class MarketHistoryController extends Controller
                 }
             }
         }
+        $usd_id = Currency::where('symbol','USD')->get()->first()->id
         foreach ($entities as $entity){
             $entity->currency;
             $entity->rate_source;
@@ -78,7 +79,7 @@ class MarketHistoryController extends Controller
             if ($entity->currency->crypto){
                 $entity->price_usd = MarketHistory::orderBy('created_at', 'desc')->where([
                     'currency_id' => $entity->currency->id,
-                    'unit_currency_id' => $entity->unit_currency->id
+                    'unit_currency_id' =>$usd_id
                 ])->first()->price;
             }
         }

@@ -47,6 +47,9 @@ class Kernel extends ConsoleKernel
                         $item->usd_price = $result[0]['price_usd'];
                     }else{
                         $item->usd_price = $fiat_usd_course['rates'][$item->symbol] ?? 0;
+                        if ($item->usd_price){
+                            $item->usd_price = 1 / $item->usd_price;
+                        }
                     }
                     $item->save();
                 }

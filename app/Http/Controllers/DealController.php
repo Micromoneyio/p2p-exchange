@@ -425,12 +425,6 @@ class DealController extends Controller
             return response()->json(['code'=>200,'error'=>['deal'=>["Can't cancel the deal"]]]);
         }
 
-        if (Auth::id() == $sellerId){
-            $deal->is_seller = 1;
-        }else{
-            $deal->is_seller = 0;
-        }
-
         $deal->save();
         return new DealResource($deal);
     }

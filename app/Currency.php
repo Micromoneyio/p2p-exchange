@@ -32,4 +32,15 @@ class Currency extends Model
             return $history->market_cap;
         }
     }
+
+
+    public function getPriceUsdAttribute()
+    {
+        if ($this->crypto){
+            $usd = Currency::where('symbol','USD')->get()->first()->id;
+
+        }else{
+            return null;
+        }
+    }
 }

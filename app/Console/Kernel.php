@@ -27,13 +27,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
         $schedule->call(function(){
             $currencies = Currency::all();
             $crypto = $currencies->filter(function ($value){
                return  $value->crypto;
             });
+            $fiat_usd_course = json_decode(file_get_contents('https://api.exchangeratesapi.io/latest?base=USD'), true);
             foreach ($crypto as $cryptoItem){
                 foreach ($currencies as $item){
                     $result = json_decode(file_get_contents(getenv('API_URL') . strtolower($cryptoItem->name). '?convert='.$item->symbol),true);
@@ -44,6 +43,12 @@ class Kernel extends ConsoleKernel
                         'market_cap' => $result[0]['market_cap_'.strtolower($item->symbol)],
                         'price' => $result[0]['price_'.strtolower($item->symbol)],
                     ]);
+                    if ($item->crypto){
+                        $item->usd_price = $result[0]['price_usd'];
+                    }else{
+                        $item->usd_price = $fiat_usd_course['rates'][$item->symbol] ?? 0;
+                    }
+                    $item->save();
                 }
 
             }

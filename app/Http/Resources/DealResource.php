@@ -32,7 +32,7 @@ class DealResource extends JsonResource
             'outgoing_transaction_hash' => $this->outgoing_transaction_hash,
             'request_cancel_by_buyer' => $this->request_cancel_by_buyer,
             'request_cancel_by_seller' => $this->request_cancel_by_seller,
-            'is_seller' => $this->is_seller,
+            'seller_id' => $this->seller_id,
         ];
     }
 }

@@ -30,6 +30,9 @@ class DealResource extends JsonResource
             'updated_at' => $this->updated_at,
             'destination_currency' => new CurrencyResource($this->destination_currency),
             'outgoing_transaction_hash' => $this->outgoing_transaction_hash,
+            'request_cancel_by_buyer' => $this->request_cancel_by_buyer,
+            'request_cancel_by_seller' => $this->request_cancel_by_seller,
+            'is_seller' => $this->is_seller,
         ];
     }
 }

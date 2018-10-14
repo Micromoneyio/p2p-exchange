@@ -48,6 +48,17 @@ class BpmModule
         }
     }
 
+    public function dealHistory(DealHistory $dealHistory)
+    {
+        $this->saveModel($dealHistory, 'SLDealHistoryCollection', [
+            'Name' => "{$dealHistory->deal->id}/{$dealHistory->deal_stage->name}",
+            'Notes' => $dealHistory->notes,
+            'SLDealId' => $dealHistory->deal->bpm_id,
+            'SLDealStageId' => $dealHistory->deal_stage->bpm_id
+        ]);
+        return $dealHistory;
+    }
+
     public function deal(Deal $deal)
     {
         $this->saveModel($deal, 'SLDealCollection', [

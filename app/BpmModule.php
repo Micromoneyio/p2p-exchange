@@ -16,9 +16,9 @@ class BpmModule
         $this->api_url  = getenv('BPM_MODULE_URI');
         $this->account  = getenv('BPM_MODULE_USERNAME').':'.getenv('BPM_MODULE_PASSWORD');
         $this->headers  = [
-            'Content-Type'          => 'application/json;odata=verbose',
-            'Accept'                => 'application/json;odata=verbose',
-            'Authorization'         => 'Basic '.base64_encode($this->account)
+            'Content-Type'  => 'application/json;odata=verbose',
+            'Accept'        => 'application/json;odata=verbose',
+            'Authorization' => 'Basic '.base64_encode($this->account)
         ];
     }
 
@@ -42,6 +42,8 @@ class BpmModule
             case 'App\Asset':
                 return $this->asset($model); break;
             case 'App\Deal':
+                return $this->deal($model); break;
+            case 'App\DealHistory':
                 return $this->deal($model); break;
             default:
                 return null;

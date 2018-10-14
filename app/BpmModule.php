@@ -44,7 +44,7 @@ class BpmModule
             case 'App\Deal':
                 return $this->deal($model); break;
             case 'App\DealHistory':
-                return $this->deal($model); break;
+                return $this->dealHistory($model); break;
             default:
                 return null;
         }

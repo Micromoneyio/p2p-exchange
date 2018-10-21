@@ -55,11 +55,11 @@ class BpmModule
     public function marketHistory(MarketHistory $marketHistory)
     {
         $this->saveModel($marketHistory, 'SLMarketRateCollection', [
-            'SLCurrencyId' => $matketHistory->currency->bpm_id,
-            'SLUnitCurrencyId' => $matketHistory->unit_currency->bpm_id,
-            'SLRateSourceId' => $dealHistory->rate_source->bpm_id,
-            'SLMarketCap' => $dealHistory->market_cap,
-            'SLPrice' => $dealHistory->price
+            'SLCurrencyId' => $marketHistory->currency->bpm_id,
+            'SLUnitCurrencyId' => $marketHistory->unit_currency->bpm_id,
+            'SLRateSourceId' => $marketHistory->rate_source->bpm_id,
+            'SLMarketCap' => $marketHistory->market_cap,
+            'SLPrice' => $marketHistory->price
         ]);
         return $marketHistory;
     }

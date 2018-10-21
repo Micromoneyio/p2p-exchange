@@ -8,6 +8,7 @@ use App\Bank;
 use App\Currency;
 use App\Deal;
 use App\DealStage;
+use App\MarketHistory;
 use App\Order;
 use App\RateSource;
 use App\User;
@@ -262,5 +263,35 @@ class SyncController extends Controller
 
         $deal->save();
         return $deal;
+    }
+
+    public function market_history(Request $request)
+    {
+        Log::info('Deal sync request', ['request' => $request]);
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $marketHistory = MarketHistory::where(['bpm_id' => $request->id])->first();
+        if (empty($marketHistory)) {
+            $marketHistory = new MarketHistory(['bpm_id' => $request->id]);
+        }
+        if (!empty($marketHistory->updated_at) && $marketHistory->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
+
+        $marketHistory->price = $request->price;
+        $marketHistory->market_cap = $request->market_cap;
+
+        $currency = Currency::where(['bpm_id' => $request->currency])->first();
+        $marketHistory->currency_id = $currency->id;
+
+        $unit_currency = Currency::where(['bpm_id' => $request->unit_currency])->first();
+        $marketHistory->order_id = $unit_currency->id;
+
+        $rate_source = RateSource::where(['bpm_id' => $request->deal_stage])->first();
+        $marketHistory->rate_source_id = $rate_source->id;
+
+        $marketHistory->save();
+        return $marketHistory;
     }
 }

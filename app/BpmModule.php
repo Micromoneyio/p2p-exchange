@@ -58,8 +58,8 @@ class BpmModule
             'SLCurrencyId' => $marketHistory->currency->bpm_id,
             'SLUnitCurrencyId' => $marketHistory->unit_currency->bpm_id,
             'SLRateSourceId' => $marketHistory->rate_source->bpm_id,
-            'SLMarketCap' => $marketHistory->market_cap,
-            'SLPrice' => $marketHistory->price
+            'SLMarketCap' => (string)$marketHistory->market_cap,
+            'SLPrice' => (string)$marketHistory->price
         ]);
         return $marketHistory;
     }

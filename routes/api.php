@@ -71,13 +71,15 @@ Route::get('tst', function () {
 
 # Sync routes for BPM
 Route::prefix('sync')->group(function () {
-    Route::post('bank',        'SyncController@bank');
-    Route::post('asset_type',  'SyncController@asset_type');
-    Route::post('deal_stage',  'SyncController@deal_stage');
-    Route::post('rate_source', 'SyncController@rate_source');
-    Route::post('asset',       'SyncController@asset');
-    Route::post('currency',    'SyncController@currency');
-    Route::post('contact',     'SyncController@contact');
-    Route::post('order',       'SyncController@order');
-    Route::post('deal',        'SyncController@deal');
+    Route::post('bank',           'SyncController@bank');
+    Route::post('asset_type',     'SyncController@asset_type');
+    Route::post('deal_stage',     'SyncController@deal_stage');
+    Route::post('rate_source',    'SyncController@rate_source');
+    Route::post('asset',          'SyncController@asset');
+    Route::post('currency',       'SyncController@currency');
+    Route::post('contact',        'SyncController@contact');
+    Route::post('order',          'SyncController@order');
+    Route::post('deal',           'SyncController@deal');
+    Route::post('market_history', 'SyncController@market_history');
+    Route::post('setting',        'SyncController@setting');
 });

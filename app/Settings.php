@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model
 {
-    protected $fillable = ['user_id', 'local_currency_id'];
+    protected $fillable = ['bpm_id', 'user_id', 'local_currency_id'];
 
     /**
      * @param $userId

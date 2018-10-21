@@ -47,9 +47,20 @@ class BpmModule
                 return $this->dealHistory($model); break;
             case 'App\MarketHistory':
                 return $this->marketHistory($model); break;
+            case 'App\Settings':
+                return $this->settings($model); break;
             default:
                 return null;
         }
+    }
+
+    public function settings(Settings $settings)
+    {
+        $this->saveModel($settings, 'SLSettingCollection', [
+            'SLName' => $settings->key,
+            'SLValue' => $settings->value,
+        ]);
+        return $settings;
     }
 
     public function marketHistory(MarketHistory $marketHistory)

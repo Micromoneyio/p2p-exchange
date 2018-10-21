@@ -11,6 +11,7 @@ use App\DealStage;
 use App\MarketHistory;
 use App\Order;
 use App\RateSource;
+use App\Settings;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -267,7 +268,7 @@ class SyncController extends Controller
 
     public function market_history(Request $request)
     {
-        Log::info('Deal sync request', ['request' => $request]);
+        Log::info('MarketHistory sync request', ['request' => $request]);
         if (getenv('BPM_TOKEN') != $request->token) {
             throw new \Exception('Invalid token');
         }
@@ -293,5 +294,24 @@ class SyncController extends Controller
 
         $marketHistory->save();
         return $marketHistory;
+    }
+
+    public function setting(Request $request)
+    {
+        Log::info('Setting sync request', ['request' => $request]);
+        if (getenv('BPM_TOKEN') != $request->token) {
+            throw new \Exception('Invalid token');
+        }
+        $settings = Settings::where(['bpm_id' => $request->id])->first();
+        if (empty($settings)) {
+            $settings = new Settings(['bpm_id' => $request->id]);
+        }
+        if (!empty($settings->updated_at) && $settings->updated_at->diffInSeconds(Carbon::now()) <= 2) {
+            return;
+        }
+        $settings->key = $request->key;
+        $settings->value = $request->value;
+        $settings->save();
+        return $settings;
     }
 }

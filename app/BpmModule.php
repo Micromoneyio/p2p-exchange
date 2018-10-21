@@ -45,9 +45,23 @@ class BpmModule
                 return $this->deal($model); break;
             case 'App\DealHistory':
                 return $this->dealHistory($model); break;
+            case 'App\MarketHistory':
+                return $this->marketHistory($model); break;
             default:
                 return null;
         }
+    }
+
+    public function marketHistory(MarketHistory $marketHistory)
+    {
+        $this->saveModel($marketHistory, 'SLMarketRateCollection', [
+            'SLCurrencyId' => $matketHistory->currency->bpm_id,
+            'SLUnitCurrencyId' => $matketHistory->unit_currency->bpm_id,
+            'SLRateSourceId' => $dealHistory->rate_source->bpm_id,
+            'SLMarketCap' => $dealHistory->market_cap,
+            'SLPrice' => $dealHistory->price
+        ]);
+        return $marketHistory;
     }
 
     public function dealHistory(DealHistory $dealHistory)

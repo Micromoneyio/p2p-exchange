@@ -9,6 +9,7 @@ use App\BpmModule;
 use App\Currency;
 use App\DealHistory;
 use App\DealStage;
+use App\MarketHistory;
 use App\Order;
 use App\RateSource;
 use App\User;
@@ -67,6 +68,8 @@ class BpmRequestJob implements ShouldQueue
                 $model = Asset::find($this->modelId); break;
             case 'DealHistory':
                 $model = DealHistory::find($this->modelId); break;
+            case 'MarketHistory':
+                $model = MarketHistory::find($this->modelId); break;
             default:
                 return null;
         }

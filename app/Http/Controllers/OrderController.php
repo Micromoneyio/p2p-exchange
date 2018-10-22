@@ -349,7 +349,7 @@ class OrderController extends Controller
      */
     public function filter(Request $request)
     {
-        if (empty($request->destination_currency_id) && empty($request->source_currency_id)) {
+        if (empty($request->destination_currency_id) || empty($request->source_currency_id) || empty($request->amount)) {
             return new OrdersResource(collect([]));
         }
 

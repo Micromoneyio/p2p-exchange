@@ -145,6 +145,6 @@ class Deal extends Model
         return true;
     }
     public function getSellerIdAttribute(){
-        return $this->order->type == 'crypto_to_fiat' ? $this->order->user_id : $this->user_id;
+        return $this->order->type == 'crypto_to_fiat' ? $this->user_id : $this->order->user_id;
     }
 }

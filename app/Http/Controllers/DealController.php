@@ -52,9 +52,9 @@ class DealController extends Controller
             $item->destination_currency = $item->order->destination_currency;
             $item->destination_asset->bank;
             
-            $temp = $item->source_asset;
-            $item->source_asset = $item->destination_asset;
-            $item->destination_asset = $temp;
+/            $temp = $item->source_asset;
+//            $item->source_asset = $item->destination_asset;
+//            $item->destination_asset = $temp;
         }
         return new DealsResource($deals);
     }

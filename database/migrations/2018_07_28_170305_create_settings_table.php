@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id')->unique();
+            $table->unsignedInteger('user_id')->unique()->nullable();
             $table->unsignedInteger('local_currency_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('local_currency_id')->references('id')->on('currencies')->onDelete('cascade');

@@ -17,6 +17,9 @@ class MoveLocalCurrencyIdToUsersTable extends Migration
             $table->dropForeign('settings_local_currency_id_foreign');
             $table->dropForeign('settings_user_id_foreign');
             $table->dropColumn('local_currency_id');
+        });
+
+        Schema::table('settings', function (Blueprint $table) {
             $table->dropColumn('user_id');
         });
 

@@ -60,8 +60,6 @@ Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');
 Route::get('password/reset/{token}', 'AuthController@showResetForm')->name('password.request');
 Route::post('password/reset', 'AuthController@resetPassword')->name('password.reset');
 
-
-
 Route::get('tst', function () {
     return App\Notification::create([
         'user_id' => 11,
@@ -70,7 +68,6 @@ Route::get('tst', function () {
         'viewed'  => 0
     ]);
 });
-
 Route::get('users/{user_id}', 'UsersController@public');
 
 # Sync routes for BPM

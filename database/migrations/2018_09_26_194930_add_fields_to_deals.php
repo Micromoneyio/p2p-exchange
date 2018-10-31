@@ -23,7 +23,7 @@ class AddFieldsToDeals extends Migration
         });
 
         Schema::table('settings', function (Blueprint $table) {
-            $table->text('key');
+            $table->text('key')->nullable();
             $table->text('value')->nullable();
         });
 
